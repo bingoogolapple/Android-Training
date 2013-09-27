@@ -102,7 +102,8 @@ public class HomeActivity extends GenericActivity {
 								offset += maxResult;
 								fillList();
 							} else {
-								ToastUtil.makeText(context, "没有更多数据了");
+//								ToastUtil.makeText(context, "没有更多数据了");
+								ToastUtil.makeCustomToast(context, "没有更多数据了");
 							}
 						}
 					}
