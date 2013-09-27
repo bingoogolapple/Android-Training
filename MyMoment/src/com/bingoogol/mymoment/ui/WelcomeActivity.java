@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 
 import com.bingoogol.mymoment.R;
 
 public class WelcomeActivity extends GenericActivity {
-
+	private ImageView logoIv = null;
 	@Override
 	public void onClick(View v) {
 	}
@@ -21,6 +24,7 @@ public class WelcomeActivity extends GenericActivity {
 
 	@Override
 	protected void findViewById() {
+		logoIv = (ImageView) this.findViewById(R.id.logo_iv);
 	}
 
 	@Override
@@ -28,15 +32,20 @@ public class WelcomeActivity extends GenericActivity {
 	}
 
 	@Override
-	protected void fillData() {
+	protected void processLogic() {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				Intent homeIntent = new Intent(context,HomeActivity.class);
+				finish();
 				startActivity(homeIntent);
-				WelcomeActivity.this.finish();
+				overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 			}
 		}, 1500);
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(1500);
+		logoIv.startAnimation(animation);
+		
 	}
 
 }

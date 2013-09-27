@@ -10,6 +10,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.bingoogol.mymoment.domain.Moment;
 import com.bingoogol.mymoment.service.MomentService;
 import com.bingoogol.mymoment.util.Constants;
 import com.bingoogol.mymoment.util.DateUtil;
+import com.bingoogol.mymoment.util.Logger;
 import com.bingoogol.mymoment.util.StorageUtil;
 import com.bingoogol.mymoment.util.ToastUtil;
 
@@ -32,7 +34,9 @@ public class WriteActivity extends GenericActivity {
 	private Resources resources = null;
 	private EditText contentEt = null;
 	private String imgRealPath = null;
-
+	private MomentService momentService = null;
+	private boolean isAdd = true;
+	private int id;
 	@Override
 	protected void loadViewLayout() {
 		setContentView(R.layout.activity_write);
@@ -54,8 +58,26 @@ public class WriteActivity extends GenericActivity {
 	}
 
 	@Override
-	protected void fillData() {
+	protected void processLogic() {
+		momentService = new MomentService(context);
 		resources = context.getResources();
+		Bundle bundle = getIntent().getExtras();
+		if(bundle != null) {
+			isAdd = false;
+			id = bundle.getInt("id");
+			publishBtn.setText(R.string.update);
+			Moment moment = momentService.getMoment(id);
+			contentEt.setText(moment.getContent());
+			imgRealPath = moment.getImgPath();
+			addImgIv.setImageBitmap(StorageUtil.getBitmapFromLocal(imgRealPath));
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+		overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 	}
 
 	@Override
@@ -63,6 +85,7 @@ public class WriteActivity extends GenericActivity {
 		switch (v.getId()) {
 		case R.id.write_back_btn:
 			finish();
+			overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 			break;
 		case R.id.write_add_img_iv:
 			addImg();
@@ -103,6 +126,7 @@ public class WriteActivity extends GenericActivity {
 		imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imgRealPath)));
 		startActivityForResult(intent, Constants.activity.GET_FROM_CAMERA);
+		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 	}
 
 	private void getFromGallery() {
@@ -113,6 +137,7 @@ public class WriteActivity extends GenericActivity {
 		// 当同时有data和type时应该用intent.setDataAndType(data, type)
 		intent.setType("image/*");
 		startActivityForResult(intent, Constants.activity.GET_FROM_GALLERY);
+		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 	}
 
 	private void publish() {
@@ -124,13 +149,27 @@ public class WriteActivity extends GenericActivity {
 			moment.setContent(content);
 			moment.setImgPath(imgRealPath);
 			moment.setPublishTime(DateUtil.getPublishTime());
-			MomentService momentService = new MomentService(context);
-			if (momentService.addMoment(moment)) {
-				// mResultCode默认值为RESULT_CANCELED;
-				setResult(RESULT_OK);
-				finish();
+			if(isAdd) {
+				if (momentService.addMoment(moment)) {
+					// mResultCode默认值为RESULT_CANCELED;
+					setResult(RESULT_OK);
+					Logger.i(tag, "add success");
+					finish();
+					overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+				} else {
+					ToastUtil.makeText(context, "发布失败");
+				}
 			} else {
-				ToastUtil.makeText(context, "发布失败");
+				moment.setId(id);
+				if (momentService.updateMoment(moment)) {
+					// mResultCode默认值为RESULT_CANCELED;
+					setResult(RESULT_OK);
+					Logger.i(tag, "update success");
+					finish();
+					overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+				} else {
+					ToastUtil.makeText(context, "修改失败");
+				}
 			}
 		}
 	}
@@ -146,7 +185,7 @@ public class WriteActivity extends GenericActivity {
 			}
 			addImgIv.setImageBitmap(StorageUtil.getBitmapFromLocal(imgRealPath));
 		} else {
-			//TODO
+			// TODO
 		}
 	}
 }

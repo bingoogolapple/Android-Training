@@ -6,5 +6,7 @@
     <string name="camera">相机</string>
     <string name="gallery">相册</string>
     <string name="add_img">添加图片</string>
+    <string name="delete">删除</string>
+    <string name="update">修改</string>
 
 </resources>

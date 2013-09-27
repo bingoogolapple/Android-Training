@@ -49,6 +49,7 @@ public class HomeActivity extends GenericActivity {
 		case R.id.home_write_btn:
 			Intent writeIntent = new Intent(context, WriteActivity.class);
 			startActivityForResult(writeIntent, 0);
+			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 			break;
 		case R.id.refresh_btn:
 			refresh();
@@ -111,7 +112,7 @@ public class HomeActivity extends GenericActivity {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+				
 			}
 		});
 	}
@@ -128,7 +129,7 @@ public class HomeActivity extends GenericActivity {
 	}
 
 	@Override
-	protected void fillData() {
+	protected void processLogic() {
 		momentService = new MomentService(context);
 		setDateTime();
 		fillList();
@@ -172,7 +173,7 @@ public class HomeActivity extends GenericActivity {
 			protected void onPostExecute(List<Moment> result) {				
 				if (result != null) {
 					if (adapter == null) {
-						adapter = new HomeMomentAdapter(context, momentLv, result);
+						adapter = new HomeMomentAdapter(HomeActivity.this, momentLv, result);
 						momentLv.setAdapter(adapter);
 					} else {
 						// 把获取到的数据添加到数据适配器里

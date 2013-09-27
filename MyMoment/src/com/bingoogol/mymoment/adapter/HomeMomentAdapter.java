@@ -2,10 +2,16 @@ package com.bingoogol.mymoment.adapter;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -15,19 +21,24 @@ import android.widget.TextView;
 
 import com.bingoogol.mymoment.R;
 import com.bingoogol.mymoment.domain.Moment;
+import com.bingoogol.mymoment.service.MomentService;
+import com.bingoogol.mymoment.ui.WriteActivity;
 import com.bingoogol.mymoment.util.ImageCache;
 import com.bingoogol.mymoment.util.ImageFetcher;
 import com.bingoogol.mymoment.util.ImageFetcher.ImgCallback;
+import com.bingoogol.mymoment.util.Logger;
 
-public class HomeMomentAdapter extends BaseAdapter {
+public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListener {
 	private List<Moment> datas;
 	private LayoutInflater layoutInflater;
 	private ListView listView;
-
-	public HomeMomentAdapter(Context context, ListView listView, List<Moment> datas) {
+	private Activity context;
+	
+	public HomeMomentAdapter(Activity context, ListView listView, List<Moment> datas) {
 		this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.datas = datas;
 		this.listView = listView;
+		this.context = context;
 	}
 
 	public void addMoreMoment(List<Moment> moments) {
@@ -59,14 +70,20 @@ public class HomeMomentAdapter extends BaseAdapter {
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.moment_item, null);
 			viewHolder = new ViewHolder();
+			viewHolder.idLeftTv = (TextView) convertView.findViewById(R.id.id_left_tv);
 			viewHolder.contentLeftTv = (TextView) convertView.findViewById(R.id.content_left_tv);
 			viewHolder.imgLeftIv = (ImageView) convertView.findViewById(R.id.img_left_iv);
 			viewHolder.publishTimeLeftTv = (TextView) convertView.findViewById(R.id.publish_time_left_tv);
+			viewHolder.itemLeftLl = (LinearLayout) convertView.findViewById(R.id.item_left_ll);
+			viewHolder.idRightTv = (TextView) convertView.findViewById(R.id.id_right_tv);
 			viewHolder.contentRightTv = (TextView) convertView.findViewById(R.id.content_right_tv);
 			viewHolder.imgRightIv = (ImageView) convertView.findViewById(R.id.img_right_iv);
 			viewHolder.publishTimeRightTv = (TextView) convertView.findViewById(R.id.publish_time_right_tv);
 			viewHolder.itemRightLl = (LinearLayout) convertView.findViewById(R.id.item_right_ll);
 			convertView.setTag(viewHolder);
+
+			viewHolder.itemLeftLl.setOnLongClickListener(this);
+			viewHolder.itemRightLl.setOnLongClickListener(this);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 			viewHolder.itemRightLl.setVisibility(View.VISIBLE);
@@ -74,6 +91,7 @@ public class HomeMomentAdapter extends BaseAdapter {
 		}
 		// 加载左边部分
 		Moment leftMoment = datas.get(position * 2);
+		viewHolder.idLeftTv.setText(leftMoment.getId() + "");
 		viewHolder.publishTimeLeftTv.setText(leftMoment.getPublishTime().substring(11));
 		viewHolder.contentLeftTv.setText(leftMoment.getContent());
 		String leftImgRealPath = leftMoment.getImgPath();
@@ -95,6 +113,7 @@ public class HomeMomentAdapter extends BaseAdapter {
 		// 如果右边部分有才加载
 		if (position * 2 + 1 < datas.size()) {
 			Moment rightMoment = datas.get(position * 2 + 1);
+			viewHolder.idRightTv.setText(rightMoment.getId() + "");
 			viewHolder.publishTimeRightTv.setText(rightMoment.getPublishTime().substring(11));
 			viewHolder.contentRightTv.setText(rightMoment.getContent());
 			String rightImgRealPath = rightMoment.getImgPath();
@@ -122,12 +141,78 @@ public class HomeMomentAdapter extends BaseAdapter {
 	}
 
 	private class ViewHolder {
+		private TextView idLeftTv;
 		private TextView contentLeftTv;
 		private TextView publishTimeLeftTv;
 		private ImageView imgLeftIv;
+		private TextView idRightTv;
 		private TextView contentRightTv;
 		private TextView publishTimeRightTv;
 		private ImageView imgRightIv;
+		private LinearLayout itemLeftLl;
 		private LinearLayout itemRightLl;
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		TextView idTv = null;
+		String id = null;
+		switch (v.getId()) {
+		case R.id.item_left_ll:
+			idTv = (TextView) v.findViewById(R.id.id_left_tv);
+			id = idTv.getText().toString().trim();
+			break;
+		case R.id.item_right_ll:
+			idTv = (TextView) v.findViewById(R.id.id_right_tv);
+			id = idTv.getText().toString().trim();
+			break;
+		}
+		showDialog(Integer.parseInt(id));
+		return false;
+	}
+	
+	private void showDialog(final int id) {
+		String[] items = new String[] { context.getResources().getString(R.string.delete), context.getResources().getString(R.string.update) };
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setItems(items, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					Logger.i("HomeMomentAdapter", "删除" + id);
+					MomentService momentService = new MomentService(context);
+					if(momentService.deleteMoment(id)) {
+						datas.remove(getDeleteMoment(id));
+						HomeMomentAdapter.this.notifyDataSetChanged();
+						Logger.i("HomeMomentAdapter", "size=" + datas.size());
+					} else {
+						// TODO 删除失败
+					}
+					break;
+				case 1:
+					Logger.i("HomeMomentAdapter", "修改" + id);
+					Intent intent = new Intent(context,WriteActivity.class);
+					intent.putExtra("id", id);
+					context.startActivityForResult(intent, 0);
+					context.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+					break;
+				}
+			}
+		});
+		builder.create().show();
+	}
+	
+	/**
+	 * 从数据源中获取要删除的Moment
+	 * @param id
+	 * @return
+	 */
+	public Moment getDeleteMoment(int id) {
+		for(Moment moment : datas) {
+			if(moment.getId() == id) {
+				return moment;
+			}
+		}
+		return null;
 	}
 }

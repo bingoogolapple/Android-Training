@@ -23,7 +23,7 @@ public abstract class GenericActivity extends Activity implements OnClickListene
 		loadViewLayout();
 		findViewById();
 		setListener();
-		fillData();
+		processLogic();
 	}
 
 	protected abstract void loadViewLayout();
@@ -32,5 +32,5 @@ public abstract class GenericActivity extends Activity implements OnClickListene
 
 	protected abstract void setListener();
 
-	protected abstract void fillData();
+	protected abstract void processLogic();
 }

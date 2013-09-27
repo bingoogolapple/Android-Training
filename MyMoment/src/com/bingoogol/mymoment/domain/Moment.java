@@ -8,7 +8,7 @@ public class Moment {
 
 	public Moment() {
 	}
-
+	
 	public Moment(int id, String content, String imgPath, String publishTime) {
 		this.id = id;
 		this.content = content;
@@ -47,6 +47,5 @@ public class Moment {
 	public void setPublishTime(String publishTime) {
 		this.publishTime = publishTime;
 	}
-
 	
 }
