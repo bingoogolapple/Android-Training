@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
-import android.view.Window;
 
 public abstract class GenericActivity extends Activity implements OnClickListener {
 	protected Context context;
@@ -13,7 +12,7 @@ public abstract class GenericActivity extends Activity implements OnClickListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		context = getApplicationContext();
 		tag = getClass().getSimpleName();
