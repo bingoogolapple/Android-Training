@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/img_bg_common_actionbar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/img_btn_home_actionbar_more" />
+        <ImageView style="@style/title_logo_style" />
+
+        <Button
+            android:id="@+id/home_write_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/img_btn_home_actionbar_write" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/home_moment_lv"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="999" >
+    </ListView>
+
+</LinearLayout>

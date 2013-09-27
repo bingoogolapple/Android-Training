@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyMoment</string>
+    <string name="action_settings">Settings</string>
+    <string name="camera">相机</string>
+    <string name="gallery">相册</string>
+    <string name="add_img">添加图片</string>
+
+</resources>
