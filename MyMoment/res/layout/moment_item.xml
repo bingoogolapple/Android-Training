@@ -4,19 +4,18 @@
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
-    <LinearLayout
-        android:id="@+id/item_left_ll"
+    <RelativeLayout
+        android:id="@+id/item_left_rl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="145dp"
         android:layout_weight="999"
         android:background="@drawable/img_bg_home_feed_listitem_sharecontent_left"
-        android:orientation="vertical"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="15dp"
-        android:paddingTop="5dp" >
+        android:gravity="left"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp" >
 
         <TextView
             android:id="@+id/id_left_tv"
@@ -26,8 +25,10 @@
 
         <TextView
             android:id="@+id/content_left_tv"
-            android:layout_width="fill_parent"
+            android:layout_width="100dp"
             android:layout_height="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:textColor="#B4B4B4"
             android:textSize="12sp" />
 
@@ -35,8 +36,10 @@
             android:id="@+id/img_left_iv"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="5dp" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="40dp"
@@ -54,9 +57,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="29dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
             android:background="@drawable/item_time_bg"
             android:padding="3dp"
+            android:text="23:00"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
@@ -65,26 +70,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="21dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/item_time_bg"
             android:padding="3dp"
+            android:text="23:00"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/item_right_ll"
+    <RelativeLayout
+        android:id="@+id/item_right_rl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="145dp"
         android:layout_weight="999"
-        android:background="@drawable/img_bg_home_feed_listitem_sharecontent_right"
-        android:orientation="vertical"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp" >
+        android:gravity="right"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/img_bg_home_feed_listitem_sharecontent_right" >
 
         <TextView
             android:id="@+id/id_right_tv"
@@ -94,8 +100,10 @@
 
         <TextView
             android:id="@+id/content_right_tv"
-            android:layout_width="fill_parent"
+            android:layout_width="100dp"
             android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:textColor="#B4B4B4"
             android:textSize="12sp" />
 
@@ -103,7 +111,9 @@
             android:id="@+id/img_right_iv"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="5dp" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
 
 </LinearLayout>

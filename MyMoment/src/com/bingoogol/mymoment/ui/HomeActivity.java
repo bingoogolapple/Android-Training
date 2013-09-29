@@ -60,9 +60,11 @@ public class HomeActivity extends GenericActivity {
 			Intent writeIntent = new Intent(context, WriteActivity.class);
 			startActivityForResult(writeIntent, 0);
 			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+			closeMore();
 			break;
 		case R.id.refresh_btn:
 			refresh();
+			closeMore();
 			break;
 		case R.id.home_more_btn:
 			//通过帧布局的方式实现

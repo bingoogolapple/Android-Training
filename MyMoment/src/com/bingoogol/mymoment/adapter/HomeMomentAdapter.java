@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bingoogol.mymoment.R;
@@ -75,19 +75,19 @@ public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListene
 			viewHolder.contentLeftTv = (TextView) convertView.findViewById(R.id.content_left_tv);
 			viewHolder.imgLeftIv = (ImageView) convertView.findViewById(R.id.img_left_iv);
 			viewHolder.publishTimeLeftTv = (TextView) convertView.findViewById(R.id.publish_time_left_tv);
-			viewHolder.itemLeftLl = (LinearLayout) convertView.findViewById(R.id.item_left_ll);
+			viewHolder.itemLeftRl = (RelativeLayout) convertView.findViewById(R.id.item_left_rl);
 			viewHolder.idRightTv = (TextView) convertView.findViewById(R.id.id_right_tv);
 			viewHolder.contentRightTv = (TextView) convertView.findViewById(R.id.content_right_tv);
 			viewHolder.imgRightIv = (ImageView) convertView.findViewById(R.id.img_right_iv);
 			viewHolder.publishTimeRightTv = (TextView) convertView.findViewById(R.id.publish_time_right_tv);
-			viewHolder.itemRightLl = (LinearLayout) convertView.findViewById(R.id.item_right_ll);
+			viewHolder.itemRightRl = (RelativeLayout) convertView.findViewById(R.id.item_right_rl);
 			convertView.setTag(viewHolder);
 
-			viewHolder.itemLeftLl.setOnLongClickListener(this);
-			viewHolder.itemRightLl.setOnLongClickListener(this);
+			viewHolder.itemLeftRl.setOnLongClickListener(this);
+			viewHolder.itemRightRl.setOnLongClickListener(this);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
-			viewHolder.itemRightLl.setVisibility(View.VISIBLE);
+			viewHolder.itemRightRl.setVisibility(View.VISIBLE);
 			viewHolder.publishTimeRightTv.setVisibility(View.VISIBLE);
 		}
 		// 加载左边部分
@@ -136,7 +136,7 @@ public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListene
 			}
 		} else {
 			viewHolder.publishTimeRightTv.setVisibility(View.INVISIBLE);
-			viewHolder.itemRightLl.setVisibility(View.INVISIBLE);
+			viewHolder.itemRightRl.setVisibility(View.INVISIBLE);
 		}
 		return convertView;
 	}
@@ -150,8 +150,8 @@ public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListene
 		private TextView contentRightTv;
 		private TextView publishTimeRightTv;
 		private ImageView imgRightIv;
-		private LinearLayout itemLeftLl;
-		private LinearLayout itemRightLl;
+		private RelativeLayout itemLeftRl;
+		private RelativeLayout itemRightRl;
 	}
 
 	@Override
@@ -159,11 +159,11 @@ public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListene
 		TextView idTv = null;
 		String id = null;
 		switch (v.getId()) {
-		case R.id.item_left_ll:
+		case R.id.item_left_rl:
 			idTv = (TextView) v.findViewById(R.id.id_left_tv);
 			id = idTv.getText().toString().trim();
 			break;
-		case R.id.item_right_ll:
+		case R.id.item_right_rl:
 			idTv = (TextView) v.findViewById(R.id.id_right_tv);
 			id = idTv.getText().toString().trim();
 			break;

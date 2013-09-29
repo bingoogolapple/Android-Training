@@ -15,7 +15,7 @@
     <style name="dialog_btn">
         <item name="android:gravity">left</item>
         <item name="android:padding">15dp</item>
-        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">16sp</item>
