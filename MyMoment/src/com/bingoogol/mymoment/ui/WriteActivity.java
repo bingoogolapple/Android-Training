@@ -213,6 +213,8 @@ public class WriteActivity extends GenericActivity {
 			if (file.exists()) {
 				file.delete();
 			}
+			
+			// TODO 这里有问题，应该是在点击发布按钮的时候才保存到文件中
 			OutputStream os = null;
 			try {
 				os = new FileOutputStream(file);

@@ -67,15 +67,15 @@ public class HomeActivity extends GenericActivity {
 			closeMore();
 			break;
 		case R.id.home_more_btn:
-			//通过帧布局的方式实现
+			// 通过帧布局的方式实现
 			if (moreLl.getVisibility() == View.INVISIBLE) {
 				showMore();
 			} else {
 				closeMore();
 			}
-			
-			//通过popupwindow的方式实现
-			//showPopupWindow();
+
+			// 通过popupwindow的方式实现
+			// showPopupWindow();
 			break;
 		case R.id.home_settings_btn:
 			ToastUtil.makeCustomToast(context, "点击了设置按钮");
@@ -95,12 +95,14 @@ public class HomeActivity extends GenericActivity {
 		moreLl.setVisibility(View.VISIBLE);
 		moreLl.startAnimation(animation);
 	}
-	
+
 	private void closeMore() {
-		Animation animation = new AlphaAnimation(1.0f, 0.0f);
-		animation.setDuration(500);
-		moreLl.setVisibility(View.INVISIBLE);
-		moreLl.startAnimation(animation);
+		if (moreLl.getVisibility() == View.VISIBLE) {
+			Animation animation = new AlphaAnimation(1.0f, 0.0f);
+			animation.setDuration(500);
+			moreLl.setVisibility(View.INVISIBLE);
+			moreLl.startAnimation(animation);
+		}
 	}
 
 	@SuppressWarnings("unused")
