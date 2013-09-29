@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/item_dialog_update"
+        style="@style/dialog_btn"
+        android:text="@string/update" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+
+    <Button
+        android:id="@+id/item_dialog_delete"
+        style="@style/dialog_btn"
+        android:text="@string/delete" />
+
+</LinearLayout>

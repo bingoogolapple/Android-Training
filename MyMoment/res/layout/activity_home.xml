@@ -7,15 +7,17 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/img_bg_common_actionbar"
+        android:background="@drawable/img_bg_common_actionbar_noshadow"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <Button
+            android:id="@+id/home_more_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:background="@drawable/img_btn_home_actionbar_more" />
+
         <ImageView style="@style/title_logo_style" />
 
         <Button
@@ -26,11 +28,40 @@
             android:background="@drawable/img_btn_home_actionbar_write" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/home_moment_lv"
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="999" >
-    </ListView>
+        <ListView
+            android:id="@+id/home_moment_lv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+        <LinearLayout
+            android:id="@+id/more_ll"
+            android:visibility="invisible"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/home_more_bg"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/home_settings_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:text="设置"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/home_exit_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:text="退出"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.bingoogol.mymoment.ui;
 
 import java.util.List;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,10 +10,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bingoogol.mymoment.R;
@@ -25,9 +30,14 @@ import com.bingoogol.mymoment.util.ToastUtil;
 
 public class HomeActivity extends GenericActivity {
 	private Button writeBtn;
+	private Button moreBtn;
+	private Button settingsBtn;
+	private Button exitBtn;
+	private Button refreshBtn;
 	private TextView dateTv;
 	private TextView timeTv;
 	private ListView momentLv;
+	private LinearLayout moreLl;
 	private HomeMomentAdapter adapter;
 	private MomentService momentService;
 	private int offset = 0;
@@ -54,10 +64,50 @@ public class HomeActivity extends GenericActivity {
 		case R.id.refresh_btn:
 			refresh();
 			break;
-
+		case R.id.home_more_btn:
+			//通过帧布局的方式实现
+			if (moreLl.getVisibility() == View.INVISIBLE) {
+				showMore();
+			} else {
+				closeMore();
+			}
+			
+			//通过popupwindow的方式实现
+			//showPopupWindow();
+			break;
+		case R.id.home_settings_btn:
+			ToastUtil.makeCustomToast(context, "点击了设置按钮");
+			closeMore();
+			break;
+		case R.id.home_exit_btn:
+			finish();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void showMore() {
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(500);
+		moreLl.setVisibility(View.VISIBLE);
+		moreLl.startAnimation(animation);
+	}
+	
+	private void closeMore() {
+		Animation animation = new AlphaAnimation(1.0f, 0.0f);
+		animation.setDuration(500);
+		moreLl.setVisibility(View.INVISIBLE);
+		moreLl.startAnimation(animation);
+	}
+
+	@SuppressWarnings("unused")
+	private void showPopupWindow() {
+		View view = View.inflate(this, R.layout.popuwindow, null);
+		final PopupWindow popupWindow = new PopupWindow(view);
+		popupWindow.setHeight(LayoutParams.WRAP_CONTENT);
+		popupWindow.setWidth(LayoutParams.WRAP_CONTENT);
+		// TODO 还未做完
 	}
 
 	private void refresh() {
@@ -73,11 +123,16 @@ public class HomeActivity extends GenericActivity {
 
 	@Override
 	protected void findViewById() {
+		moreLl = (LinearLayout) this.findViewById(R.id.more_ll);
 		writeBtn = (Button) this.findViewById(R.id.home_write_btn);
+		moreBtn = (Button) this.findViewById(R.id.home_more_btn);
+		settingsBtn = (Button) this.findViewById(R.id.home_settings_btn);
+		exitBtn = (Button) this.findViewById(R.id.home_exit_btn);
 		momentLv = (ListView) this.findViewById(R.id.home_moment_lv);
 		View headerView = LayoutInflater.from(context).inflate(R.layout.moment_header, null);
 		momentLv.addHeaderView(headerView);
 		momentLv.setDivider(null);
+		refreshBtn = (Button) headerView.findViewById(R.id.refresh_btn);
 		dateTv = (TextView) headerView.findViewById(R.id.home_date_tv);
 		timeTv = (TextView) headerView.findViewById(R.id.home_time_tv);
 	}
@@ -85,6 +140,10 @@ public class HomeActivity extends GenericActivity {
 	@Override
 	protected void setListener() {
 		writeBtn.setOnClickListener(this);
+		moreBtn.setOnClickListener(this);
+		settingsBtn.setOnClickListener(this);
+		exitBtn.setOnClickListener(this);
+		refreshBtn.setOnClickListener(this);
 		momentLv.setOnScrollListener(new OnScrollListener() {
 
 			@Override
@@ -102,7 +161,7 @@ public class HomeActivity extends GenericActivity {
 								offset += maxResult;
 								fillList();
 							} else {
-//								ToastUtil.makeText(context, "没有更多数据了");
+								// ToastUtil.makeText(context, "没有更多数据了");
 								ToastUtil.makeCustomToast(context, "没有更多数据了");
 							}
 						}
@@ -113,7 +172,7 @@ public class HomeActivity extends GenericActivity {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				
+
 			}
 		});
 	}
@@ -171,7 +230,7 @@ public class HomeActivity extends GenericActivity {
 			}
 
 			@Override
-			protected void onPostExecute(List<Moment> result) {				
+			protected void onPostExecute(List<Moment> result) {
 				if (result != null) {
 					if (adapter == null) {
 						adapter = new HomeMomentAdapter(HomeActivity.this, momentLv, result);
@@ -199,5 +258,4 @@ public class HomeActivity extends GenericActivity {
 
 		}.execute();
 	}
-
 }

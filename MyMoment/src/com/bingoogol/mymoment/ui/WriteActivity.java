@@ -1,18 +1,21 @@
 package com.bingoogol.mymoment.ui;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,12 +34,12 @@ public class WriteActivity extends GenericActivity {
 	private Button backBtn = null;
 	private ImageView addImgIv = null;
 	private Button publishBtn = null;
-	private Resources resources = null;
 	private EditText contentEt = null;
 	private String imgRealPath = null;
 	private MomentService momentService = null;
 	private boolean isAdd = true;
 	private int id;
+
 	@Override
 	protected void loadViewLayout() {
 		setContentView(R.layout.activity_write);
@@ -60,9 +63,8 @@ public class WriteActivity extends GenericActivity {
 	@Override
 	protected void processLogic() {
 		momentService = new MomentService(context);
-		resources = context.getResources();
 		Bundle bundle = getIntent().getExtras();
-		if(bundle != null) {
+		if (bundle != null) {
 			isAdd = false;
 			id = bundle.getInt("id");
 			publishBtn.setText(R.string.update);
@@ -88,7 +90,7 @@ public class WriteActivity extends GenericActivity {
 			overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 			break;
 		case R.id.write_add_img_iv:
-			addImg();
+			showAddImgMethodDialog();
 			break;
 		case R.id.write_publish_btn:
 			publish();
@@ -98,24 +100,28 @@ public class WriteActivity extends GenericActivity {
 		}
 	}
 
-	private void addImg() {
-		String[] items = new String[] { resources.getString(R.string.camera), resources.getString(R.string.gallery) };
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.add_img);
-		builder.setItems(items, new OnClickListener() {
+	private void showAddImgMethodDialog() {
+		final Dialog dialog = new Dialog(this, R.style.MyDialog);
+		View view = View.inflate(this, R.layout.add_img_dialog, null);
+		Button updateBtn = (Button) view.findViewById(R.id.camera_btn);
+		updateBtn.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case 0:
-					getFromCamera();
-					break;
-				case 1:
-					getFromGallery();
-					break;
-				}
+			public void onClick(View v) {
+				getFromCamera();
+				dialog.dismiss();
 			}
 		});
-		builder.create().show();
+		Button deleteBtn = (Button) view.findViewById(R.id.gallery_btn);
+		deleteBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getFromGallery();
+				dialog.dismiss();
+			}
+		});
+		dialog.setContentView(view);
+		dialog.setCancelable(true);
+		dialog.show();
 	}
 
 	private void getFromCamera() {
@@ -149,7 +155,7 @@ public class WriteActivity extends GenericActivity {
 			moment.setContent(content);
 			moment.setImgPath(imgRealPath);
 			moment.setPublishTime(DateUtil.getPublishTime());
-			if(isAdd) {
+			if (isAdd) {
 				if (momentService.addMoment(moment)) {
 					// mResultCode默认值为RESULT_CANCELED;
 					setResult(RESULT_OK);
@@ -175,17 +181,80 @@ public class WriteActivity extends GenericActivity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			if (requestCode == Constants.activity.GET_FROM_GALLERY) {
-				imgRealPath = StorageUtil.getRealPathByUri(context, intent.getData());
-			} else {
-				imgRealPath = intent.getData().getPath();
+			switch (requestCode) {
+			case Constants.activity.GET_FROM_GALLERY:
+				startPhotoZoom(data.getData());
+				break;
+			case Constants.activity.GET_FROM_CAMERA:
+				startPhotoZoom(Uri.fromFile(new File(data.getData().getPath())));
+				break;
+			case Constants.activity.GET_FROM_CROP:
+				setPicToView(data);
+				break;
+			default:
+				break;
 			}
-			addImgIv.setImageBitmap(StorageUtil.getBitmapFromLocal(imgRealPath));
 		} else {
 			// TODO
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+	private void setPicToView(Intent data) {
+		if (data != null) {
+			Bitmap bitmap = data.getExtras().getParcelable("data");
+			if (imgRealPath == null) {
+				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+				imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
+			}
+			File file = new File(imgRealPath);
+			if (file.exists()) {
+				file.delete();
+			}
+			OutputStream os = null;
+			try {
+				os = new FileOutputStream(file);
+				bitmap.compress(CompressFormat.PNG, 100, os);
+				addImgIv.setImageBitmap(bitmap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(os != null) {
+					try {
+						os.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	public void startPhotoZoom(Uri uri) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", 150);
+		intent.putExtra("outputY", 150);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, Constants.activity.GET_FROM_CROP);
+	}
+
+	/*
+	 * @Override protected void onActivityResult(int requestCode, int
+	 * resultCode, Intent intent) { super.onActivityResult(requestCode,
+	 * resultCode, intent); if (resultCode == RESULT_OK) { if (requestCode ==
+	 * Constants.activity.GET_FROM_GALLERY) { imgRealPath =
+	 * StorageUtil.getRealPathByUri(context, intent.getData()); } else {
+	 * imgRealPath = intent.getData().getPath(); }
+	 * addImgIv.setImageBitmap(StorageUtil.getBitmapFromLocal(imgRealPath)); }
+	 * else { // TODO } }
+	 */
 }

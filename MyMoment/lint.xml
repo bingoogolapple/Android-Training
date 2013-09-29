@@ -3,7 +3,8 @@
     <issue id="ContentDescription" severity="ignore" />
     <issue id="HandlerLeak" severity="ignore" />
     <issue id="HardcodedText" severity="ignore" />
-    <issue id="NewApi">
+    <issue id="InlinedApi" severity="ignore" />
+    <issue id="NewApi" severity="ignore">
         <ignore path="src/com/bingoogol/mymoment/adapter/HomeMomentAdapter.java" />
     </issue>
     <issue id="SimpleDateFormat" severity="ignore" />

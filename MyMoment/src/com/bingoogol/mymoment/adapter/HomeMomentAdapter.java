@@ -3,17 +3,17 @@ package com.bingoogol.mymoment.adapter;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +27,7 @@ import com.bingoogol.mymoment.util.ImageCache;
 import com.bingoogol.mymoment.util.ImageFetcher;
 import com.bingoogol.mymoment.util.ImageFetcher.ImgCallback;
 import com.bingoogol.mymoment.util.Logger;
+import com.bingoogol.mymoment.util.ToastUtil;
 
 public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListener {
 	private List<Moment> datas;
@@ -171,35 +172,41 @@ public class HomeMomentAdapter extends BaseAdapter implements OnLongClickListene
 		return false;
 	}
 	
+	
 	private void showDialog(final int id) {
-		String[] items = new String[] { context.getResources().getString(R.string.delete), context.getResources().getString(R.string.update) };
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setItems(items, new OnClickListener() {
+		final Dialog dialog = new Dialog(context, R.style.MyDialog);
+		View view = View.inflate(context, R.layout.item_long_click_dialog, null);
+		Button updateBtn = (Button) view.findViewById(R.id.item_dialog_update);
+		updateBtn.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case 0:
-					Logger.i("HomeMomentAdapter", "删除" + id);
-					MomentService momentService = new MomentService(context);
-					if(momentService.deleteMoment(id)) {
-						datas.remove(getDeleteMoment(id));
-						HomeMomentAdapter.this.notifyDataSetChanged();
-						Logger.i("HomeMomentAdapter", "size=" + datas.size());
-					} else {
-						// TODO 删除失败
-					}
-					break;
-				case 1:
-					Logger.i("HomeMomentAdapter", "修改" + id);
-					Intent intent = new Intent(context,WriteActivity.class);
-					intent.putExtra("id", id);
-					context.startActivityForResult(intent, 0);
-					context.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
-					break;
+			public void onClick(View v) {
+				Logger.i("HomeMomentAdapter", "修改" + id);
+				Intent intent = new Intent(context,WriteActivity.class);
+				intent.putExtra("id", id);
+				context.startActivityForResult(intent, 0);
+				context.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+				dialog.dismiss();
+			}
+		});
+		Button deleteBtn = (Button) view.findViewById(R.id.item_dialog_delete);
+		deleteBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Logger.i("HomeMomentAdapter", "删除" + id);
+				MomentService momentService = new MomentService(context);
+				if(momentService.deleteMoment(id)) {
+					datas.remove(getDeleteMoment(id));
+					HomeMomentAdapter.this.notifyDataSetChanged();
+					Logger.i("HomeMomentAdapter", "size=" + datas.size());
+					dialog.dismiss();
+				} else {
+					ToastUtil.makeCustomToast(context, "删除失败");
 				}
 			}
 		});
-		builder.create().show();
+		dialog.setContentView(view);
+		dialog.setCancelable(true);
+		dialog.show();
 	}
 	
 	/**

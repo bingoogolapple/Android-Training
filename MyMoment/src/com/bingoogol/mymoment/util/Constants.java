@@ -24,6 +24,7 @@ public final class Constants {
 	public static final class activity {
 		public static final int GET_FROM_GALLERY = 1;
 		public static final int GET_FROM_CAMERA = 2;
+		public static final int GET_FROM_CROP = 3;
 	}
 
 	public static final class file {
