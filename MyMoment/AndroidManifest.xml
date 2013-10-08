@@ -23,17 +23,17 @@
         android:theme="@style/AppTheme" >
         <uses-library android:name="android.test.runner" />
 
-        <activity android:name="com.bingoogol.mymoment.ui.WelcomeActivity" >
+        <activity android:name=".ui.WelcomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.bingoogol.mymoment.ui.HomeActivity" >
+        <activity android:name=".ui.HomeActivity" >
         </activity>
         <activity
-            android:name="com.bingoogol.mymoment.ui.WriteActivity"
+            android:name=".ui.WriteActivity"
             android:windowSoftInputMode="adjustResize" >
         </activity>
     </application>

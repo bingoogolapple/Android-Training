@@ -35,7 +35,7 @@ public class WriteActivity extends GenericActivity {
 	private ImageView addImgIv = null;
 	private Button publishBtn = null;
 	private EditText contentEt = null;
-	private String imgRealPath = null;
+	private String imgRealPath = "";
 	private MomentService momentService = null;
 	private boolean isAdd = true;
 	private int id;
@@ -188,7 +188,7 @@ public class WriteActivity extends GenericActivity {
 				startPhotoZoom(data.getData());
 				break;
 			case Constants.activity.GET_FROM_CAMERA:
-				startPhotoZoom(Uri.fromFile(new File(data.getData().getPath())));
+				startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
 				break;
 			case Constants.activity.GET_FROM_CROP:
 				setPicToView(data);
@@ -205,7 +205,7 @@ public class WriteActivity extends GenericActivity {
 	private void setPicToView(Intent data) {
 		if (data != null) {
 			Bitmap bitmap = data.getExtras().getParcelable("data");
-			if (imgRealPath == null) {
+			if ("".equals(imgRealPath)) {
 				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 				imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
 			}
