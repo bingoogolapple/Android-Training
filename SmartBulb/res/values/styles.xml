@@ -1,0 +1,51 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="tv_dialog">
+        <item name="android:gravity">left</item>
+        <item name="android:padding">25dp</item>
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#F8F8F8</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="tv_dialog_operate" parent="tv_dialog"></style>
+
+    <style name="btn_dialog">
+        <item name="android:gravity">center</item>
+       <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:background">#F8F8F8</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    
+
+    <style name="btn_dialog_operate" parent="btn_dialog">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">999</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="btn_dialog_add_img_type" parent="btn_dialog">
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="btn_dialog_select_img">
+        <item name="android:gravity">left</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>

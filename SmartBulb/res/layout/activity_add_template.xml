@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_img"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_title_main"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/title_activity_bg"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btn_select_img"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/btn_insert_pic" />
+
+        <TextView
+            android:id="@+id/tv_title_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="New Scene"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
+
+        <RelativeLayout
+            android:layout_width="43dp"
+            android:layout_height="52dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp" >
+
+            <ImageView
+                android:id="@+id/picker1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:layout_width="43dp"
+                android:layout_height="52dp"
+                android:background="@drawable/colorpicker_big" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="43dp"
+            android:layout_height="52dp"
+            android:layout_centerHorizontal="true" >
+
+            <ImageView
+                android:id="@+id/picker2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:layout_width="43dp"
+                android:layout_height="52dp"
+                android:background="@drawable/colorpicker_big" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="43dp"
+            android:layout_height="52dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp" >
+
+            <ImageView
+                android:id="@+id/picker3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:layout_width="43dp"
+                android:layout_height="52dp"
+                android:background="@drawable/colorpicker_big" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_img_add_template"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/default_img" />
+
+    <TextView
+        android:id="@+id/tv_bulb_name"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:textColor="@android:color/white" />
+
+    <SeekBar
+        android:id="@+id/edit_sb_bri"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:progressDrawable="@drawable/seekbar"
+        android:thumb="@drawable/thum" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:hint="请输入模板名称"
+        android:paddingLeft="10dp"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_add_selector"
+        android:text="Save" />
+
+</LinearLayout>

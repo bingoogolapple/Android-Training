@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SmartBulb</string>
+    <string name="operate">操作提示</string>
+    <string name="no_wifi">Wifi未正确链接,请设置Wifi</string>
+    <string name="set_wifi">设置</string>
+    <string name="exit">退出</string>
+    <string name="press_link_btn">请按下按钮</string>
+    <string name="retry">重试</string>
+    <string name="gallery">相册</string>
+    <string name="camera">拍照</string>
+    <string name="add_img">添加图片</string>
+</resources>

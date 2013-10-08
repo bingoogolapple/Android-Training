@@ -1,0 +1,309 @@
+package com.bingoogol.smartbulb.api;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import android.util.Log;
+
+import com.bingoogol.smartbulb.util.Constants;
+import com.bingoogol.smartbulb.util.Logger;
+
+/**
+ * api访问客户端，对HttpClient进行封装
+ * 
+ * @author Li Bin
+ */
+public class HueRestClient {
+	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
+
+	private String ipAddress = "192.168.1.101";
+
+	private String userName = "newdeveloper";
+
+	private static HueRestClient instance;
+
+	private HueRestClient() {
+	}
+
+	/**
+	 * 获取HueRestClient类唯一实例
+	 * 
+	 * @return
+	 */
+	public synchronized static HueRestClient getInstance() {
+		if (instance == null) {
+			instance = new HueRestClient();
+		}
+		return instance;
+	}
+
+	/**
+	 * 获取桥接器ip
+	 * 
+	 * @return
+	 */
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * 获取用户名
+	 * 
+	 * @return
+	 */
+	public String getUserName() {
+		return this.userName;
+	}
+
+	/**
+	 * 设置用户名
+	 * 
+	 * @param userName
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * 设置桥接器ip
+	 * 
+	 * @param ipAddress
+	 */
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+	/**
+	 * 以get方式发送请求调用api
+	 * 
+	 * @param url
+	 *            表示相应api的相对地址
+	 * @return 返回Json格式的响应数据
+	 * @throws Exception
+	 */
+	public synchronized String get(String path) {
+		String jsonResult = "";
+		InputStream is = null;
+		try {
+			// Log.i("Get", "1");
+			HttpURLConnection conn = getHttpURLConnection(path);
+			conn.setRequestMethod("GET");
+			if (conn.getResponseCode() == 200) {
+				is = conn.getInputStream();
+				jsonResult = this.read(is);
+				Log.i("Get", jsonResult);
+			}
+
+		} catch (MalformedURLException e) {
+			Log.e("Get", "URL格式错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e("Get", "连接网络发生错误" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeStream(is);
+		}
+
+		return jsonResult;
+	}
+
+	/**
+	 * 以post方法发送请求调用api
+	 * 
+	 * @param url
+	 * @param jsonBody
+	 *            json格式的请求数据
+	 * @return 返回Json格式的响应数据
+	 * @throws IOException 
+	 */
+	public synchronized String post(String path, String jsonBody) {
+		String jsonResult = "";
+		OutputStream os = null;
+		InputStream is = null;
+
+		try {
+			HttpURLConnection conn = getHttpURLConnection(path);
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+
+			conn.setRequestProperty("Content-type", CONTENT_TYPE);
+
+			conn.setRequestMethod("POST");
+			os = conn.getOutputStream();
+			os.write(jsonBody.getBytes());
+			os.flush();
+
+			if (conn.getResponseCode() == 200) {
+				is = conn.getInputStream();
+				jsonResult = this.read(is);
+				Log.i("Post", jsonResult);
+			}
+		} catch (MalformedURLException e) {
+			Log.e(Constants.TAG, "URL格式错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e(Constants.TAG, "网络链接错误");
+			e.printStackTrace();
+		} finally {
+			closeStream(is);
+			closeStream(os);
+		}
+		return jsonResult;
+	}
+
+	/**
+	 * 以put方法发送请求调用api
+	 * 
+	 * 
+	 * @param url
+	 * @param jsonBody
+	 *            json格式的请求数据
+	 * @return 返回Json格式的响应数据
+	 */
+	public synchronized String put(String path, String jsonBody) {
+		String jsonResult = "";
+		OutputStream os = null;
+		InputStream is = null;
+		try {
+			HttpURLConnection conn = getHttpURLConnection(path);
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+			conn.setRequestProperty("Content-type", CONTENT_TYPE);
+			conn.setRequestMethod("PUT");
+			os = conn.getOutputStream();
+			os.write(jsonBody.getBytes());
+			os.flush();
+
+			if (conn.getResponseCode() == 200) {
+				is = conn.getInputStream();
+				jsonResult = this.read(is);
+			}
+		} catch (MalformedURLException e) {
+			Log.e(Constants.TAG, "URL格式错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e(Constants.TAG, "连接网络发生错误:");
+		} finally {
+			closeStream(is);
+			closeStream(os);
+		}
+		return jsonResult;
+	}
+
+	/**
+	 * 以delete方式发送请求调用api
+	 * 
+	 * @param url
+	 *            表示相应api的相对地址
+	 * @return 返回Json格式的响应数据
+	 */
+	public synchronized String delete(String path) {
+		String jsonResult = "";
+		InputStream is = null;
+		try {
+			HttpURLConnection conn = getHttpURLConnection(path);
+			conn.setRequestMethod("DELETE");
+			if (conn.getResponseCode() == 200) {
+				is = conn.getInputStream();
+				jsonResult = this.read(is);
+			}
+			Log.d(Constants.TAG, jsonResult);
+		} catch (MalformedURLException e) {
+			Log.e(Constants.TAG, "URL格式错误");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e(Constants.TAG, "连接网络发生错误" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			closeStream(is);
+		}
+
+		return jsonResult;
+	}
+
+	/**
+	 * 获得HttpURLConnection连接实例
+	 * 
+	 * @param strURL
+	 * @return 连接
+	 * @throws IOException
+	 */
+	private HttpURLConnection getHttpURLConnection(String strURL)
+			throws IOException {
+		URL url = new URL(this.getAbsoluteURL(strURL));
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setConnectTimeout(Constants.net.CONNECTTIMEOUT);
+		conn.setReadTimeout(Constants.net.READTIMEOUT);
+		return conn;
+	}
+
+	/**
+	 * 从输入流中读出文本信息
+	 * 
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public String read(InputStream is) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		byte[] buffer = new byte[128];
+		int len = 0;
+		while ((len = is.read(buffer)) != -1) {
+			out.write(buffer, 0, len);
+		}
+
+		String text = new String(out.toByteArray(), "utf-8");
+		out.flush();
+		this.closeStream(out);
+		return text;
+	}
+
+	/**
+	 * 关闭IO流
+	 * 
+	 * @param obj
+	 */
+	private void closeStream(Object obj) {
+		if (obj != null && obj instanceof InputStream) {
+			InputStream is = (InputStream) obj;
+			try {
+				is.close();
+			} catch (IOException e) {
+				Log.e(Constants.TAG, "输入流关闭错误");
+				e.printStackTrace();
+			}
+		} else if (obj != null && obj instanceof OutputStream) {
+			OutputStream os = (OutputStream) obj;
+			try {
+				os.close();
+			} catch (IOException e) {
+				Log.e(Constants.TAG, "输出流关闭错误");
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	/**
+	 * 获取完整的URL
+	 * 
+	 * @param relativeURL
+	 * @return
+	 */
+	private String getAbsoluteURL(String relativeURL) {
+		String absoluteUrl = "";
+		if (relativeURL == null || "".equals(relativeURL)) {
+			absoluteUrl = "http://" + this.getIpAddress() + "/api/";
+		} else {
+			absoluteUrl = "http://" + this.getIpAddress() + "/api/"
+					+ this.getUserName() + relativeURL;
+		}
+		Logger.i(Constants.TAG, "absoluteURL >> " + absoluteUrl);
+		return absoluteUrl;
+	}
+}

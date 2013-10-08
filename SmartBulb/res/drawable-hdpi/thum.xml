@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 按下状态 -->
+    
+    <item android:drawable="@drawable/bulb_selected" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/sliderball_lr" android:state_pressed="false"></item>
+
+</selector>

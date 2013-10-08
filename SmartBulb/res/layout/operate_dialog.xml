@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/title_dialog_bg"
+        android:gravity="center"
+        android:text="@string/operate"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_msg_dialog"
+        style="@style/tv_dialog_operate" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_left_dialog"
+            style="@style/btn_dialog_operate"/>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="#E0E0E0" />
+
+        <Button
+            android:id="@+id/btn_right_dialog"
+            style="@style/btn_dialog_operate"/>
+    </LinearLayout>
+
+</LinearLayout>
