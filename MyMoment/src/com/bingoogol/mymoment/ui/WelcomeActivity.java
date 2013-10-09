@@ -36,7 +36,7 @@ public class WelcomeActivity extends GenericActivity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Intent homeIntent = new Intent(context,HomeActivity.class);
+				Intent homeIntent = new Intent(app,HomeActivity.class);
 				finish();
 				startActivity(homeIntent);
 				overridePendingTransition(R.anim.translate_in, R.anim.translate_out);

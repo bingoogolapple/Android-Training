@@ -57,7 +57,7 @@ public class HomeActivity extends GenericActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.home_write_btn:
-			Intent writeIntent = new Intent(context, WriteActivity.class);
+			Intent writeIntent = new Intent(app, WriteActivity.class);
 			startActivityForResult(writeIntent, 0);
 			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 			closeMore();
@@ -78,11 +78,11 @@ public class HomeActivity extends GenericActivity {
 			// showPopupWindow();
 			break;
 		case R.id.home_settings_btn:
-			ToastUtil.makeCustomToast(context, "点击了设置按钮");
+			ToastUtil.makeCustomToast(app, "点击了设置按钮");
 			closeMore();
 			break;
 		case R.id.home_exit_btn:
-			finish();
+			app.exit();
 			break;
 		default:
 			break;
@@ -133,7 +133,7 @@ public class HomeActivity extends GenericActivity {
 		settingsBtn = (Button) this.findViewById(R.id.home_settings_btn);
 		exitBtn = (Button) this.findViewById(R.id.home_exit_btn);
 		momentLv = (ListView) this.findViewById(R.id.home_moment_lv);
-		View headerView = LayoutInflater.from(context).inflate(R.layout.moment_header, null);
+		View headerView = LayoutInflater.from(app).inflate(R.layout.moment_header, null);
 		momentLv.addHeaderView(headerView);
 		momentLv.setDivider(null);
 		refreshBtn = (Button) headerView.findViewById(R.id.refresh_btn);
@@ -166,7 +166,7 @@ public class HomeActivity extends GenericActivity {
 								fillList();
 							} else {
 								// ToastUtil.makeText(context, "没有更多数据了");
-								ToastUtil.makeCustomToast(context, "没有更多数据了");
+								ToastUtil.makeCustomToast(app, "没有更多数据了");
 							}
 						}
 					}
@@ -194,7 +194,7 @@ public class HomeActivity extends GenericActivity {
 
 	@Override
 	protected void processLogic() {
-		momentService = new MomentService(context);
+		momentService = new MomentService(app);
 		setDateTime();
 		fillList();
 	}
@@ -255,7 +255,7 @@ public class HomeActivity extends GenericActivity {
 			@Override
 			protected List<Moment> doInBackground(Void... params) {
 				if (momentService == null) {
-					momentService = new MomentService(context);
+					momentService = new MomentService(app);
 				}
 				return momentService.getScrollData(offset, maxResult);
 			}

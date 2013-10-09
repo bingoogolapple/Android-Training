@@ -62,7 +62,7 @@ public class WriteActivity extends GenericActivity {
 
 	@Override
 	protected void processLogic() {
-		momentService = new MomentService(context);
+		momentService = new MomentService(app);
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null) {
 			isAdd = false;
@@ -149,7 +149,7 @@ public class WriteActivity extends GenericActivity {
 	private void publish() {
 		String content = contentEt.getText().toString().trim();
 		if (content.length() == 0 || imgRealPath == null) {
-			ToastUtil.makeText(context, "必须选择一张照片和说一些话");
+			ToastUtil.makeText(app, "必须选择一张照片和说一些话");
 		} else {
 			Moment moment = new Moment();
 			moment.setContent(content);
@@ -163,7 +163,7 @@ public class WriteActivity extends GenericActivity {
 					finish();
 					overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 				} else {
-					ToastUtil.makeText(context, "发布失败");
+					ToastUtil.makeText(app, "发布失败");
 				}
 			} else {
 				moment.setId(id);
@@ -174,7 +174,7 @@ public class WriteActivity extends GenericActivity {
 					finish();
 					overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 				} else {
-					ToastUtil.makeText(context, "修改失败");
+					ToastUtil.makeText(app, "修改失败");
 				}
 			}
 		}
