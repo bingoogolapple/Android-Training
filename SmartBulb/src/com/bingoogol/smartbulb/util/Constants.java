@@ -11,6 +11,9 @@ public final class Constants {
 	private Constants() {
 	}
 	
+	public static String APP_NAME = "SmartBulb";
+	public static String TAG = APP_NAME;
+	
 	public static final class what {
 		public static final int SUCCESS = 1;
 		public static final int FAILURE = 2;
@@ -73,6 +76,4 @@ public final class Constants {
 		public static final int CONNECTTIMEOUT = 5000;
 		public static final int READTIMEOUT = 5000;
 	}
-
-	public static String TAG = "SmartBulb";
 }

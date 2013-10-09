@@ -10,7 +10,6 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -39,8 +38,8 @@ import com.bingoogol.smartbulb.domain.LightAttr;
 import com.bingoogol.smartbulb.domain.Template;
 import com.bingoogol.smartbulb.domain.http.LightEntry;
 import com.bingoogol.smartbulb.domain.http.State;
-import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
+import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
@@ -215,9 +214,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 						public void unauthorized() {
 							Logger.e(Constants.TAG, "用户名失效");
 							closeProgressDialog();
-							Editor editor = sp.edit();
-							editor.putString("username", "");
-							editor.commit();
+							app.addSp("username", "");
 							openSplashActivity();
 						}
 
@@ -369,9 +366,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 					public void unauthorized() {
 						Logger.e(Constants.TAG, "用户名失效");
 						closeProgressDialog();
-						Editor editor = sp.edit();
-						editor.putString("username", "");
-						editor.commit();
+						app.addSp("username", "");
 						openSplashActivity();
 					}
 
@@ -437,9 +432,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			public void unauthorized() {
 				Logger.e(Constants.TAG, "用户名失效");
 				closeProgressDialog();
-				Editor editor = sp.edit();
-				editor.putString("username", "");
-				editor.commit();
+				app.addSp("username", "");
 				openSplashActivity();
 			}
 
@@ -509,9 +502,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 					public void unauthorized() {
 						Logger.e(Constants.TAG, "用户名失效");
 						closeProgressDialog();
-						Editor editor = sp.edit();
-						editor.putString("username", "");
-						editor.commit();
+						app.addSp("username", "");
 						openSplashActivity();
 					}
 

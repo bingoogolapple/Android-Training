@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +17,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bingoogol.smartbulb.App;
 import com.bingoogol.smartbulb.db.dao.TemplateDao;
 import com.bingoogol.smartbulb.domain.LightAttr;
 import com.bingoogol.smartbulb.domain.Template;
 import com.bingoogol.smartbulb.domain.http.LightEntry;
 import com.bingoogol.smartbulb.domain.http.State;
-import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
+import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.ui.EditTemplateActivity;
 import com.bingoogol.smartbulb.ui.MainActivity;
 import com.bingoogol.smartbulb.util.Constants;
@@ -236,9 +236,8 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		public void unauthorized() {
 			Logger.e(Constants.TAG, "用户名失效");
 			activity.closeProgressDialog();
-			Editor editor = activity.sp.edit();
-			editor.putString("username", "");
-			editor.commit();
+			App app = (App) activity.getApplication();
+			app.addSp("username", "");
 			activity.openSplashActivity();
 		}
 

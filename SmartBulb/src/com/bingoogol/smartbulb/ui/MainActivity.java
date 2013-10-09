@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AbsListView;
@@ -231,9 +230,7 @@ public class MainActivity extends GenericActivity {
 			public void unauthorized() {
 				Logger.e(Constants.TAG, "用户名失效");
 				closeProgressDialog();
-				Editor editor = sp.edit();
-				editor.putString("username", "");
-				editor.commit();
+				app.addSp("username", "");
 				openSplashActivity();
 			}
 

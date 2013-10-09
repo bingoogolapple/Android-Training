@@ -3,7 +3,6 @@ package com.bingoogol.smartbulb.ui;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.view.View;
 
@@ -13,8 +12,8 @@ import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.util.ConnectivityUtil;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.DialogBuilder;
-import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.DialogBuilder.OperateDialogCallBack;
+import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smarthue.R;
 
 public class SplashActivity extends GenericActivity {
@@ -39,9 +38,7 @@ public class SplashActivity extends GenericActivity {
 		@Override
 		public void onSuccess(Object obj) {
 			closeProgressDialog();
-			Editor editor = sp.edit();
-			editor.putString("username", (String)obj);
-			editor.commit();
+			app.addSp("username", (String)obj);
 			openMainActivity();
 		}
 
@@ -113,7 +110,7 @@ public class SplashActivity extends GenericActivity {
 	}
 
 	private void openMainActivity() {
-		HueRestClient.getInstance().setUserName(sp.getString("username", ""));
+		HueRestClient.getInstance().setUserName(app.getSp("username",""));
 		Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
 		SplashActivity.this.finish();
 		startActivity(homeIntent);
@@ -147,7 +144,7 @@ public class SplashActivity extends GenericActivity {
 	@Override
 	protected void processLogic() {
 		if (ConnectivityUtil.isWifiConnected(SplashActivity.this)) {
-			String username = sp.getString("username", "");
+			String username = app.getSp("username","");
 			Logger.i(Constants.TAG, "用户名:" + username);
 			if ("".equals(username)) {
 				openProgressDialog();
