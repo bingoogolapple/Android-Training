@@ -32,7 +32,7 @@ public class MyAnimations {
 			ImageButton inoutimagebutton = (ImageButton) viewgroup.getChildAt(i);
 			inoutimagebutton.setVisibility(0);
 			MarginLayoutParams mlp = (MarginLayoutParams) inoutimagebutton.getLayoutParams();
-			Animation animation = new TranslateAnimation(mlp.rightMargin - xOffset, 0F, yOffset + mlp.bottomMargin, 0F);
+			Animation animation = new TranslateAnimation(xOffset - mlp.leftMargin, 0F, yOffset + mlp.bottomMargin, 0F);
 
 			animation.setFillAfter(true);
 			animation.setDuration(durationMillis);
@@ -47,7 +47,7 @@ public class MyAnimations {
 		for (int i = 0; i < viewgroup.getChildCount(); i++) {
 			final ImageButton inoutimagebutton = (ImageButton) viewgroup.getChildAt(i);
 			MarginLayoutParams mlp = (MarginLayoutParams) inoutimagebutton.getLayoutParams();
-			Animation animation = new TranslateAnimation(0F, mlp.rightMargin - xOffset, 0F, yOffset + mlp.bottomMargin);
+			Animation animation = new TranslateAnimation(0F, xOffset - mlp.leftMargin, 0F, yOffset + mlp.bottomMargin);
 
 			animation.setFillAfter(true);
 			animation.setDuration(durationMillis);
@@ -64,7 +64,6 @@ public class MyAnimations {
 
 				@Override
 				public void onAnimationEnd(Animation arg0) {
-					// TODO Auto-generated method stub
 					inoutimagebutton.setVisibility(8);
 				}
 			});

@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.httpmodel;
+package com.bingoogol.smartbulb.domain.http;
 
 import java.io.Serializable;
 

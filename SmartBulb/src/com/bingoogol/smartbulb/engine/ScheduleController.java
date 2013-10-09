@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.api;
+package com.bingoogol.smartbulb.engine;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,9 +10,9 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.bingoogol.smartbulb.httpmodel.Command;
-import com.bingoogol.smartbulb.httpmodel.ScheduleEntry;
-import com.bingoogol.smartbulb.httpmodel.State;
+import com.bingoogol.smartbulb.domain.http.Command;
+import com.bingoogol.smartbulb.domain.http.ScheduleEntry;
+import com.bingoogol.smartbulb.domain.http.State;
 
 /**
  * Schedule Api

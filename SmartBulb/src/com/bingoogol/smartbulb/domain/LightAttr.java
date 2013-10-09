@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.model;
+package com.bingoogol.smartbulb.domain;
 
 
 public class LightAttr {

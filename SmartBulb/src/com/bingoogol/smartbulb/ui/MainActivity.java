@@ -8,30 +8,28 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.bingoogol.smartbulb.adapter.MainGridViewAdapter;
-import com.bingoogol.smartbulb.api.LightsController;
-import com.bingoogol.smartbulb.api.LightHandler.LightCallback;
-import com.bingoogol.smartbulb.httpmodel.LightEntry;
-import com.bingoogol.smartbulb.httpmodel.State;
-import com.bingoogol.smartbulb.model.LightAttr;
-import com.bingoogol.smartbulb.model.ModelAccess;
-import com.bingoogol.smartbulb.model.Template;
+import com.bingoogol.smartbulb.db.dao.TemplateDao;
+import com.bingoogol.smartbulb.domain.Template;
+import com.bingoogol.smartbulb.domain.http.LightEntry;
+import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
+import com.bingoogol.smartbulb.engine.LightsController;
+import com.bingoogol.smartbulb.ui.adapter.MainGridViewAdapter;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.MyAnimations;
+import com.bingoogol.smartbulb.util.ToastUtil;
 import com.bingoogol.smarthue.R;
 
-public class MainActivity extends GenericActivity implements OnItemClickListener, OnItemLongClickListener {
+public class MainActivity extends GenericActivity {
 	private GridView mainGv;
 	private MainGridViewAdapter adapter;
-	private ModelAccess modelAccess;
+	private TemplateDao templateDao;
 	private boolean isFunctionsShowing;
 	private RelativeLayout functionRl;
 	private ImageButton functionIb;
@@ -39,18 +37,13 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 	private ImageButton addIb;
 
 	private LightsController lightsController;
-	private List<LightEntry> lightsList;
 	private ProgressDialog pd;
 
 	private int offset = 0;
-	private int maxResult = 12;
+	private int maxResult = 18;
 	private boolean isLoading = false;
 
-	private int flag = 0;
-
 	private List<LightEntry> lightEntries;
-
-	private boolean setLightAttributesAndState = true;
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -67,12 +60,12 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 		fillGridView();
 	}
 
-	private void openProgressDialog(String msg) {
+	public void openProgressDialog(String msg) {
 		pd = ProgressDialog.show(MainActivity.this, "提示", msg);
 		pd.setCancelable(false);
 	}
 
-	private void closeProgressDialog() {
+	public void closeProgressDialog() {
 		pd.dismiss();
 	}
 
@@ -93,8 +86,10 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 						template.setId(-1);
 						template.setName("ALL OFF");
 						datas.add(0, template);
-						adapter = new MainGridViewAdapter(MainActivity.this, datas);
+						adapter = new MainGridViewAdapter(MainActivity.this, datas,lightEntries);
 						mainGv.setAdapter(adapter);
+						mainGv.setOnItemClickListener(adapter);
+						mainGv.setOnItemLongClickListener(adapter);
 					} else {
 						// 把获取到的数据添加到数据适配器里
 						adapter.addMoreMoment(datas);
@@ -110,10 +105,10 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 
 			@Override
 			protected List<Template> doInBackground(Void... params) {
-				if (modelAccess == null) {
-					modelAccess = new ModelAccess(getApplicationContext());
+				if (templateDao == null) {
+					templateDao = new TemplateDao(getApplicationContext());
 				}
-				return modelAccess.getTemplateScrollData(offset, maxResult);
+				return templateDao.getTemplateScrollData(offset, maxResult);
 			}
 		}.execute();
 	}
@@ -132,8 +127,8 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 		case R.id.ib_add_main:
 			Logger.i(Constants.TAG, "点击了添加按钮");
 			closeFunction();
-			Intent addTemplate = new Intent(getApplicationContext(), AddTemplateActivity.class);
-			startActivityForResult(addTemplate, 0);
+			Intent editTemplateIntent = new Intent(getApplicationContext(), EditTemplateActivity.class);
+			startActivityForResult(editTemplateIntent, 0);
 			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 			break;
 
@@ -170,10 +165,39 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 
 	@Override
 	protected void setListener() {
-		mainGv.setOnItemClickListener(this);
-		mainGv.setOnItemLongClickListener(this);
 		functionIb.setOnClickListener(this);
 		addIb.setOnClickListener(this);
+		mainGv.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				switch (scrollState) {
+				// 如果当前滚动状态为静止状态，并且mainGv里面最后一个用户可见的条目等于mainGv适配器里的最后一个条目
+				case OnScrollListener.SCROLL_STATE_IDLE:
+					// 如果不是正在加载数据才去加载数据
+					if (!isLoading) {
+						// 从1开始
+						int position = view.getLastVisiblePosition();
+						int count = adapter.getCount();
+						if (position == count) {
+							if (offset + maxResult < templateDao.getCount()) {
+								offset += maxResult;
+								fillGridView();
+							} else {
+								ToastUtil.makeText(MainActivity.this, "没有更多数据了");
+							}
+						}
+					}
+					break;
+				}
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	@Override
@@ -227,102 +251,7 @@ public class MainActivity extends GenericActivity implements OnItemClickListener
 		startActivity(intent);
 		this.finish();
 	}
-
-	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		Logger.i(Constants.TAG, "长按");
-		// TODO 悬浮删除模板
-		return true;
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		openProgressDialog("正在获取灯泡属性");
-		if (id == -1) {
-			Logger.i(Constants.TAG, "关闭全部");
-			State state = new State();
-			state.setBri(0);
-			state.setHue(0);
-			state.setSat(0);
-			state.setOn(false);
-			for (final LightEntry lightEntry : lightEntries) {
-				lightsController.setLightState(lightEntry.getId(), state, new SetLightCallback());
-			}
-		} else {
-			Logger.i(Constants.TAG, "设置模板");
-			List<LightAttr> lightAttrs = modelAccess.getLightAttrListByTid((int) id);
-			LightAttr lightAttr;
-			for(int i = 0;i < lightAttrs.size(); i++) {
-				lightAttr = lightAttrs.get(i);
-				State state = new State();
-				state.setAlert(lightAttr.getAlert());
-				state.setBri(lightAttr.getBri());
-				state.setColormode(lightAttr.getColormode());
-				state.setCt(lightAttr.getCt());
-				state.setEffect(lightAttr.getEffect());
-				state.setHue(lightAttr.getHue());
-				state.setOn(lightAttr.getState() == 1?true:false);
-				state.setSat(lightAttr.getSat());
-				state.setTransitiontime(lightAttr.getTransitiontime());
-				state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
-				lightsController.setLightState(lightAttr.getId() + "", state, new SetLightCallback());
-			}
-		}
-		new Thread() {
-			public void run() {
-				while (true) {
-					if (flag == 3) {
-						Logger.i(Constants.TAG, "成功设置所有灯泡属性");
-						flag = 0;
-						closeProgressDialog();
-						break;
-					}
-					if (!setLightAttributesAndState) {
-						Logger.e(Constants.TAG, "设置灯泡属性失败");
-						flag = 0;
-						closeProgressDialog();
-						break;
-					}
-				}
-			};
-		}.start();
-	}
-
-	private class SetLightCallback implements LightCallback {
-
-		@Override
-		public void onSuccess(Object obj) {
-			flag++;
-		}
-
-		@Override
-		public void onFailure(Object obj) {
-			Logger.e(Constants.TAG, "设置灯泡属性失败");
-			setLightAttributesAndState = false;
-		}
-
-		@Override
-		public void wifiError() {
-			Logger.e(Constants.TAG, "wifi链接不对");
-			closeProgressDialog();
-			openSplashActivity();
-		}
-
-		@Override
-		public void unauthorized() {
-			Logger.e(Constants.TAG, "用户名失效");
-			closeProgressDialog();
-			Editor editor = sp.edit();
-			editor.putString("username", "");
-			editor.commit();
-			openSplashActivity();
-		}
-
-		@Override
-		public void pressLinkBtn() {
-			Logger.i(Constants.TAG, "按钮");
-		}
-
-	}
+	
+	
 
 }

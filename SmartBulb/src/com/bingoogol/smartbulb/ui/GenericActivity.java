@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View.OnClickListener;
 
 public abstract class GenericActivity extends Activity implements OnClickListener {
-	protected SharedPreferences sp;
+	public SharedPreferences sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,23 +29,24 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import com.bingoogol.smartbulb.api.LightsController;
-import com.bingoogol.smartbulb.api.LightHandler.LightCallback;
-import com.bingoogol.smartbulb.httpmodel.LightEntry;
-import com.bingoogol.smartbulb.httpmodel.State;
-import com.bingoogol.smartbulb.model.LightAttr;
-import com.bingoogol.smartbulb.model.ModelAccess;
-import com.bingoogol.smartbulb.model.Template;
+import com.bingoogol.smartbulb.db.dao.TemplateDao;
+import com.bingoogol.smartbulb.domain.LightAttr;
+import com.bingoogol.smartbulb.domain.Template;
+import com.bingoogol.smartbulb.domain.http.LightEntry;
+import com.bingoogol.smartbulb.domain.http.State;
+import com.bingoogol.smartbulb.engine.LightsController;
+import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
 import com.bingoogol.smarthue.R;
 
-public class AddTemplateActivity extends GenericActivity implements OnTouchListener {
+public class EditTemplateActivity extends GenericActivity implements OnTouchListener {
 
 	private ImageView picker1;
 	private ImageView picker2;
@@ -57,24 +60,28 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 	private Button selectImgBtn;
 	private TextView bulbNameTv;
 	private ProgressDialog pd;
+	private TemplateDao templateDao;
 	private LightsController lightsController = new LightsController();
 	private List<ImageView> pickersList = new ArrayList<ImageView>();
 	private List<LightEntry> lightEntries;
 	private boolean getLightAttributesAndState = true;
+	private boolean isAdd = true;
+	private int id;
+	private String imgRealPath = "";
 
 	private void showAddImgMethodDialog() {
 		final Dialog dialog = new Dialog(this, R.style.MyDialog);
 		View view = View.inflate(this, R.layout.add_img_dialog, null);
-		Button updateBtn = (Button) view.findViewById(R.id.camera_btn);
-		updateBtn.setOnClickListener(new OnClickListener() {
+		LinearLayout cameraLl = (LinearLayout) view.findViewById(R.id.ll_camera);
+		cameraLl.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getFromCamera();
 				dialog.dismiss();
 			}
 		});
-		Button deleteBtn = (Button) view.findViewById(R.id.gallery_btn);
-		deleteBtn.setOnClickListener(new OnClickListener() {
+		LinearLayout galleryLl = (LinearLayout) view.findViewById(R.id.ll_gallery);
+		galleryLl.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getFromGallery();
@@ -91,7 +98,7 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 		intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.addCategory(Intent.CATEGORY_DEFAULT);
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
+		imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imgRealPath)));
 		startActivityForResult(intent, Constants.activity.GET_FROM_CAMERA);
 		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
@@ -131,7 +138,7 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 				startPhotoZoom(data.getData());
 				break;
 			case Constants.activity.GET_FROM_CAMERA:
-				startPhotoZoom(Uri.fromFile(new File(data.getData().getPath())));
+				startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
 				break;
 			case Constants.activity.GET_FROM_CROP:
 				if (data != null) {
@@ -146,6 +153,13 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 			// TODO
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		finish();
+		overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 	}
 
 	@Override
@@ -220,7 +234,6 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 							if (saveFlag == 3) {
 								Logger.i(Constants.TAG, "成功获取所有灯泡属性");
 								closeProgressDialog();
-								ModelAccess modelAccess = new ModelAccess(getApplicationContext());
 								Template template = new Template();
 								template.setName(name);
 								String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -248,13 +261,25 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 									lightAttr.setColormode(lightEntry.getState().getColormode());
 									lightAttrs.add(lightAttr);
 								}
-								if (modelAccess.addTemplete(template, lightAttrs, bitmap)) {
-									Logger.i(Constants.TAG, "添加成功");
-									setResult(RESULT_OK);
-									finish();
-									overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+								if(isAdd) {
+									if (templateDao.addTemplete(template, lightAttrs, bitmap)) {
+										Logger.i(Constants.TAG, "添加成功");
+										setResult(RESULT_OK);
+										finish();
+										overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+									} else {
+										Logger.e(Constants.TAG, "添加失败");
+									}
 								} else {
-									Logger.e(Constants.TAG, "添加失败");
+									template.setId(id);
+									if (templateDao.updateTemplete(template, lightAttrs, bitmap)) {
+										Logger.i(Constants.TAG, "修改成功");
+										setResult(RESULT_OK);
+										finish();
+										overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+									} else {
+										Logger.e(Constants.TAG, "修改失败");
+									}
 								}
 								break;
 							}
@@ -275,7 +300,7 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 	}
 
 	private void openProgressDialog(String msg) {
-		pd = ProgressDialog.show(AddTemplateActivity.this, "提示", msg);
+		pd = ProgressDialog.show(EditTemplateActivity.this, "提示", msg);
 		pd.setCancelable(false);
 	}
 
@@ -285,7 +310,7 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 
 	@Override
 	protected void loadViewLayout() {
-		setContentView(R.layout.activity_add_template);
+		setContentView(R.layout.activity_edit_template);
 	}
 
 	@Override
@@ -372,6 +397,7 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 	@Override
 	protected void processLogic() {
 		openProgressDialog("正在获取灯泡列表");
+		templateDao = new TemplateDao(EditTemplateActivity.this);
 		lightsController.getAllLights(new LightCallback() {
 
 			@Override
@@ -379,6 +405,18 @@ public class AddTemplateActivity extends GenericActivity implements OnTouchListe
 				lightEntries = (List<LightEntry>) obj;
 				Collections.sort(lightEntries);
 				bulbNameTv.setText(lightEntries.get(index).getName());
+				
+				Bundle bundle = getIntent().getExtras();
+				if (bundle != null) {
+					isAdd = false;
+					id = bundle.getInt("id");
+					Template template = templateDao.getTemplete(id);
+					imgIv.setImageBitmap(BitmapFactory.decodeFile(template.getImgPath()));
+					nameEt.setText(template.getName());
+					
+					
+				}
+				
 				closeProgressDialog();
 			}
 

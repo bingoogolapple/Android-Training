@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.api;
+package com.bingoogol.smartbulb.engine;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.bingoogol.smartbulb.httpmodel.GroupEntry;
-import com.bingoogol.smartbulb.httpmodel.State;
+import com.bingoogol.smartbulb.domain.http.GroupEntry;
+import com.bingoogol.smartbulb.domain.http.State;
 
 /**
  * Groups Api

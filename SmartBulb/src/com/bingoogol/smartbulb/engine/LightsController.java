@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.api;
+package com.bingoogol.smartbulb.engine;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,9 +11,9 @@ import org.json.JSONObject;
 import android.os.Message;
 import android.util.Log;
 
-import com.bingoogol.smartbulb.api.LightHandler.LightCallback;
-import com.bingoogol.smartbulb.httpmodel.LightEntry;
-import com.bingoogol.smartbulb.httpmodel.State;
+import com.bingoogol.smartbulb.domain.http.LightEntry;
+import com.bingoogol.smartbulb.domain.http.State;
+import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 

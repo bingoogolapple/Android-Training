@@ -1,9 +1,11 @@
-package com.bingoogol.smartbulb.util;
+package com.bingoogol.smartbulb.db;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.bingoogol.smartbulb.util.Constants;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
 	public DBOpenHelper(Context context) {

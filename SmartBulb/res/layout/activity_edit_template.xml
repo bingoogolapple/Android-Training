@@ -15,12 +15,12 @@
 
         <Button
             android:id="@+id/btn_select_img"
-            android:gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/btn_insert_pic" />
+            android:background="@drawable/btn_insert_pic"
+            android:gravity="center_vertical" />
 
         <TextView
             android:id="@+id/tv_title_main"
@@ -32,15 +32,16 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <RelativeLayout
+    
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
 
         <RelativeLayout
             android:layout_width="43dp"
             android:layout_height="52dp"
-            android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp" >
 
             <ImageView
@@ -60,7 +61,7 @@
         <RelativeLayout
             android:layout_width="43dp"
             android:layout_height="52dp"
-            android:layout_centerHorizontal="true" >
+            android:layout_marginLeft="20dp" >
 
             <ImageView
                 android:id="@+id/picker2"
@@ -79,7 +80,7 @@
         <RelativeLayout
             android:layout_width="43dp"
             android:layout_height="52dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" >
 
             <ImageView
@@ -95,21 +96,21 @@
                 android:layout_height="52dp"
                 android:background="@drawable/colorpicker_big" />
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_img_add_template"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/default_img" />
 
     <TextView
         android:id="@+id/tv_bulb_name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:textColor="@android:color/white" />
 
@@ -125,8 +126,8 @@
         android:id="@+id/et_name"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:clickable="true"
         android:gravity="center_vertical"
         android:hint="请输入模板名称"

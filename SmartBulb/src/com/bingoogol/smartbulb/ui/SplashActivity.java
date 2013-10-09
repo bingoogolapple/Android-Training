@@ -7,9 +7,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.view.View;
 
-import com.bingoogol.smartbulb.api.Config;
-import com.bingoogol.smartbulb.api.HueRestClient;
-import com.bingoogol.smartbulb.api.LightHandler.LightCallback;
+import com.bingoogol.smartbulb.engine.Config;
+import com.bingoogol.smartbulb.engine.HueRestClient;
+import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.util.ConnectivityUtil;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.DialogBuilder;

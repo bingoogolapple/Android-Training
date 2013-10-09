@@ -11,4 +11,6 @@
     <string name="gallery">相册</string>
     <string name="camera">拍照</string>
     <string name="add_img">添加图片</string>
+    <string name="update">修改</string>
+    <string name="delete">删除</string>
 </resources>

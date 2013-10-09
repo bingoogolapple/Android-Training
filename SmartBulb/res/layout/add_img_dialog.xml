@@ -2,31 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#F8F8F8"
+    android:background="@android:color/transparent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:id="@+id/ll_camera"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/title_dialog_bg"
-        android:gravity="center"
-        android:text="@string/add_img"
-        android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:background="@drawable/button_cluster_top"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp" >
 
-    <Button
-        android:id="@+id/gallery_btn"
-        style="@style/btn_dialog_select_img"
-        android:text="@string/gallery" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/takepicture_symbol" />
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#E0E0E0" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Camera" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/camera_btn"
-        style="@style/btn_dialog_select_img"
-        android:text="@string/camera" />
+    <LinearLayout
+        android:id="@+id/ll_gallery"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_cluster_bottom"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/library_symbol" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Gallery" />
+    </LinearLayout>
 
 </LinearLayout>

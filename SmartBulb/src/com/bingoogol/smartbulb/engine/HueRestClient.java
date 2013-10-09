@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.api;
+package com.bingoogol.smartbulb.engine;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

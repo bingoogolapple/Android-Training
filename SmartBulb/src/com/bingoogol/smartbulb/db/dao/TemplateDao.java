@@ -1,4 +1,4 @@
-package com.bingoogol.smartbulb.model;
+package com.bingoogol.smartbulb.db.dao;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,13 +14,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 
+import com.bingoogol.smartbulb.db.DBOpenHelper;
+import com.bingoogol.smartbulb.domain.LightAttr;
+import com.bingoogol.smartbulb.domain.Template;
 import com.bingoogol.smartbulb.util.Constants;
-import com.bingoogol.smartbulb.util.DBOpenHelper;
 
-public class ModelAccess {
+public class TemplateDao {
 	private DBOpenHelper dbOpenHelper;
 
-	public ModelAccess(Context context) {
+	public TemplateDao(Context context) {
 		dbOpenHelper = new DBOpenHelper(context);
 	}
 
@@ -104,9 +106,10 @@ public class ModelAccess {
 	 * @param template
 	 * @return
 	 */
-	public boolean updateTemplete(Template template, ArrayList<LightAttr> lightAttrs) {
+	public boolean updateTemplete(Template template, ArrayList<LightAttr> lightAttrs,Bitmap bitmap) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 		db.beginTransaction();
+		FileOutputStream fos = null;
 		boolean result = false;
 		try {
 			db = dbOpenHelper.getWritableDatabase();
@@ -134,8 +137,16 @@ public class ModelAccess {
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_COLORMODE, lightAttr.getColormode());
 				db.update(Constants.db.lightattr.TABLE_NAME, lightAttrValues, Constants.db.lightattr.COLUMN_NAME_ID + "=?", new String[] { lightAttr.getId() + "" });
 			}
+			File imgFile = new File(template.getImgPath());
+			if (!imgFile.getParentFile().exists()) {
+				imgFile.getParentFile().mkdirs();
+			}
+			fos = new FileOutputStream(imgFile);
+			bitmap.compress(CompressFormat.PNG, 80, fos);
 			db.setTransactionSuccessful();
 			result = true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} finally {
 			db.endTransaction();
 			DBOpenHelper.close(db, null);
@@ -231,6 +242,21 @@ public class ModelAccess {
 			DBOpenHelper.close(db, cursor);
 		}
 		return datas;
+	}
+
+	public long getCount() {
+		SQLiteDatabase db = null;
+		Cursor cursor = null;
+		long result = 0L;
+		try {
+			db = dbOpenHelper.getReadableDatabase();
+			cursor = db.rawQuery("select count(*) from " + Constants.db.template.TABLE_NAME, null);
+			cursor.moveToFirst();
+			result = cursor.getLong(0);
+		} finally {
+			DBOpenHelper.close(db, cursor);
+		}
+		return result;
 	}
 
 }

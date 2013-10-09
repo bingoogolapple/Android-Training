@@ -28,23 +28,25 @@
         android:layout_height="match_parent"
         android:layout_below="@id/rl_title_main"
         android:layout_margin="5dp"
+        android:horizontalSpacing="10dip"
+        android:verticalSpacing="10dip"
         android:numColumns="3" >
     </GridView>
-
+    
     <RelativeLayout
         android:id="@+id/rl_function_main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentRight="true" >
+        android:layout_alignParentLeft="true" >
 
         <ImageButton
             android:id="@+id/ib_add_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="142dp"
-            android:layout_marginRight="10.667dp"
+            android:layout_marginLeft="10.667dp"
             android:background="@drawable/add_bg"
             android:visibility="gone" />
 
@@ -52,9 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="135.333dp"
-            android:layout_marginRight="52dp"
+            android:layout_marginLeft="52dp"
             android:background="@drawable/composer_with"
             android:visibility="gone" />
 
@@ -62,9 +64,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="116.666dp"
-            android:layout_marginRight="89.33333333333333dp"
+            android:layout_marginLeft="89.33333333333333dp"
             android:background="@drawable/composer_place"
             android:visibility="gone" />
 
@@ -72,9 +74,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="87.33333333333333dp"
-            android:layout_marginRight="118.6666666666667dp"
+            android:layout_marginLeft="118.6666666666667dp"
             android:background="@drawable/composer_music"
             android:visibility="gone" />
 
@@ -82,9 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="50dp"
-            android:layout_marginRight="137.3333333333333dp"
+            android:layout_marginLeft="137.3333333333333dp"
             android:background="@drawable/composer_thought"
             android:visibility="gone" />
 
@@ -92,9 +94,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="8.666666666666667dp"
-            android:layout_marginRight="144dp"
+            android:layout_marginLeft="144dp"
             android:background="@drawable/composer_sleep"
             android:visibility="gone" />
     </RelativeLayout>
@@ -104,7 +106,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" 
+        android:layout_alignParentLeft="true" 
         android:src="@drawable/function_plus"
         android:background="@drawable/function_bg"/>
 </RelativeLayout>
