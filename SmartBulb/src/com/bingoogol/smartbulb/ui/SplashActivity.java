@@ -17,19 +17,20 @@ import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.ToastUtil;
 
 public class SplashActivity extends GenericActivity {
+	protected static final String TAG = "SplashActivity";
 	private Config config = new Config();
 	private ProgressDialog pd;
 	private LightCallback lightCallback = new LightCallback() {
 
 		@Override
 		public void pressLinkBtn() {
-			Logger.i(Constants.TAG, "打开按钮对话框");
+			Logger.i(TAG, "打开按钮对话框");
 			new LinkButtonDialog(SplashActivity.this).show();
 		}
 
 		@Override
 		public void wifiError() {
-			Logger.i(Constants.TAG, "打开wifi对话框");
+			Logger.i(TAG, "打开wifi对话框");
 			new SetWifiDialog(SplashActivity.this).show();
 		}
 
@@ -52,7 +53,7 @@ public class SplashActivity extends GenericActivity {
 		@Override
 		public void closeDialog() {
 			pd.dismiss();
-			Logger.i(Constants.TAG, "关闭进度条");
+			Logger.i(TAG, "关闭进度条");
 		}
 	};
 
@@ -95,7 +96,7 @@ public class SplashActivity extends GenericActivity {
 	protected void processLogic() {
 		if (ConnectivityUtil.isWifiConnected(SplashActivity.this)) {
 			String username = app.getSp("username", "");
-			Logger.i(Constants.TAG, "用户名:" + username);
+			Logger.i(TAG, "用户名:" + username);
 			if ("".equals(username)) {
 				auth();
 			} else {

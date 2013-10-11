@@ -28,7 +28,6 @@ import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.ui.EditTemplateActivity;
 import com.bingoogol.smartbulb.ui.MainActivity;
-import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
 import com.bingoogol.smartbulb.util.ToastUtil;
@@ -55,7 +54,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		public void onSuccess(Object obj) {
 			setTemplateFlag++;
 			if (setTemplateFlag == 3) {
-				Logger.i(Constants.TAG, "成功设置所有灯泡属性");
+				Logger.i(TAG, "成功设置所有灯泡属性");
 				setTemplateFlag = 0;
 				activity.closeProgressDialog();
 			}
@@ -63,7 +62,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 
 		@Override
 		public void onFailure() {
-			Logger.e(Constants.TAG, "设置灯泡属性失败");
+			Logger.e(TAG, "设置灯泡属性失败");
 			setTemplateFlag = 0;
 			activity.closeProgressDialog();
 			App app = (App) activity.getApplication();
@@ -73,7 +72,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 
 		@Override
 		public void wifiError() {
-			Logger.e(Constants.TAG, "wifi链接不对");
+			Logger.e(TAG, "wifi链接不对");
 			activity.closeProgressDialog();
 			App app = (App) activity.getApplication();
 			app.addSp("username", "");
@@ -82,7 +81,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 
 		@Override
 		public void unauthorized() {
-			Logger.e(Constants.TAG, "用户名失效");
+			Logger.e(TAG, "用户名失效");
 			activity.closeProgressDialog();
 			App app = (App) activity.getApplication();
 			app.addSp("username", "");
@@ -91,7 +90,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 
 		@Override
 		public void pressLinkBtn() {
-			Logger.i(Constants.TAG, "按钮");
+			Logger.w(TAG, "请按下按钮");
 			App app = (App) activity.getApplication();
 			app.addSp("username", "");
 			activity.openSplashActivity();

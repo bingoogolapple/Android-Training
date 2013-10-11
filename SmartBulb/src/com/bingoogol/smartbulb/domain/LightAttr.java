@@ -75,6 +75,13 @@ public class LightAttr {
 		this.colormode = colormode;
 	}
 	
+	public LightAttr(int state, int bri, int hue, int sat) {
+		this.state = state;
+		this.bri = bri;
+		this.hue = hue;
+		this.sat = sat;
+	}
+
 	public int getId() {
 		return id;
 	}

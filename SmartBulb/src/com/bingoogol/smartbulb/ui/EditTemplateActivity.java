@@ -44,6 +44,7 @@ import com.bingoogol.smartbulb.util.ToastUtil;
 
 public class EditTemplateActivity extends GenericActivity implements OnTouchListener {
 
+	private static final String TAG = "EditTemplateActivity";
 	private ImageView picker1;
 	private ImageView picker2;
 	private ImageView picker3;
@@ -66,22 +67,21 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	private SelectImgDialog selectImgDialog;
 
 	private int setTemplateFlag = 0;
-	private int getTemplateFlag = 0;
 	private LightCallback setTemplateCallback = new LightCallback() {
 
 		@Override
 		public void onSuccess(Object obj) {
 			setTemplateFlag++;
 			if (setTemplateFlag == 3) {
-				Logger.i(Constants.TAG, "成功设置所有灯泡属性");
-				initPicker();
+				Logger.i(TAG, "成功设置所有灯泡属性");
+				initColor();
 				pd.dismiss();
 			}
 		}
 
 		@Override
 		public void onFailure() {
-			Logger.e(Constants.TAG, "设置灯泡属性失败");
+			Logger.e(TAG, "设置灯泡属性失败");
 			setTemplateFlag = 0;
 			pd.dismiss();
 			app.exit();
@@ -90,7 +90,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 		@Override
 		public void wifiError() {
-			Logger.e(Constants.TAG, "wifi链接不对");
+			Logger.e(TAG, "wifi链接不对");
 			pd.dismiss();
 			app.exit();
 			openSplashActivity();
@@ -98,7 +98,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 		@Override
 		public void unauthorized() {
-			Logger.e(Constants.TAG, "用户名失效");
+			Logger.e(TAG, "用户名失效");
 			pd.dismiss();
 			app.addSp("username", "");
 			app.exit();
@@ -107,7 +107,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 		@Override
 		public void pressLinkBtn() {
-			Logger.i(Constants.TAG, "按钮");
+			Logger.i(TAG, "按钮");
 			pd.dismiss();
 			app.exit();
 			openSplashActivity();
@@ -142,9 +142,17 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		}
 	}
 
-	protected void initPicker() {
+	protected void initColor() {
 		sbar.setProgress(lightEntries.get(index).getState().getBri());
-		
+		setPickerColor(1, 0);
+		for(int i = 0; i < lightAttrs.size(); i++) {
+			float[] hsv = new float[3];
+			hsv[0] = lightAttrs.get(i).getHue() * 360/65535;
+			hsv[1] = lightAttrs.get(i).getSat() * 255;
+			hsv[2] = lightAttrs.get(i).getBri() * 255;
+			int color = Color.HSVToColor(hsv);
+			setPickerColor(color, i);
+		}
 	}
 
 	@Override
@@ -171,13 +179,6 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			// TODO
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		finish();
-		overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 	}
 
 	@Override
@@ -212,6 +213,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 				String imgPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
 				template.setImgPath(imgPath);
+				imgIv.setDrawingCacheEnabled(true);
 				Bitmap bitmap = imgIv.getDrawingCache();
 				for (int i = 0; i < 3; i++) {
 					LightEntry lightEntry = lightEntries.get(i);
@@ -234,7 +236,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				}
 				if (isAdd) {
 					if (templateDao.addTemplete(template, lightAttrs, bitmap)) {
-						Logger.i(Constants.TAG, "添加成功");
+						Logger.i(TAG, "添加成功");
 						setResult(RESULT_OK);
 						finish();
 						overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
@@ -244,7 +246,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				} else {
 					template.setId(id);
 					if (templateDao.updateTemplete(template, lightAttrs, bitmap)) {
-						Logger.i(Constants.TAG, "修改成功");
+						Logger.i(TAG, "修改成功");
 						setResult(RESULT_OK);
 						finish();
 						overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
@@ -257,76 +259,6 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 		default:
 			break;
-		}
-	}
-
-	/**
-	 * 获取当前桥接器链接的所有灯的属性和状态
-	 */
-	private void getTemplate() {
-		openProgressDialog("正在获取灯泡属性");
-		getTemplateFlag = 0;
-		Logger.i(Constants.TAG, "id:" + lightEntries.get(0).getId());
-		for (final LightEntry lightEntry : lightEntries) {
-			lightsController.getLightAttributesAndState(lightEntry.getId(), new LightCallback() {
-
-				@Override
-				public void onSuccess(Object obj) {
-					int index2 = lightEntries.indexOf(lightEntry);
-					LightEntry lightEntry2 = (LightEntry) obj;
-					lightEntry2.setId(lightEntry.getId());
-					lightEntry2.setName(lightEntry.getName());
-					lightEntries.set(index2, lightEntry2);
-					getTemplateFlag++;
-					if (getTemplateFlag == 3) {
-						Logger.i(Constants.TAG, "成功获取所有灯泡属性");
-						lightAttrs = new ArrayList<LightAttr>();
-						for(int i = 0; i < 3;i++) {
-							lightAttrs.add(new LightAttr());
-						}
-						pd.dismiss();
-					}
-				}
-
-				@Override
-				public void onFailure() {
-					Logger.e(Constants.TAG, "获取灯泡属性失败");
-					pd.dismiss();
-					app.exit();
-					openSplashActivity();
-				}
-
-				@Override
-				public void wifiError() {
-					Logger.e(Constants.TAG, "wifi链接不对");
-					pd.dismiss();
-					app.exit();
-					openSplashActivity();
-				}
-
-				@Override
-				public void unauthorized() {
-					Logger.e(Constants.TAG, "用户名失效");
-					pd.dismiss();
-					app.addSp("username", "");
-					app.exit();
-					openSplashActivity();
-				}
-
-				@Override
-				public void pressLinkBtn() {
-					Logger.i(Constants.TAG, "按钮");
-					pd.dismiss();
-					app.exit();
-					openSplashActivity();
-				}
-
-				@Override
-				public void closeDialog() {
-
-				}
-
-			});
 		}
 	}
 
@@ -409,27 +341,38 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 					nameEt.setText(template.getName());
 					setTemplate(id);
 				} else {
-					getTemplate();
+					lightAttrs = new ArrayList<LightAttr>();
+					openProgressDialog("正在设置灯泡属性...");
+					for(int i = 0; i < 3;i++) {
+						LightAttr lightAttr = new LightAttr(1, 135, 24775, 232);
+						State state = lightEntries.get(i).getState();
+						state.setBri(lightAttr.getBri());
+						state.setHue(lightAttr.getHue());
+						state.setOn(lightAttr.getState() == 1 ? true : false);
+						state.setSat(lightAttr.getSat());
+						lightAttrs.add(lightAttr);
+						lightsController.setLightState(lightEntries.get(i).getId() + "", state, setTemplateCallback);
+					}
 				}
 			}
 
 			@Override
 			public void onFailure() {
-				Logger.e(Constants.TAG, "获取灯泡列表失败");
+				Logger.e(TAG, "获取灯泡列表失败");
 				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void wifiError() {
-				Logger.e(Constants.TAG, "wifi链接不对");
+				Logger.e(TAG, "wifi链接不对");
 				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void unauthorized() {
-				Logger.e(Constants.TAG, "用户名失效");
+				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
 				app.exit();
 				openSplashActivity();
@@ -437,7 +380,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 			@Override
 			public void pressLinkBtn() {
-				Logger.i(Constants.TAG, "按钮");
+				Logger.i(TAG, "按钮");
 				app.exit();
 				openSplashActivity();
 			}
@@ -484,6 +427,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				state.setHue(hue);
 				state.setSat(sat);
 				state.setBri(bri);
+				Logger.i(TAG, "设置灯泡属性 >> hue:" + hue + " sat:" + sat + " bri:" + bri);
 				setLightState(state);
 				break;
 			default:
@@ -505,7 +449,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 			@Override
 			public void unauthorized() {
-				Logger.e(Constants.TAG, "用户名失效");
+				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
 				app.exit();
 				openSplashActivity();
@@ -520,7 +464,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			@Override
 			public void onSuccess(Object obj) {
 				sbar.setProgress(lightEntries.get(index).getState().getBri());
-				Logger.i(Constants.TAG, "成功设置灯泡属性");
+				Logger.i(TAG, "成功设置灯泡属性");
 			}
 
 			@Override

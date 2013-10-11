@@ -12,6 +12,7 @@ import com.bingoogol.smartbulb.util.Logger;
  * @author 王浩 bingoogol@sina.com
  */
 public class LightHandler extends Handler {
+	private static final String TAG = "LightHandler";
 	private LightCallback lightCallback;
 
 	public LightHandler(LightCallback lightCallback) {
@@ -31,7 +32,7 @@ public class LightHandler extends Handler {
 			lightCallback.unauthorized();
 			break;
 		case Constants.what.LINKBUTTON:
-			Logger.e(Constants.TAG, "按钮");
+			Logger.e(TAG, "按钮");
 			lightCallback.pressLinkBtn();
 			break;
 		case Constants.what.WIFIERROR:

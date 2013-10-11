@@ -23,6 +23,8 @@ import com.bingoogol.smartbulb.util.Logger;
  */
 public class LightsController {
 
+	protected static final String TAG = "LightsController";
+
 	/**
 	 * 获取当前桥接器链接的所有灯的信息，每个点灯信息包括一个唯一id和指定的名称
 	 * 
@@ -37,7 +39,7 @@ public class LightsController {
 				Message msg = lightHandler.obtainMessage(Constants.what.FAILURE);
 				String url = "/lights";
 				String response = HueRestClient.getInstance().get(url);
-				Logger.i(Constants.TAG, "response >> " + response);
+				Logger.i(TAG, "response >> " + response);
 				ArrayList<LightEntry> allLights = new ArrayList<LightEntry>();
 				try {
 					JSONObject jsonObject = new JSONObject(response);
@@ -69,7 +71,7 @@ public class LightsController {
 						}
 					} catch (JSONException e2) {
 						msg.what = Constants.what.WIFIERROR;
-						Log.e(Constants.TAG, e.getLocalizedMessage());
+						Log.e(TAG, e.getLocalizedMessage());
 					}
 				} finally {
 					lightHandler.sendMessage(msg);
@@ -94,7 +96,7 @@ public class LightsController {
 				Message msg = lightHandler.obtainMessage(Constants.what.FAILURE);
 				String url = "/lights/" + id;
 				String response = HueRestClient.getInstance().get(url);
-				Logger.i(Constants.TAG, "response >> " + response);
+				Logger.i(TAG, "response >> " + response);
 				LightEntry light = null;
 				try {
 					JSONObject jo = new JSONObject(response);
@@ -122,7 +124,7 @@ public class LightsController {
 						}
 					}
 				} catch (JSONException e) {
-					Log.e(Constants.TAG, e.getLocalizedMessage());
+					Log.e(TAG, e.getLocalizedMessage());
 					try {
 						JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
 						@SuppressWarnings("unchecked")
@@ -137,7 +139,7 @@ public class LightsController {
 							}
 						}
 					} catch (Exception e2) {
-						Logger.e(Constants.TAG, e2.getLocalizedMessage());
+						Logger.e(TAG, e2.getLocalizedMessage());
 						msg.what = Constants.what.WIFIERROR;
 					}
 				} finally {
@@ -167,7 +169,7 @@ public class LightsController {
 				String jsonBody = state.convertToJSON();
 				HueRestClient client = HueRestClient.getInstance();
 				String response = client.put(url, jsonBody);
-				Log.i(Constants.TAG, "response >> " + response);
+				Log.i(TAG, "response >> " + response);
 				try {
 					JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
 					Iterator<String> keys = jsonObject.keys();

@@ -19,6 +19,8 @@ import android.provider.MediaStore;
  */
 public class StorageUtil {
 
+	private static final String TAG = "StorageUtil";
+
 	private StorageUtil() {
 	}
 
@@ -55,7 +57,7 @@ public class StorageUtil {
 				appDir.mkdirs();
 			}
 		} else {
-			Logger.e(Constants.TAG, "外部存储器不可写入");
+			Logger.e(TAG, "外部存储器不可写入");
 		}
 		return appDir;
 	}
@@ -74,7 +76,7 @@ public class StorageUtil {
 				imageDir.mkdirs();
 			}
 		} else {
-			Logger.e(Constants.TAG, "外部存储器不可写入");
+			Logger.e(TAG, "外部存储器不可写入");
 		}
 		return imageDir;
 	}
@@ -90,7 +92,7 @@ public class StorageUtil {
 		if (isExternalStorageReadable()) {
 			bitmap = BitmapFactory.decodeFile(imgRealPath);
 		} else {
-			Logger.e(Constants.TAG, "外部存储器不可读");
+			Logger.e(TAG, "外部存储器不可读");
 		}
 		return bitmap;
 	}
@@ -113,7 +115,7 @@ public class StorageUtil {
 			opts.inJustDecodeBounds = false;
 			bitmap = BitmapFactory.decodeFile(imgRealPath, opts);
 		} else {
-			Logger.e(Constants.TAG, "外部存储器不可读");
+			Logger.e(TAG, "外部存储器不可读");
 		}
 		return bitmap;
 	}
@@ -175,7 +177,7 @@ public class StorageUtil {
 			File file = new File(realPath);
 			return file.exists();
 		} else {
-			Logger.e(Constants.TAG, "外部存储器不可读");
+			Logger.e(TAG, "外部存储器不可读");
 			return false;
 		}
 	}

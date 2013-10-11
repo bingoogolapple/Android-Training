@@ -21,6 +21,8 @@ import com.bingoogol.smartbulb.util.Logger;
 public class HueRestClient {
 	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
+	private static final String TAG = "HueRestClient";
+
 	private String ipAddress = "192.168.1.101";
 
 	private String userName = "newdeveloper";
@@ -141,10 +143,10 @@ public class HueRestClient {
 				Log.i("Post", jsonResult);
 			}
 		} catch (MalformedURLException e) {
-			Log.e(Constants.TAG, "URL格式错误");
+			Log.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(Constants.TAG, "网络链接错误");
+			Log.e(TAG, "网络链接错误");
 			e.printStackTrace();
 		} finally {
 			closeStream(is);
@@ -181,10 +183,10 @@ public class HueRestClient {
 				jsonResult = this.read(is);
 			}
 		} catch (MalformedURLException e) {
-			Log.e(Constants.TAG, "URL格式错误");
+			Log.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(Constants.TAG, "连接网络发生错误:");
+			Log.e(TAG, "连接网络发生错误:");
 		} finally {
 			closeStream(is);
 			closeStream(os);
@@ -209,12 +211,12 @@ public class HueRestClient {
 				is = conn.getInputStream();
 				jsonResult = this.read(is);
 			}
-			Log.d(Constants.TAG, jsonResult);
+			Log.d(TAG, jsonResult);
 		} catch (MalformedURLException e) {
-			Log.e(Constants.TAG, "URL格式错误");
+			Log.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(Constants.TAG, "连接网络发生错误" + e.getMessage());
+			Log.e(TAG, "连接网络发生错误" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			closeStream(is);
@@ -270,7 +272,7 @@ public class HueRestClient {
 			try {
 				is.close();
 			} catch (IOException e) {
-				Log.e(Constants.TAG, "输入流关闭错误");
+				Log.e(TAG, "输入流关闭错误");
 				e.printStackTrace();
 			}
 		} else if (obj != null && obj instanceof OutputStream) {
@@ -278,7 +280,7 @@ public class HueRestClient {
 			try {
 				os.close();
 			} catch (IOException e) {
-				Log.e(Constants.TAG, "输出流关闭错误");
+				Log.e(TAG, "输出流关闭错误");
 				e.printStackTrace();
 			}
 		}
@@ -298,7 +300,7 @@ public class HueRestClient {
 		} else {
 			absoluteUrl = "http://" + this.getIpAddress() + "/api/" + this.getUserName() + relativeURL;
 		}
-		Logger.i(Constants.TAG, "absoluteURL >> " + absoluteUrl);
+		Logger.i(TAG, "absoluteURL >> " + absoluteUrl);
 		return absoluteUrl;
 	}
 }

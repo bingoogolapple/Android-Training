@@ -17,6 +17,7 @@ import com.bingoogol.smartbulb.util.Logger;
  * @author 王浩 bingoogol@sina.com
  */
 public class Config {
+	protected static final String TAG = "Config";
 	private String deviceType = "bingoogol";
 
 	public String getDeviceType() {
@@ -39,7 +40,7 @@ public class Config {
 				Message msg = lightHandler.obtainMessage(Constants.what.FAILURE);
 				try {
 					String response = HueRestClient.getInstance().post(relativeUrl, jsonBody);
-					Logger.i(Constants.TAG, "response >> " + response);
+					Logger.i(TAG, "response >> " + response);
 					JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
 					Iterator<String> keys = jsonObject.keys();
 					if (keys.hasNext()) {

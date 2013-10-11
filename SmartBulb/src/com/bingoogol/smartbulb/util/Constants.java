@@ -12,7 +12,6 @@ public final class Constants {
 	}
 	
 	public static String APP_NAME = "SmartBulb";
-	public static String TAG = APP_NAME;
 	
 	public static final class what {
 		public static final int SUCCESS = 1;
@@ -24,7 +23,7 @@ public final class Constants {
 	}
 	
 	public static final class file {
-		public static final String DIR_ROOT = "SmartBulb";
+		public static final String DIR_ROOT = APP_NAME;
 		public static final String DIR_IMAGE = DIR_ROOT + File.separator + "images";
 	}
 

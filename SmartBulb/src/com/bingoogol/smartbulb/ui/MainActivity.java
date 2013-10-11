@@ -20,7 +20,6 @@ import com.bingoogol.smartbulb.domain.http.LightEntry;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.ui.adapter.MainGridViewAdapter;
-import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.MyAnimations;
 import com.bingoogol.smartbulb.util.ToastUtil;
@@ -40,7 +39,7 @@ public class MainActivity extends GenericActivity {
 	private ProgressDialog pd;
 
 	private int offset = 0;
-	private int maxResult = 12;
+	private int maxResult = 11;
 	private boolean isLoading = false;
 
 	private List<LightEntry> lightEntries;
@@ -54,9 +53,10 @@ public class MainActivity extends GenericActivity {
 	}
 
 	public void refresh() {
-		Logger.i(Constants.TAG, "刷新");
+		Logger.i(TAG, "刷新");
 		adapter = null;
 		offset = 0;
+		maxResult = 11;
 		fillGridView();
 	}
 
@@ -111,7 +111,12 @@ public class MainActivity extends GenericActivity {
 				if (templateDao == null) {
 					templateDao = new TemplateDao(getApplicationContext());
 				}
-				return templateDao.getTemplateScrollData(offset, maxResult);
+				Logger.i(TAG, "maxResult:" + maxResult);
+				List<Template> datas = templateDao.getTemplateScrollData(offset, maxResult);
+				if(maxResult == 11) {
+					maxResult =12;
+				}
+				return datas;
 			}
 		}.execute();
 	}
@@ -128,7 +133,7 @@ public class MainActivity extends GenericActivity {
 			break;
 
 		case R.id.ib_add_main:
-			Logger.i(Constants.TAG, "点击了添加按钮");
+			Logger.i(TAG, "点击了添加按钮");
 			closeFunction();
 			Intent editTemplateIntent = new Intent(getApplicationContext(), EditTemplateActivity.class);
 			startActivityForResult(editTemplateIntent, 0);
@@ -179,8 +184,6 @@ public class MainActivity extends GenericActivity {
 				case OnScrollListener.SCROLL_STATE_IDLE:
 					// 如果不是正在加载数据才去加载数据
 					if (!isLoading) {
-						// 从0开始
-						Logger.i(TAG, "view.getLastVisiblePosition():" + view.getLastVisiblePosition());
 						int lastPosition = view.getLastVisiblePosition() + 1;
 						int count = adapter.getCount();
 						Logger.i(TAG, "lastPosition:" + lastPosition + "  count:" + count);
@@ -229,21 +232,21 @@ public class MainActivity extends GenericActivity {
 
 			@Override
 			public void onFailure() {
-				Logger.e(Constants.TAG, "获取灯泡列表失败");
+				Logger.e(TAG, "获取灯泡列表失败");
 				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void wifiError() {
-				Logger.e(Constants.TAG, "wifi链接不对");
+				Logger.e(TAG, "wifi链接不对");
 				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void unauthorized() {
-				Logger.e(Constants.TAG, "用户名失效");
+				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
 				app.exit();
 				openSplashActivity();
@@ -252,7 +255,7 @@ public class MainActivity extends GenericActivity {
 
 			@Override
 			public void pressLinkBtn() {
-				Logger.i(Constants.TAG, "按钮");
+				Logger.i(TAG, "按钮");
 			}
 
 			@Override
