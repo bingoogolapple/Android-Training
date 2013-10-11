@@ -148,6 +148,7 @@ public class MainActivity extends GenericActivity {
 			break;
 		case R.id.ib_yyy_main:
 			Logger.i(TAG, "注册摇一摇监听器");
+			closeFunction();
 			new YYYDialog(this).show();
 			//sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 			break;
