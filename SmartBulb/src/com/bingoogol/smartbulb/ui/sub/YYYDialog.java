@@ -97,7 +97,6 @@ public class YYYDialog extends Dialog {
 			float x = values[0]; // x轴方向的重力加速度，向右为正
 			float y = values[1]; // y轴方向的重力加速度，向前为正
 			float z = values[2]; // z轴方向的重力加速度，向上为正
-			// 一般在这三个方向的重力加速度达到40就达到了摇晃手机的状态。
 			int medumValue = 19;
 			if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) {
 				vibrator.vibrate(200);
