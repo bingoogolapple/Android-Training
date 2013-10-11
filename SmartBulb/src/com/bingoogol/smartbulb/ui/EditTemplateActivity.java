@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -55,6 +56,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	private Button saveBtn;
 	private Button selectImgBtn;
 	private TextView bulbNameTv;
+	private TextView titleTv;
 	private ProgressDialog pd;
 	private TemplateDao templateDao;
 	private LightsController lightsController = new LightsController();
@@ -65,6 +67,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	private int id;
 	public String imgRealPath = "";
 	private SelectImgDialog selectImgDialog;
+	private Typeface typeface;
 
 	private int setTemplateFlag = 0;
 	private LightCallback setTemplateCallback = new LightCallback() {
@@ -287,8 +290,14 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		nameEt = (EditText) this.findViewById(R.id.et_name);
 		saveBtn = (Button) this.findViewById(R.id.btn_save);
 		bulbNameTv = (TextView) this.findViewById(R.id.tv_bulb_name);
-
+		titleTv = (TextView) this.findViewById(R.id.tv_title_edit_template);
 		selectImgDialog = new SelectImgDialog(this);
+		
+		typeface = Typeface.createFromAsset(getAssets(), "font.ttf");
+		nameEt.setTypeface(typeface);
+		saveBtn.setTypeface(typeface);
+		bulbNameTv.setTypeface(typeface);
+		titleTv.setTypeface(typeface);
 	}
 
 	@Override
@@ -335,6 +344,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				if (bundle != null) {
 					isAdd = false;
 					saveBtn.setText("修改");
+					titleTv.setText("修改模板");
 					id = bundle.getInt("id");
 					Template template = templateDao.getTemplete(id);
 					imgIv.setImageBitmap(BitmapFactory.decodeFile(template.getImgPath()));

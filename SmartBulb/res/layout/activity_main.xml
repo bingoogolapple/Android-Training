@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Smart Bulb"
+            android:text="智能灯泡"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -51,13 +51,14 @@
             android:visibility="gone" />
 
         <ImageButton
+            android:id="@+id/ib_yyy_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="135.333dp"
-            android:layout_marginLeft="52dp"
-            android:background="@drawable/composer_with"
+            android:layout_marginBottom="120.666dp"
+            android:layout_marginLeft="77.33333333333333dp"
+            android:background="@drawable/yyy"
             android:visibility="gone" />
 
         <ImageButton
@@ -65,39 +66,20 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="116.666dp"
-            android:layout_marginLeft="89.33333333333333dp"
-            android:background="@drawable/composer_place"
-            android:visibility="gone" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="87.33333333333333dp"
-            android:layout_marginLeft="118.6666666666667dp"
+            android:layout_marginBottom="73.33333333333333dp"
+            android:layout_marginLeft="125.6666666666667dp"
             android:background="@drawable/composer_music"
             android:visibility="gone" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="137.3333333333333dp"
-            android:background="@drawable/composer_thought"
-            android:visibility="gone" />
-
-        <ImageButton
+            android:id="@+id/ib_exit_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="8.666666666666667dp"
             android:layout_marginLeft="144dp"
-            android:background="@drawable/composer_sleep"
+            android:background="@drawable/exit_bg"
             android:visibility="gone" />
     </RelativeLayout>
 

@@ -66,7 +66,6 @@ public class SplashActivity extends GenericActivity {
 	
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		app.exit();
 	}
 

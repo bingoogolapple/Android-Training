@@ -15,31 +15,32 @@
 
         <Button
             android:id="@+id/btn_select_img"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/btn_insert_pic"
+            android:background="@drawable/insert_img"
             android:gravity="center_vertical" />
 
         <TextView
-            android:id="@+id/tv_title_main"
+            android:id="@+id/tv_title_edit_template"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="New Scene"
+            android:text="添加模板"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>
 
     
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal" >
+        android:gravity="center_vertical" >
 
         <RelativeLayout
+            android:layout_alignParentLeft="true"
             android:layout_width="43dp"
             android:layout_height="52dp"
             android:layout_marginLeft="20dp" >
@@ -59,9 +60,9 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_centerInParent="true"
             android:layout_width="43dp"
-            android:layout_height="52dp"
-            android:layout_marginLeft="20dp" >
+            android:layout_height="52dp">
 
             <ImageView
                 android:id="@+id/picker2"
@@ -80,7 +81,7 @@
         <RelativeLayout
             android:layout_width="43dp"
             android:layout_height="52dp"
-            android:layout_marginLeft="20dp"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="20dp" >
 
             <ImageView
@@ -96,7 +97,7 @@
                 android:layout_height="52dp"
                 android:background="@drawable/colorpicker_big" />
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/iv_img_add_template"
@@ -122,6 +123,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:max="255"
+        android:textSize="20sp"
         android:progressDrawable="@drawable/seekbar"
         android:thumb="@drawable/thum" />
 
@@ -129,8 +131,9 @@
         android:id="@+id/et_name"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
         android:clickable="true"
         android:gravity="center_vertical"
         android:hint="请输入模板名称"
@@ -140,7 +143,9 @@
     <Button
         android:id="@+id/btn_save"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:textSize="25sp"
+        android:gravity="center"
         android:background="@drawable/btn_add_selector"
         android:text="保存" />
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ll_dialog_bg" >
+
+    <TextView
+        android:id="@+id/tv_name_yyy"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="请摇晃手机"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/iv_icon_yyy"
+        android:layout_width="300dp"
+        android:layout_height="240dp"
+        android:background="@drawable/yyy_dialog_bg"/>
+
+</LinearLayout>

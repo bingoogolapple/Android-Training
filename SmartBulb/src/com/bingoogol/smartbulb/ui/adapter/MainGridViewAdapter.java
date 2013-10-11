@@ -117,7 +117,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 	 * 設置指定模板
 	 * @param id
 	 */
-	private void setTemplate(long id) {
+	public void setTemplate(long id) {
 		List<LightAttr> lightAttrs = templateDao.getLightAttrListByTid((int) id);
 		LightAttr lightAttr;
 		setTemplateFlag = 0;

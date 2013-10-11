@@ -86,7 +86,7 @@
         <item name="android:layout_width">220dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#F8F8F8</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!-- dialog End -->

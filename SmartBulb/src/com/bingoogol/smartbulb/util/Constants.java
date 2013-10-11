@@ -65,6 +65,7 @@ public final class Constants {
 		public static final int GET_FROM_GALLERY = 2;
 		public static final int GET_FROM_CAMERA = 3;
 		public static final int GET_FROM_CROP = 4;
+		public static final int YYY = 5;
 	}
 
 	public static final class net {

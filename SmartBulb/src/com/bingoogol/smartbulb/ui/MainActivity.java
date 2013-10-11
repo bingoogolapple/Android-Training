@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AbsListView;
@@ -12,6 +13,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bingoogol.smartbulb.R;
 import com.bingoogol.smartbulb.db.dao.TemplateDao;
@@ -20,6 +22,7 @@ import com.bingoogol.smartbulb.domain.http.LightEntry;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.engine.LightsController;
 import com.bingoogol.smartbulb.ui.adapter.MainGridViewAdapter;
+import com.bingoogol.smartbulb.ui.sub.YYYDialog;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.MyAnimations;
 import com.bingoogol.smartbulb.util.ToastUtil;
@@ -27,13 +30,17 @@ import com.bingoogol.smartbulb.util.ToastUtil;
 public class MainActivity extends GenericActivity {
 	protected static final String TAG = "MainActivity";
 	private GridView mainGv;
-	private MainGridViewAdapter adapter;
+	public MainGridViewAdapter adapter;
 	private TemplateDao templateDao;
 	private boolean isFunctionsShowing;
 	private RelativeLayout functionRl;
 	private ImageButton functionIb;
 
 	private ImageButton addIb;
+	private ImageButton exitIb;
+	private ImageButton yyyIb;
+
+	private TextView titleTv;
 
 	private LightsController lightsController;
 	private ProgressDialog pd;
@@ -113,8 +120,8 @@ public class MainActivity extends GenericActivity {
 				}
 				Logger.i(TAG, "maxResult:" + maxResult);
 				List<Template> datas = templateDao.getTemplateScrollData(offset, maxResult);
-				if(maxResult == 11) {
-					maxResult =12;
+				if (maxResult == 11) {
+					maxResult = 12;
 				}
 				return datas;
 			}
@@ -138,6 +145,15 @@ public class MainActivity extends GenericActivity {
 			Intent editTemplateIntent = new Intent(getApplicationContext(), EditTemplateActivity.class);
 			startActivityForResult(editTemplateIntent, 0);
 			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+			break;
+		case R.id.ib_yyy_main:
+			Logger.i(TAG, "注册摇一摇监听器");
+			new YYYDialog(this).show();
+			//sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+			break;
+		case R.id.ib_exit_main:
+			Logger.i(TAG, "点击了退出");
+			app.exit();
 			break;
 
 		default:
@@ -169,12 +185,19 @@ public class MainActivity extends GenericActivity {
 		functionRl = (RelativeLayout) this.findViewById(R.id.rl_function_main);
 		functionIb = (ImageButton) this.findViewById(R.id.ib_function_main);
 		addIb = (ImageButton) this.findViewById(R.id.ib_add_main);
+		exitIb = (ImageButton) this.findViewById(R.id.ib_exit_main);
+		yyyIb = (ImageButton) this.findViewById(R.id.ib_yyy_main);
+		titleTv = (TextView) this.findViewById(R.id.tv_title_main);
+		Typeface typeface = Typeface.createFromAsset(getAssets(), "font.ttf");
+		titleTv.setTypeface(typeface);
 	}
 
 	@Override
 	protected void setListener() {
 		functionIb.setOnClickListener(this);
 		addIb.setOnClickListener(this);
+		exitIb.setOnClickListener(this);
+		yyyIb.setOnClickListener(this);
 		mainGv.setOnScrollListener(new OnScrollListener() {
 
 			@Override
@@ -207,12 +230,6 @@ public class MainActivity extends GenericActivity {
 
 			}
 		});
-	}
-	
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		app.exit();
 	}
 
 	@Override
