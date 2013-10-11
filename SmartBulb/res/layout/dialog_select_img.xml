@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ll_dialog_bg" >
+
+    <TextView
+        style="@style/tv_dialog_select_img_title"
+        android:text="选择图片" />
+
+    <Button
+        android:id="@+id/btn_select_img_gallery"
+        style="@style/btn_dialog_add_img"
+        android:text="相册" />
+
+    <ImageView style="@style/iv_dialog_devide_line_horizontal" />
+
+    <Button
+        android:id="@+id/btn_select_img_camera"
+        style="@style/btn_dialog_add_img"
+        android:text="拍照" />
+
+</LinearLayout>

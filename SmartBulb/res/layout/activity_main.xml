@@ -27,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/rl_title_main"
-        android:layout_margin="5dp"
-        android:horizontalSpacing="10dip"
-        android:verticalSpacing="10dip"
+        android:layout_margin="15dp"
+        android:horizontalSpacing="15dip"
+        android:verticalSpacing="30dip"
         android:numColumns="3" >
     </GridView>
     

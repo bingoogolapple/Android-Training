@@ -21,12 +21,13 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:name="com.bingoogol.training.App"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <uses-library android:name="android.test.runner" />
 
         <activity
-            android:name="com.bingoogol.training.MainActivity"
+            android:name="com.bingoogol.training.ui.AddImgActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

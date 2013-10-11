@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,21 +16,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.bingoogol.smartbulb.R;
 import com.bingoogol.smartbulb.db.dao.TemplateDao;
 import com.bingoogol.smartbulb.domain.LightAttr;
 import com.bingoogol.smartbulb.domain.Template;
@@ -40,10 +36,11 @@ import com.bingoogol.smartbulb.domain.http.LightEntry;
 import com.bingoogol.smartbulb.domain.http.State;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.engine.LightsController;
+import com.bingoogol.smartbulb.ui.sub.SelectImgDialog;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
-import com.bingoogol.smarthue.R;
+import com.bingoogol.smartbulb.util.ToastUtil;
 
 public class EditTemplateActivity extends GenericActivity implements OnTouchListener {
 
@@ -51,7 +48,6 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	private ImageView picker2;
 	private ImageView picker3;
 	private int index = 0;
-	private int saveFlag = 0;
 	private ImageView imgIv;
 	private SeekBar sbar;
 	private EditText nameEt;
@@ -61,72 +57,94 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	private ProgressDialog pd;
 	private TemplateDao templateDao;
 	private LightsController lightsController = new LightsController();
-	private List<ImageView> pickersList = new ArrayList<ImageView>();
-	private List<LightEntry> lightEntries;
-	private boolean getLightAttributesAndState = true;
+	private ArrayList<ImageView> pickersList = new ArrayList<ImageView>();
+	private ArrayList<LightEntry> lightEntries;
+	private ArrayList<LightAttr> lightAttrs;
 	private boolean isAdd = true;
 	private int id;
-	private String imgRealPath = "";
+	public String imgRealPath = "";
+	private SelectImgDialog selectImgDialog;
 
-	private void showAddImgMethodDialog() {
-		final Dialog dialog = new Dialog(this, R.style.MyDialog);
-		View view = View.inflate(this, R.layout.add_img_dialog, null);
-		LinearLayout cameraLl = (LinearLayout) view.findViewById(R.id.ll_camera);
-		cameraLl.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getFromCamera();
-				dialog.dismiss();
+	private int setTemplateFlag = 0;
+	private int getTemplateFlag = 0;
+	private LightCallback setTemplateCallback = new LightCallback() {
+
+		@Override
+		public void onSuccess(Object obj) {
+			setTemplateFlag++;
+			if (setTemplateFlag == 3) {
+				Logger.i(Constants.TAG, "成功设置所有灯泡属性");
+				initPicker();
+				pd.dismiss();
 			}
-		});
-		LinearLayout galleryLl = (LinearLayout) view.findViewById(R.id.ll_gallery);
-		galleryLl.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getFromGallery();
-				dialog.dismiss();
-			}
-		});
-		dialog.setContentView(view);
-		dialog.setCancelable(true);
-		dialog.show();
+		}
+
+		@Override
+		public void onFailure() {
+			Logger.e(Constants.TAG, "设置灯泡属性失败");
+			setTemplateFlag = 0;
+			pd.dismiss();
+			app.exit();
+			openSplashActivity();
+		}
+
+		@Override
+		public void wifiError() {
+			Logger.e(Constants.TAG, "wifi链接不对");
+			pd.dismiss();
+			app.exit();
+			openSplashActivity();
+		}
+
+		@Override
+		public void unauthorized() {
+			Logger.e(Constants.TAG, "用户名失效");
+			pd.dismiss();
+			app.addSp("username", "");
+			app.exit();
+			openSplashActivity();
+		}
+
+		@Override
+		public void pressLinkBtn() {
+			Logger.i(Constants.TAG, "按钮");
+			pd.dismiss();
+			app.exit();
+			openSplashActivity();
+		}
+
+		@Override
+		public void closeDialog() {
+
+		}
+
+	};
+
+	private void setTemplate(long id) {
+		openProgressDialog("正在设置灯泡属性...");
+		lightAttrs = templateDao.getLightAttrListByTid((int) id);
+		LightAttr lightAttr;
+		setTemplateFlag = 0;
+		for (int i = 0; i < lightAttrs.size(); i++) {
+			lightAttr = lightAttrs.get(i);
+			State state = lightEntries.get(i).getState();
+			state.setBri(lightAttr.getBri());
+			state.setHue(lightAttr.getHue());
+			state.setOn(lightAttr.getState() == 1 ? true : false);
+			state.setSat(lightAttr.getSat());
+//			state.setAlert(lightAttr.getAlert());
+//			state.setColormode(lightAttr.getColormode());
+//			state.setCt(lightAttr.getCt());
+//			state.setEffect(lightAttr.getEffect());
+//			state.setTransitiontime(lightAttr.getTransitiontime());
+//			state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
+			lightsController.setLightState(lightEntries.get(i).getId() + "", state, setTemplateCallback);
+		}
 	}
 
-	private void getFromCamera() {
-		Intent intent = new Intent();
-		intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.addCategory(Intent.CATEGORY_DEFAULT);
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		imgRealPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imgRealPath)));
-		startActivityForResult(intent, Constants.activity.GET_FROM_CAMERA);
-		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
-	}
-
-	private void getFromGallery() {
-		Intent intent = new Intent();
-		intent.setAction(Intent.ACTION_PICK);
-		// 设置特定环境下才能执行的参数，例如机顶盒，车载模式等
-		intent.addCategory(Intent.CATEGORY_DEFAULT);
-		// 当同时有data和type时应该用intent.setDataAndType(data, type)
-		intent.setType("image/*");
-		startActivityForResult(intent, Constants.activity.GET_FROM_GALLERY);
-		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
-	}
-
-	public void startPhotoZoom(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 180);
-		intent.putExtra("outputY", 180);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, Constants.activity.GET_FROM_CROP);
+	protected void initPicker() {
+		sbar.setProgress(lightEntries.get(index).getState().getBri());
+		
 	}
 
 	@Override
@@ -134,14 +152,15 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case Constants.activity.GET_FROM_GALLERY:
-				startPhotoZoom(data.getData());
+				selectImgDialog.startPhotoZoom(data.getData());
 				break;
 			case Constants.activity.GET_FROM_CAMERA:
-				startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
+				selectImgDialog.startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
 				break;
 			case Constants.activity.GET_FROM_CROP:
 				if (data != null) {
 					Bitmap bitmap = data.getExtras().getParcelable("data");
+					imgIv.setDrawingCacheEnabled(false);
 					imgIv.setImageBitmap(bitmap);
 				}
 				break;
@@ -153,7 +172,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -167,17 +186,20 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		case R.id.picker1:
 			index = 0;
 			bulbNameTv.setText(lightEntries.get(index).getName());
+			sbar.setProgress(lightEntries.get(index).getState().getBri());
 			break;
 		case R.id.picker2:
 			index = 1;
 			bulbNameTv.setText(lightEntries.get(index).getName());
+			sbar.setProgress(lightEntries.get(index).getState().getBri());
 			break;
 		case R.id.picker3:
 			index = 2;
 			bulbNameTv.setText(lightEntries.get(index).getName());
+			sbar.setProgress(lightEntries.get(index).getState().getBri());
 			break;
 		case R.id.btn_select_img:
-			showAddImgMethodDialog();
+			selectImgDialog.show();
 			break;
 		case R.id.btn_save:
 			final String name = nameEt.getText().toString().trim();
@@ -185,109 +207,51 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 				nameEt.startAnimation(shake);
 			} else {
-				openProgressDialog("正在获取灯泡属性");
-				for (final LightEntry lightEntry : lightEntries) {
-					lightsController.getLightAttributesAndState(lightEntry.getId(), new LightCallback() {
-
-						@Override
-						public void onSuccess(Object obj) {
-							int index = lightEntries.indexOf(lightEntry);
-							Logger.i(Constants.TAG, "index >> " + index);
-							lightEntries.set(index, (LightEntry) obj);
-							saveFlag++;
-						}
-
-						@Override
-						public void onFailure(Object obj) {
-							Logger.e(Constants.TAG, "获取灯泡属性失败");
-							getLightAttributesAndState = false;
-						}
-
-						@Override
-						public void wifiError() {
-							Logger.e(Constants.TAG, "wifi链接不对");
-							closeProgressDialog();
-							openSplashActivity();
-						}
-
-						@Override
-						public void unauthorized() {
-							Logger.e(Constants.TAG, "用户名失效");
-							closeProgressDialog();
-							app.addSp("username", "");
-							openSplashActivity();
-						}
-
-						@Override
-						public void pressLinkBtn() {
-							Logger.i(Constants.TAG, "按钮");
-						}
-
-					});
+				Template template = new Template();
+				template.setName(name);
+				String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+				String imgPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
+				template.setImgPath(imgPath);
+				Bitmap bitmap = imgIv.getDrawingCache();
+				for (int i = 0; i < 3; i++) {
+					LightEntry lightEntry = lightEntries.get(i);
+					LightAttr lightAttr = lightAttrs.get(i);
+//					lightAttr.setType(lightEntry.getType());
+//					lightAttr.setName(lightEntry.getName());
+//					lightAttr.setModelid(lightEntry.getModelid());
+//					lightAttr.setSwversion(lightEntry.getSwversion());
+					lightAttr.setState(lightEntry.getState().isOn() == false ? 0 : 1);
+					lightAttr.setBri(lightEntry.getState().getBri());
+					lightAttr.setHue(lightEntry.getState().getHue());
+					lightAttr.setSat(lightEntry.getState().getSat());
+//					lightAttr.setXy_x(lightEntry.getState().getXy()[0]);
+//					lightAttr.setXy_y(lightEntry.getState().getXy()[1]);
+//					lightAttr.setCt(lightEntry.getState().getCt());
+//					lightAttr.setAlert(lightEntry.getState().getAlert());
+//					lightAttr.setEffect(lightEntry.getState().getEffect());
+//					lightAttr.setTransitiontime(lightEntry.getState().getTransitiontime());
+//					lightAttr.setColormode(lightEntry.getState().getColormode());
 				}
-				new Thread() {
-					public void run() {
-						while (true) {
-							if (saveFlag == 3) {
-								Logger.i(Constants.TAG, "成功获取所有灯泡属性");
-								closeProgressDialog();
-								Template template = new Template();
-								template.setName(name);
-								String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-								String imgPath = StorageUtil.getImageDir() + File.separator + "IMG_" + timeStamp + ".png";
-								template.setImgPath(imgPath);
-								Bitmap bitmap = imgIv.getDrawingCache();
-								ArrayList<LightAttr> lightAttrs = new ArrayList<LightAttr>();
-								for (int i = 0; i < 3; i++) {
-									LightEntry lightEntry = lightEntries.get(i);
-									LightAttr lightAttr = new LightAttr();
-									lightAttr.setType(lightEntry.getType());
-									lightAttr.setName(lightEntry.getName());
-									lightAttr.setModelid(lightEntry.getModelid());
-									lightAttr.setSwversion(lightEntry.getSwversion());
-									lightAttr.setState(lightEntry.getState().isOn() == false ? 0 : 1);
-									lightAttr.setBri(lightEntry.getState().getBri());
-									lightAttr.setHue(lightEntry.getState().getHue());
-									lightAttr.setSat(lightEntry.getState().getSat());
-									lightAttr.setXy_x(lightEntry.getState().getXy()[0]);
-									lightAttr.setXy_y(lightEntry.getState().getXy()[1]);
-									lightAttr.setCt(lightEntry.getState().getCt());
-									lightAttr.setAlert(lightEntry.getState().getAlert());
-									lightAttr.setEffect(lightEntry.getState().getEffect());
-									lightAttr.setTransitiontime(lightEntry.getState().getTransitiontime());
-									lightAttr.setColormode(lightEntry.getState().getColormode());
-									lightAttrs.add(lightAttr);
-								}
-								if(isAdd) {
-									if (templateDao.addTemplete(template, lightAttrs, bitmap)) {
-										Logger.i(Constants.TAG, "添加成功");
-										setResult(RESULT_OK);
-										finish();
-										overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
-									} else {
-										Logger.e(Constants.TAG, "添加失败");
-									}
-								} else {
-									template.setId(id);
-									if (templateDao.updateTemplete(template, lightAttrs, bitmap)) {
-										Logger.i(Constants.TAG, "修改成功");
-										setResult(RESULT_OK);
-										finish();
-										overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
-									} else {
-										Logger.e(Constants.TAG, "修改失败");
-									}
-								}
-								break;
-							}
-							if (!getLightAttributesAndState) {
-								Logger.e(Constants.TAG, "获取灯泡属性失败");
-								closeProgressDialog();
-								break;
-							}
-						}
-					};
-				}.start();
+				if (isAdd) {
+					if (templateDao.addTemplete(template, lightAttrs, bitmap)) {
+						Logger.i(Constants.TAG, "添加成功");
+						setResult(RESULT_OK);
+						finish();
+						overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+					} else {
+						ToastUtil.makeText(EditTemplateActivity.this, "添加失败");
+					}
+				} else {
+					template.setId(id);
+					if (templateDao.updateTemplete(template, lightAttrs, bitmap)) {
+						Logger.i(Constants.TAG, "修改成功");
+						setResult(RESULT_OK);
+						finish();
+						overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+					} else {
+						ToastUtil.makeText(EditTemplateActivity.this, "修改失败");
+					}
+				}
 			}
 			break;
 
@@ -296,13 +260,79 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		}
 	}
 
-	private void openProgressDialog(String msg) {
-		pd = ProgressDialog.show(EditTemplateActivity.this, "提示", msg);
-		pd.setCancelable(false);
+	/**
+	 * 获取当前桥接器链接的所有灯的属性和状态
+	 */
+	private void getTemplate() {
+		openProgressDialog("正在获取灯泡属性");
+		getTemplateFlag = 0;
+		Logger.i(Constants.TAG, "id:" + lightEntries.get(0).getId());
+		for (final LightEntry lightEntry : lightEntries) {
+			lightsController.getLightAttributesAndState(lightEntry.getId(), new LightCallback() {
+
+				@Override
+				public void onSuccess(Object obj) {
+					int index2 = lightEntries.indexOf(lightEntry);
+					LightEntry lightEntry2 = (LightEntry) obj;
+					lightEntry2.setId(lightEntry.getId());
+					lightEntry2.setName(lightEntry.getName());
+					lightEntries.set(index2, lightEntry2);
+					getTemplateFlag++;
+					if (getTemplateFlag == 3) {
+						Logger.i(Constants.TAG, "成功获取所有灯泡属性");
+						lightAttrs = new ArrayList<LightAttr>();
+						for(int i = 0; i < 3;i++) {
+							lightAttrs.add(new LightAttr());
+						}
+						pd.dismiss();
+					}
+				}
+
+				@Override
+				public void onFailure() {
+					Logger.e(Constants.TAG, "获取灯泡属性失败");
+					pd.dismiss();
+					app.exit();
+					openSplashActivity();
+				}
+
+				@Override
+				public void wifiError() {
+					Logger.e(Constants.TAG, "wifi链接不对");
+					pd.dismiss();
+					app.exit();
+					openSplashActivity();
+				}
+
+				@Override
+				public void unauthorized() {
+					Logger.e(Constants.TAG, "用户名失效");
+					pd.dismiss();
+					app.addSp("username", "");
+					app.exit();
+					openSplashActivity();
+				}
+
+				@Override
+				public void pressLinkBtn() {
+					Logger.i(Constants.TAG, "按钮");
+					pd.dismiss();
+					app.exit();
+					openSplashActivity();
+				}
+
+				@Override
+				public void closeDialog() {
+
+				}
+
+			});
+		}
 	}
 
-	private void closeProgressDialog() {
-		pd.dismiss();
+	private void openProgressDialog(String msg) {
+		pd = ProgressDialog.show(this, "提示", msg);
+		pd.setCancelable(false);
 	}
 
 	@Override
@@ -325,6 +355,8 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		nameEt = (EditText) this.findViewById(R.id.et_name);
 		saveBtn = (Button) this.findViewById(R.id.btn_save);
 		bulbNameTv = (TextView) this.findViewById(R.id.tv_bulb_name);
+
+		selectImgDialog = new SelectImgDialog(this);
 	}
 
 	@Override
@@ -341,40 +373,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				State state = lightEntries.get(index).getState();
 				state.setBri(seekBar.getProgress());
-				openProgressDialog("正在设置灯泡亮度");
-				lightsController.setLightState(lightEntries.get(index).getId(), state, new LightCallback() {
-					@Override
-					public void onSuccess(Object obj) {
-						closeProgressDialog();
-						Logger.i(Constants.TAG, "修改亮度成功");
-					}
-
-					@Override
-					public void onFailure(Object obj) {
-						closeProgressDialog();
-						Logger.e(Constants.TAG, "修改亮度失败");
-					}
-
-					@Override
-					public void wifiError() {
-						Logger.e(Constants.TAG, "wifi链接不对");
-						closeProgressDialog();
-						openSplashActivity();
-					}
-
-					@Override
-					public void unauthorized() {
-						Logger.e(Constants.TAG, "用户名失效");
-						closeProgressDialog();
-						app.addSp("username", "");
-						openSplashActivity();
-					}
-
-					@Override
-					public void pressLinkBtn() {
-						Logger.i(Constants.TAG, "按钮");
-					}
-				});
+				setLightState(state);
 			}
 
 			@Override
@@ -391,54 +390,61 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 	@Override
 	protected void processLogic() {
-		openProgressDialog("正在获取灯泡列表");
 		templateDao = new TemplateDao(EditTemplateActivity.this);
+		openProgressDialog("正在获取灯泡列表");
 		lightsController.getAllLights(new LightCallback() {
-
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onSuccess(Object obj) {
-				lightEntries = (List<LightEntry>) obj;
+				lightEntries = (ArrayList<LightEntry>) obj;
 				Collections.sort(lightEntries);
 				bulbNameTv.setText(lightEntries.get(index).getName());
-				
 				Bundle bundle = getIntent().getExtras();
 				if (bundle != null) {
 					isAdd = false;
+					saveBtn.setText("修改");
 					id = bundle.getInt("id");
 					Template template = templateDao.getTemplete(id);
 					imgIv.setImageBitmap(BitmapFactory.decodeFile(template.getImgPath()));
 					nameEt.setText(template.getName());
-					
-					
+					setTemplate(id);
+				} else {
+					getTemplate();
 				}
-				
-				closeProgressDialog();
 			}
 
 			@Override
-			public void onFailure(Object obj) {
-				closeProgressDialog();
+			public void onFailure() {
 				Logger.e(Constants.TAG, "获取灯泡列表失败");
+				app.exit();
+				openSplashActivity();
 			}
 
 			@Override
 			public void wifiError() {
 				Logger.e(Constants.TAG, "wifi链接不对");
-				closeProgressDialog();
+				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void unauthorized() {
 				Logger.e(Constants.TAG, "用户名失效");
-				closeProgressDialog();
 				app.addSp("username", "");
+				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void pressLinkBtn() {
 				Logger.i(Constants.TAG, "按钮");
+				app.exit();
+				openSplashActivity();
+			}
+
+			@Override
+			public void closeDialog() {
+				pd.dismiss();
 			}
 
 		});
@@ -459,7 +465,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		if ((x > 0 && x < width) && (y > 0 && y < height)) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_MOVE:
-				setPickerColor(color);
+				setPickerColor(color, index);
 				break;
 			case MotionEvent.ACTION_UP:
 				// RGB转HSV
@@ -472,45 +478,13 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				int hue = (int) (hsv[0] * 65535.0 / 360.0);
 				int sat = (int) (hsv[1] * 255.0);
 				int bri = (int) (hsv[2] * 255.0);
+
 				State state = lightEntries.get(index).getState();
 				state.setOn(true);
 				state.setHue(hue);
 				state.setSat(sat);
 				state.setBri(bri);
-				openProgressDialog("正在设置灯泡颜色");
-				lightsController.setLightState(String.valueOf(index + 1), state, new LightCallback() {
-					@Override
-					public void onSuccess(Object obj) {
-						closeProgressDialog();
-						Logger.i(Constants.TAG, "修改LightAttr成功");
-					}
-
-					@Override
-					public void onFailure(Object obj) {
-						closeProgressDialog();
-						Logger.e(Constants.TAG, "修改LightAttr失败");
-					}
-
-					@Override
-					public void wifiError() {
-						Logger.e(Constants.TAG, "wifi链接不对");
-						closeProgressDialog();
-						openSplashActivity();
-					}
-
-					@Override
-					public void unauthorized() {
-						Logger.e(Constants.TAG, "用户名失效");
-						closeProgressDialog();
-						app.addSp("username", "");
-						openSplashActivity();
-					}
-
-					@Override
-					public void pressLinkBtn() {
-						Logger.i(Constants.TAG, "按钮");
-					}
-				});
+				setLightState(state);
 				break;
 			default:
 				break;
@@ -519,14 +493,57 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		return true;
 	}
 
+	private void setLightState(State state) {
+		openProgressDialog("正在设置灯泡属性...");
+		lightsController.setLightState(lightEntries.get(index).getId(), state, new LightCallback() {
+
+			@Override
+			public void wifiError() {
+				app.exit();
+				openSplashActivity();
+			}
+
+			@Override
+			public void unauthorized() {
+				Logger.e(Constants.TAG, "用户名失效");
+				app.addSp("username", "");
+				app.exit();
+				openSplashActivity();
+			}
+
+			@Override
+			public void pressLinkBtn() {
+				app.exit();
+				openSplashActivity();
+			}
+
+			@Override
+			public void onSuccess(Object obj) {
+				sbar.setProgress(lightEntries.get(index).getState().getBri());
+				Logger.i(Constants.TAG, "成功设置灯泡属性");
+			}
+
+			@Override
+			public void onFailure() {
+				app.exit();
+				openSplashActivity();
+			}
+
+			@Override
+			public void closeDialog() {
+				pd.dismiss();
+			}
+		});
+	}
+
 	public void openSplashActivity() {
 		Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
 		startActivity(intent);
 		this.finish();
 	}
 
-	private void setPickerColor(int color) {
-		ImageView picker = pickersList.get(index);
+	private void setPickerColor(int color, int position) {
+		ImageView picker = pickersList.get(position);
 		Bitmap alterBitmap = Bitmap.createBitmap(picker.getWidth(), picker.getHeight(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(alterBitmap);
 		Paint paint = new Paint();
@@ -534,4 +551,5 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		canvas.drawCircle(picker.getWidth() / 2, picker.getWidth() / 2, picker.getWidth() / 2, paint);
 		picker.setImageBitmap(alterBitmap);
 	}
+
 }

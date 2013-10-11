@@ -18,16 +18,35 @@ import com.bingoogol.smartbulb.db.DBOpenHelper;
 import com.bingoogol.smartbulb.domain.LightAttr;
 import com.bingoogol.smartbulb.domain.Template;
 import com.bingoogol.smartbulb.util.Constants;
+import com.bingoogol.smartbulb.util.Logger;
 
+/**
+ * 模板和狀態操作
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class TemplateDao {
+	private static final String TAG = "TemplateDao";
 	private DBOpenHelper dbOpenHelper;
 
 	public TemplateDao(Context context) {
 		dbOpenHelper = new DBOpenHelper(context);
 	}
 
+	/**
+	 * 添加模板
+	 * 
+	 * @param template
+	 *            模板
+	 * @param lightAttrs
+	 *            燈泡屬性
+	 * @param bitmap
+	 *            模板圖片Bitmap
+	 * @return 添加成功返回true，否則返回false
+	 */
 	public boolean addTemplete(Template template, ArrayList<LightAttr> lightAttrs, Bitmap bitmap) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		// 1.開起事務
 		db.beginTransaction();
 		FileOutputStream fos = null;
 		boolean result = false;
@@ -35,7 +54,9 @@ public class TemplateDao {
 			ContentValues templateValues = new ContentValues();
 			templateValues.put(Constants.db.template.COLUMN_NAME_NAME, template.getName());
 			templateValues.put(Constants.db.template.COLUMN_NAME_IMG_PATH, template.getImgPath());
+			// 2.添加模板
 			long tid = db.insert(Constants.db.template.TABLE_NAME, null, templateValues);
+			// 3.添加燈泡屬性
 			for (LightAttr lightAttr : lightAttrs) {
 				ContentValues lightAttrValues = new ContentValues();
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_TID, tid);
@@ -55,18 +76,22 @@ public class TemplateDao {
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_TRANSITIONTIME, lightAttr.getTransitiontime());
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_COLORMODE, lightAttr.getColormode());
 				db.insert(Constants.db.lightattr.TABLE_NAME, null, lightAttrValues);
+				Logger.i(TAG, "添加 >> bri:" + lightAttr.getBri() + "   hue:" + lightAttr.getHue() + "   sat:" + lightAttr.getSat() + " state:" + lightAttr.getState());
 			}
+			// 4.保存图片文件
 			File imgFile = new File(template.getImgPath());
 			if (!imgFile.getParentFile().exists()) {
 				imgFile.getParentFile().mkdirs();
 			}
 			fos = new FileOutputStream(imgFile);
 			bitmap.compress(CompressFormat.PNG, 80, fos);
+			// 5.如果能执行到这一步，说明前面的操作没出错，设置状态为success
 			db.setTransactionSuccessful();
 			result = true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} finally {
+			// 6.结束事务
 			db.endTransaction();
 			DBOpenHelper.close(db, null);
 			if (fos != null) {
@@ -80,6 +105,13 @@ public class TemplateDao {
 		return result;
 	}
 
+	/**
+	 * 刪除指定模板
+	 * 
+	 * @param id
+	 *            模板id
+	 * @return 刪除成功返回true，否則返回false
+	 */
 	public boolean deleteTemplete(int id) {
 		SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
 		db.beginTransaction();
@@ -104,9 +136,10 @@ public class TemplateDao {
 	 * 修改模板
 	 * 
 	 * @param template
-	 * @return
+	 *            模板
+	 * @return 修改成功返回true，否則返回false
 	 */
-	public boolean updateTemplete(Template template, ArrayList<LightAttr> lightAttrs,Bitmap bitmap) {
+	public boolean updateTemplete(Template template, ArrayList<LightAttr> lightAttrs, Bitmap bitmap) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 		db.beginTransaction();
 		FileOutputStream fos = null;
@@ -136,6 +169,7 @@ public class TemplateDao {
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_TRANSITIONTIME, lightAttr.getTransitiontime());
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_COLORMODE, lightAttr.getColormode());
 				db.update(Constants.db.lightattr.TABLE_NAME, lightAttrValues, Constants.db.lightattr.COLUMN_NAME_ID + "=?", new String[] { lightAttr.getId() + "" });
+				Logger.i(TAG, "修改 >> bri:" + lightAttr.getBri() + "   hue:" + lightAttr.getHue() + "   sat:" + lightAttr.getSat() + " state:" + lightAttr.getState());
 			}
 			File imgFile = new File(template.getImgPath());
 			if (!imgFile.getParentFile().exists()) {
@@ -155,10 +189,11 @@ public class TemplateDao {
 	}
 
 	/**
-	 * 根据id获取模板
+	 * 获取指定模板
 	 * 
 	 * @param id
-	 * @return
+	 *            模板id
+	 * @return 模板
 	 */
 	public Template getTemplete(int id) {
 		SQLiteDatabase db = null;
@@ -209,11 +244,11 @@ public class TemplateDao {
 	/**
 	 * 根据模板id获取灯泡属性列表
 	 * 
-	 * @param tid
-	 * @return
+	 * @param tid 模板id
+	 * @return 燈泡屬性列表
 	 */
-	public List<LightAttr> getLightAttrListByTid(int tid) {
-		List<LightAttr> datas = new ArrayList<LightAttr>();
+	public ArrayList<LightAttr> getLightAttrListByTid(int tid) {
+		ArrayList<LightAttr> datas = new ArrayList<LightAttr>();
 		SQLiteDatabase db = null;
 		Cursor cursor = null;
 		try {
@@ -244,6 +279,10 @@ public class TemplateDao {
 		return datas;
 	}
 
+	/**
+	 * 獲取模板總數
+	 * @return
+	 */
 	public long getCount() {
 		SQLiteDatabase db = null;
 		Cursor cursor = null;

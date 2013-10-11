@@ -66,7 +66,9 @@ public class NetUtil {
 			Logger.e(TAG, e.getLocalizedMessage());
 		} finally {
 			try {
-
+				if (baos != null) {
+					baos.close();
+				}
 			} catch (Exception e2) {
 				Logger.e(TAG, e2.getLocalizedMessage());
 			}

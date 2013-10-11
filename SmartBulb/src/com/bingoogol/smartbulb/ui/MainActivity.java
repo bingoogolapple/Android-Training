@@ -13,6 +13,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.bingoogol.smartbulb.R;
 import com.bingoogol.smartbulb.db.dao.TemplateDao;
 import com.bingoogol.smartbulb.domain.Template;
 import com.bingoogol.smartbulb.domain.http.LightEntry;
@@ -23,9 +24,9 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.MyAnimations;
 import com.bingoogol.smartbulb.util.ToastUtil;
-import com.bingoogol.smarthue.R;
 
 public class MainActivity extends GenericActivity {
+	protected static final String TAG = "MainActivity";
 	private GridView mainGv;
 	private MainGridViewAdapter adapter;
 	private TemplateDao templateDao;
@@ -39,7 +40,7 @@ public class MainActivity extends GenericActivity {
 	private ProgressDialog pd;
 
 	private int offset = 0;
-	private int maxResult = 18;
+	private int maxResult = 12;
 	private boolean isLoading = false;
 
 	private List<LightEntry> lightEntries;
@@ -52,7 +53,7 @@ public class MainActivity extends GenericActivity {
 		}
 	}
 
-	private void refresh() {
+	public void refresh() {
 		Logger.i(Constants.TAG, "刷新");
 		adapter = null;
 		offset = 0;
@@ -60,7 +61,7 @@ public class MainActivity extends GenericActivity {
 	}
 
 	public void openProgressDialog(String msg) {
-		pd = ProgressDialog.show(MainActivity.this, "提示", msg);
+		pd = ProgressDialog.show(this, "提示", msg);
 		pd.setCancelable(false);
 	}
 
@@ -80,22 +81,25 @@ public class MainActivity extends GenericActivity {
 			@Override
 			protected void onPostExecute(List<Template> datas) {
 				if (datas != null) {
+					Logger.i(TAG, "datas.size >> " + datas.size());
 					if (adapter == null) {
+						Logger.i(TAG, "第一次加载模板 >> " + datas.size());
 						Template template = new Template();
 						template.setId(-1);
 						template.setName("ALL OFF");
 						datas.add(0, template);
-						adapter = new MainGridViewAdapter(MainActivity.this, datas,lightEntries);
+						adapter = new MainGridViewAdapter(MainActivity.this, datas, lightEntries);
 						mainGv.setAdapter(adapter);
 						mainGv.setOnItemClickListener(adapter);
 						mainGv.setOnItemLongClickListener(adapter);
 					} else {
+						Logger.i(TAG, "加载更多模板 >> " + datas.size());
 						// 把获取到的数据添加到数据适配器里
 						adapter.addMoreMoment(datas);
 						adapter.notifyDataSetChanged();
 					}
 				} else {
-					Logger.i(Constants.TAG, "datas is null");
+					Logger.i(TAG, "datas is null");
 				}
 				closeProgressDialog();
 				isLoading = false;
@@ -167,7 +171,7 @@ public class MainActivity extends GenericActivity {
 		functionIb.setOnClickListener(this);
 		addIb.setOnClickListener(this);
 		mainGv.setOnScrollListener(new OnScrollListener() {
-			
+
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				switch (scrollState) {
@@ -175,10 +179,13 @@ public class MainActivity extends GenericActivity {
 				case OnScrollListener.SCROLL_STATE_IDLE:
 					// 如果不是正在加载数据才去加载数据
 					if (!isLoading) {
-						// 从1开始
-						int position = view.getLastVisiblePosition();
+						// 从0开始
+						Logger.i(TAG, "view.getLastVisiblePosition():" + view.getLastVisiblePosition());
+						int lastPosition = view.getLastVisiblePosition() + 1;
 						int count = adapter.getCount();
-						if (position == count) {
+						Logger.i(TAG, "lastPosition:" + lastPosition + "  count:" + count);
+						if (lastPosition == count) {
+							Logger.i(TAG, "offset:" + offset + "  maxResult:" + maxResult + "  templateDao.getCount():" + templateDao.getCount());
 							if (offset + maxResult < templateDao.getCount()) {
 								offset += maxResult;
 								fillGridView();
@@ -190,13 +197,19 @@ public class MainActivity extends GenericActivity {
 					break;
 				}
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		app.exit();
 	}
 
 	@Override
@@ -205,38 +218,46 @@ public class MainActivity extends GenericActivity {
 		openProgressDialog("正在获取灯泡列表");
 		lightsController.getAllLights(new LightCallback() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onSuccess(Object obj) {
 				lightEntries = (List<LightEntry>) obj;
 				Collections.sort(lightEntries);
-				closeProgressDialog();
+				// 成功获取到当前桥接器链接的所有灯的信息，为gridview填充数据
 				fillGridView();
 			}
 
 			@Override
-			public void onFailure(Object obj) {
-				closeProgressDialog();
+			public void onFailure() {
 				Logger.e(Constants.TAG, "获取灯泡列表失败");
+				app.exit();
+				openSplashActivity();
 			}
 
 			@Override
 			public void wifiError() {
 				Logger.e(Constants.TAG, "wifi链接不对");
-				closeProgressDialog();
+				app.exit();
 				openSplashActivity();
 			}
 
 			@Override
 			public void unauthorized() {
 				Logger.e(Constants.TAG, "用户名失效");
-				closeProgressDialog();
 				app.addSp("username", "");
+				app.exit();
 				openSplashActivity();
+
 			}
 
 			@Override
 			public void pressLinkBtn() {
 				Logger.i(Constants.TAG, "按钮");
+			}
+
+			@Override
+			public void closeDialog() {
+				closeProgressDialog();
 			}
 
 		});
@@ -248,7 +269,5 @@ public class MainActivity extends GenericActivity {
 		startActivity(intent);
 		this.finish();
 	}
-	
-	
 
 }

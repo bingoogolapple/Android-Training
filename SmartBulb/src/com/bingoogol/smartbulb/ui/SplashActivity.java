@@ -1,116 +1,76 @@
 package com.bingoogol.smartbulb.ui;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
+import com.bingoogol.smartbulb.R;
 import com.bingoogol.smartbulb.engine.Config;
 import com.bingoogol.smartbulb.engine.HueRestClient;
 import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
+import com.bingoogol.smartbulb.ui.sub.LinkButtonDialog;
+import com.bingoogol.smartbulb.ui.sub.SetWifiDialog;
 import com.bingoogol.smartbulb.util.ConnectivityUtil;
 import com.bingoogol.smartbulb.util.Constants;
-import com.bingoogol.smartbulb.util.DialogBuilder;
-import com.bingoogol.smartbulb.util.DialogBuilder.OperateDialogCallBack;
 import com.bingoogol.smartbulb.util.Logger;
-import com.bingoogol.smarthue.R;
+import com.bingoogol.smartbulb.util.ToastUtil;
 
 public class SplashActivity extends GenericActivity {
 	private Config config = new Config();
 	private ProgressDialog pd;
-	private Dialog wifiDialog;
-	private Dialog linkBtnDialog;
 	private LightCallback lightCallback = new LightCallback() {
 
 		@Override
 		public void pressLinkBtn() {
-			closeProgressDialog();
-			openLinkBtnDialog();
+			Logger.i(Constants.TAG, "打开按钮对话框");
+			new LinkButtonDialog(SplashActivity.this).show();
 		}
 
 		@Override
 		public void wifiError() {
-			closeProgressDialog();
-			openWifiDialog();
+			Logger.i(Constants.TAG, "打开wifi对话框");
+			new SetWifiDialog(SplashActivity.this).show();
 		}
 
 		@Override
 		public void onSuccess(Object obj) {
-			closeProgressDialog();
-			app.addSp("username", (String)obj);
+			app.addSp("username", (String) obj);
 			openMainActivity();
 		}
 
 		@Override
-		public void onFailure(Object obj) {
-			
+		public void onFailure() {
+			ToastUtil.makeText(app, "认证用户失败");
 		}
 
 		@Override
 		public void unauthorized() {
-			
+
+		}
+		
+		@Override
+		public void closeDialog() {
+			pd.dismiss();
+			Logger.i(Constants.TAG, "关闭进度条");
 		}
 	};
 
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == Constants.activity.OPEN_WIFI_SETTINGS) {
 			processLogic();
 		}
 	};
-
-	private void openWifiDialog() {
-		wifiDialog = DialogBuilder.createOperateDialog(this, R.string.no_wifi, R.string.set_wifi, R.string.exit, new OperateDialogCallBack() {
-
-			@Override
-			public void onClickRightBtn() {
-				closeWifiDialog();
-				SplashActivity.this.finish();
-			}
-
-			@Override
-			public void onClickLeftBtn() {
-				closeWifiDialog();
-				Intent intent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
-				startActivityForResult(intent, Constants.activity.OPEN_WIFI_SETTINGS);
-			}
-		});
-		wifiDialog.show();
-	}
-
-	private void closeWifiDialog() {
-		wifiDialog.dismiss();
-	}
-
-	private void openLinkBtnDialog() {
-		linkBtnDialog = DialogBuilder.createOperateDialog(this, R.string.press_link_btn, R.string.retry, R.string.exit, new OperateDialogCallBack() {
-
-			@Override
-			public void onClickRightBtn() {
-				SplashActivity.this.finish();
-			}
-
-			@Override
-			public void onClickLeftBtn() {
-				closeLinkBtnDialog();
-				openProgressDialog();
-				config.createUser(lightCallback);
-			}
-		});
-		linkBtnDialog.show();
-	}
-
-	private void closeLinkBtnDialog() {
-		linkBtnDialog.dismiss();
-	}
-
+	
 	@Override
-	public void onClick(View v) {
-
+	public void onBackPressed() {
+		super.onBackPressed();
+		app.exit();
 	}
 
 	private void openMainActivity() {
-		HueRestClient.getInstance().setUserName(app.getSp("username",""));
+		HueRestClient.getInstance().setUserName(app.getSp("username", ""));
 		Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
 		SplashActivity.this.finish();
 		startActivity(homeIntent);
@@ -122,33 +82,22 @@ public class SplashActivity extends GenericActivity {
 		setContentView(R.layout.activity_splash);
 	}
 
-	@Override
-	protected void findViewById() {
-
-	}
-
-	@Override
-	protected void setListener() {
-
-	}
-
-	private void openProgressDialog() {
-		pd = ProgressDialog.show(SplashActivity.this, "提示", "正在链接...");
+	/**
+	 * 认证用户
+	 */
+	public void auth() {
+		pd = ProgressDialog.show(this, "提示", "正在认证用户...");
 		pd.setCancelable(false);
-	}
-
-	private void closeProgressDialog() {
-		pd.dismiss();
+		config.createUser(lightCallback);
 	}
 
 	@Override
 	protected void processLogic() {
 		if (ConnectivityUtil.isWifiConnected(SplashActivity.this)) {
-			String username = app.getSp("username","");
+			String username = app.getSp("username", "");
 			Logger.i(Constants.TAG, "用户名:" + username);
 			if ("".equals(username)) {
-				openProgressDialog();
-				config.createUser(lightCallback);
+				auth();
 			} else {
 				new Handler().postDelayed(new Runnable() {
 					@Override
@@ -158,9 +107,21 @@ public class SplashActivity extends GenericActivity {
 				}, 1500);
 			}
 		} else {
-			openWifiDialog();
+			new SetWifiDialog(this).show();
 		}
 
+	}
+
+	@Override
+	protected void findViewById() {
+	}
+
+	@Override
+	public void onClick(View v) {
+	}
+
+	@Override
+	protected void setListener() {
 	}
 
 }

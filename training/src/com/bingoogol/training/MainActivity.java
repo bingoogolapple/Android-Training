@@ -7,6 +7,7 @@ import android.widget.Button;
 import com.bingoogol.training.ui.CalculatorActivity;
 import com.bingoogol.training.ui.FirstActivity;
 import com.bingoogol.training.ui.HtmlViewActivity;
+import com.bingoogol.training.ui.stub.SelectImgDialog;
 
 public class MainActivity extends GenericActivity {
 

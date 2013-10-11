@@ -14,9 +14,9 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
 /**
- * api访问客户端，对HttpClient进行封装
+ * 燈泡访问客户端
  * 
- * @author Li Bin
+ * @author 王浩 bingoogol@sina.com
  */
 public class HueRestClient {
 	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
@@ -31,9 +31,9 @@ public class HueRestClient {
 	}
 
 	/**
-	 * 获取HueRestClient类唯一实例
+	 * 懒汉模式，获取HueRestClient类唯一实例
 	 * 
-	 * @return
+	 * @return HueRestClient实例
 	 */
 	public synchronized static HueRestClient getInstance() {
 		if (instance == null) {
@@ -84,13 +84,11 @@ public class HueRestClient {
 	 * @param url
 	 *            表示相应api的相对地址
 	 * @return 返回Json格式的响应数据
-	 * @throws Exception
 	 */
 	public synchronized String get(String path) {
 		String jsonResult = "";
 		InputStream is = null;
 		try {
-			// Log.i("Get", "1");
 			HttpURLConnection conn = getHttpURLConnection(path);
 			conn.setRequestMethod("GET");
 			if (conn.getResponseCode() == 200) {
@@ -119,7 +117,6 @@ public class HueRestClient {
 	 * @param jsonBody
 	 *            json格式的请求数据
 	 * @return 返回Json格式的响应数据
-	 * @throws IOException 
 	 */
 	public synchronized String post(String path, String jsonBody) {
 		String jsonResult = "";
@@ -233,8 +230,7 @@ public class HueRestClient {
 	 * @return 连接
 	 * @throws IOException
 	 */
-	private HttpURLConnection getHttpURLConnection(String strURL)
-			throws IOException {
+	private HttpURLConnection getHttpURLConnection(String strURL) throws IOException {
 		URL url = new URL(this.getAbsoluteURL(strURL));
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setConnectTimeout(Constants.net.CONNECTTIMEOUT);
@@ -300,8 +296,7 @@ public class HueRestClient {
 		if (relativeURL == null || "".equals(relativeURL)) {
 			absoluteUrl = "http://" + this.getIpAddress() + "/api/";
 		} else {
-			absoluteUrl = "http://" + this.getIpAddress() + "/api/"
-					+ this.getUserName() + relativeURL;
+			absoluteUrl = "http://" + this.getIpAddress() + "/api/" + this.getUserName() + relativeURL;
 		}
 		Logger.i(Constants.TAG, "absoluteURL >> " + absoluteUrl);
 		return absoluteUrl;

@@ -12,6 +12,9 @@ import android.content.SharedPreferences.Editor;
 import com.bingoogol.smartbulb.util.Constants;
 
 public class App extends Application {
+	/**
+	 * 存放应用程序中的activity，主要是用来实现完全退出应用程序功能
+	 */
 	private List<Activity> activities;
 	private SharedPreferences sp;
 	

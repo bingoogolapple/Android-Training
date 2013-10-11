@@ -1,5 +1,10 @@
 package com.bingoogol.smartbulb.domain;
 
+/**
+ * 模板实体
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class Template {
 	private int id;
 	private String name;

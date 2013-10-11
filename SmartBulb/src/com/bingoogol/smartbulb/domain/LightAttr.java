@@ -1,6 +1,11 @@
 package com.bingoogol.smartbulb.domain;
 
 
+/**
+ * 定灯的属性和状态实体
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class LightAttr {
 	private int id;
 	private int tid;

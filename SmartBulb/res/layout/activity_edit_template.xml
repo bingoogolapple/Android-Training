@@ -100,8 +100,8 @@
 
     <ImageView
         android:id="@+id/iv_img_add_template"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="300dp"
+        android:layout_height="240dp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/default_img" />
@@ -115,8 +115,11 @@
         android:textColor="@android:color/white" />
 
     <SeekBar
+	    android:layout_marginTop="30dp"
         android:id="@+id/edit_sb_bri"
-        android:layout_width="250dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:max="255"
         android:progressDrawable="@drawable/seekbar"
@@ -139,6 +142,6 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_add_selector"
-        android:text="Save" />
+        android:text="保存" />
 
 </LinearLayout>

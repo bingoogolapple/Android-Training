@@ -61,10 +61,6 @@ public final class Constants {
 		}
 	}
 
-	public static final class hue {
-		public static final String DEVICETYPE = "android_hue";
-	}
-
 	public static final class activity {
 		public static final int OPEN_WIFI_SETTINGS = 1;
 		public static final int GET_FROM_GALLERY = 2;

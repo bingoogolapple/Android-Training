@@ -8,5 +8,11 @@
     <string name="main_html_wiew">网页查看器</string>
     <string name="request">发送请求</string>
     
+    
+    
+    <string name="camera">拍照</string>
+    <string name="gallery">图库</string>
+    <string name="add_img">添加图片</string>
+    
 
 </resources>

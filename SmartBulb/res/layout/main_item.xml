@@ -15,17 +15,16 @@
 
     <ImageView
         android:id="@+id/iv_icom_main_item"
-        android:layout_width="80dip"
-        android:layout_height="80dip"
-        android:scaleType="fitXY"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
         android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/tv_name_main_item"
-        android:layout_width="80dp"
-        android:layout_height="25dp"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
         android:gravity="center"
         android:text="模板名字"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

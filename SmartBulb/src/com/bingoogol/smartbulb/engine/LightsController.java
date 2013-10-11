@@ -2,7 +2,6 @@ package com.bingoogol.smartbulb.engine;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,16 +17,17 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
 /**
- * Lights Api
+ * Light控制器
  * 
- * @author 李斌
+ * @author 王浩 bingoogol@sina.com
  */
 public class LightsController {
 
 	/**
-	 * 获取当前桥接器链接的所有灯的信息
+	 * 获取当前桥接器链接的所有灯的信息，每个点灯信息包括一个唯一id和指定的名称
 	 * 
-	 * @return 返回所有点灯的信息，每个点灯信息包括一个唯一id和指定的名称
+	 * @param lightCallback
+	 *            操作灯泡的回调接口
 	 */
 	@SuppressWarnings("unchecked")
 	public void getAllLights(LightCallback lightCallback) {
@@ -38,7 +38,7 @@ public class LightsController {
 				String url = "/lights";
 				String response = HueRestClient.getInstance().get(url);
 				Logger.i(Constants.TAG, "response >> " + response);
-				List<LightEntry> allLights = new ArrayList<LightEntry>();
+				ArrayList<LightEntry> allLights = new ArrayList<LightEntry>();
 				try {
 					JSONObject jsonObject = new JSONObject(response);
 					Iterator<String> keys = jsonObject.keys();
@@ -79,11 +79,12 @@ public class LightsController {
 	}
 
 	/**
-	 * get方式请求，获得指定灯的属性和状态
+	 * 获得指定灯的属性和状态
 	 * 
 	 * @param id
 	 *            指定灯的id
-	 * @return 返回指定的灯的属性和状态
+	 * @param lightCallback
+	 *            操作灯泡的回调接口
 	 */
 	public void getLightAttributesAndState(final String id, LightCallback lightCallback) {
 		final LightHandler lightHandler = new LightHandler(lightCallback);
@@ -124,6 +125,7 @@ public class LightsController {
 					Log.e(Constants.TAG, e.getLocalizedMessage());
 					try {
 						JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
+						@SuppressWarnings("unchecked")
 						Iterator<String> keys = jsonObject.keys();
 						if (keys.hasNext()) {
 							String key = keys.next();
@@ -135,6 +137,7 @@ public class LightsController {
 							}
 						}
 					} catch (Exception e2) {
+						Logger.e(Constants.TAG, e2.getLocalizedMessage());
 						msg.what = Constants.what.WIFIERROR;
 					}
 				} finally {
@@ -145,45 +148,14 @@ public class LightsController {
 	}
 
 	/**
-	 * 修改指定灯的属性。目前只是修改名称name
-	 * 
-	 * @param id
-	 *            指定灯的id
-	 * @param name
-	 *            重新指定灯的名称
-	 * @return 返回true表示修改属性成功
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean setLightAttributes(String id, String name) {
-		String url = "/lights" + "/" + id;
-		String jsonBody = "{\"name\" : \"" + name + "\"}";
-		HueRestClient client = HueRestClient.getInstance();
-		String response = client.put(url, jsonBody);
-		Logger.i(Constants.TAG, "response >> " + response);
-		try {
-			JSONArray ja = new JSONArray(response);
-			JSONObject jo = ja.getJSONObject(0);
-			Iterator<String> i = jo.keys();
-			if (i.hasNext()) {
-				String key = i.next();
-				if ("success".equals(key)) {
-					return true;
-				}
-			}
-		} catch (Exception e) {
-			Log.e("setLightAttributes", e.getLocalizedMessage());
-		}
-
-		return false;
-	}
-
-	/**
 	 * 设置灯的状态
 	 * 
 	 * @param id
-	 *            指定灯的id
+	 *            制定灯的id
 	 * @param state
 	 *            指定灯的状态State实体
+	 * @param lightCallback
+	 *            操作灯泡的回调接口
 	 */
 	@SuppressWarnings("unchecked")
 	public void setLightState(final String id, final State state, LightCallback lightCallback) {

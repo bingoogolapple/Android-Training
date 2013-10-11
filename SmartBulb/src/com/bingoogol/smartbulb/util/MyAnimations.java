@@ -10,10 +10,18 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 
+/**
+ * pathMenu动画
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class MyAnimations {
 
 	private static int xOffset = 15;
 	private static int yOffset = -13;
+
+	private MyAnimations() {
+	}
 
 	public static void initOffset(Context context) {// 由布局文件
 		xOffset = (int) (10.667 * context.getResources().getDisplayMetrics().density);

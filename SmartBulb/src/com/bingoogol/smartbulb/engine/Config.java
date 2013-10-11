@@ -11,13 +11,24 @@ import com.bingoogol.smartbulb.engine.LightHandler.LightCallback;
 import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
+/**
+ * 应用程序配置，认证用户
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class Config {
-	private String deviceType = "android_hue";
+	private String deviceType = "bingoogol";
 
 	public String getDeviceType() {
 		return deviceType;
 	}
 
+	/**
+	 * 异步认证用户
+	 * 
+	 * @param lightCallback
+	 *            Light操作回调接口
+	 */
 	public void createUser(LightCallback lightCallback) {
 		final LightHandler lightHandler = new LightHandler(lightCallback);
 		new Thread() {
