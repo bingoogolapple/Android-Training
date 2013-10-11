@@ -43,6 +43,11 @@ import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
 import com.bingoogol.smartbulb.util.ToastUtil;
 
+/**
+ * 编辑模板
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class EditTemplateActivity extends GenericActivity implements OnTouchListener {
 
 	private static final String TAG = "EditTemplateActivity";
@@ -124,7 +129,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	};
 
 	private void setTemplate(long id) {
-		openProgressDialog("正在设置灯泡属性...");
+		openProgressDialog(R.string.setting_lightattr);
 		lightAttrs = templateDao.getLightAttrListByTid((int) id);
 		LightAttr lightAttr;
 		setTemplateFlag = 0;
@@ -265,8 +270,8 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		}
 	}
 
-	private void openProgressDialog(String msg) {
-		pd = ProgressDialog.show(this, "提示", msg);
+	private void openProgressDialog(int resId) {
+		pd = ProgressDialog.show(this, getResources().getString(R.string.prompt), getResources().getString(resId));
 		pd.setCancelable(false);
 	}
 
@@ -332,7 +337,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	@Override
 	protected void processLogic() {
 		templateDao = new TemplateDao(EditTemplateActivity.this);
-		openProgressDialog("正在获取灯泡列表");
+		openProgressDialog(R.string.getting_lights);
 		lightsController.getAllLights(new LightCallback() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -352,7 +357,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 					setTemplate(id);
 				} else {
 					lightAttrs = new ArrayList<LightAttr>();
-					openProgressDialog("正在设置灯泡属性...");
+					openProgressDialog(R.string.setting_lightattr);
 					for(int i = 0; i < 3;i++) {
 						LightAttr lightAttr = new LightAttr(1, 135, 24775, 232);
 						State state = lightEntries.get(i).getState();
@@ -448,7 +453,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 	}
 
 	private void setLightState(State state) {
-		openProgressDialog("正在设置灯泡属性...");
+		openProgressDialog(R.string.setting_lightattr);
 		lightsController.setLightState(lightEntries.get(index).getId(), state, new LightCallback() {
 
 			@Override

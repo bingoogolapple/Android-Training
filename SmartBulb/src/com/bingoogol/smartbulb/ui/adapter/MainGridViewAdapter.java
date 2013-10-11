@@ -65,9 +65,6 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 			Logger.e(TAG, "设置灯泡属性失败");
 			setTemplateFlag = 0;
 			activity.closeProgressDialog();
-			App app = (App) activity.getApplication();
-			app.addSp("username", "");
-			activity.openSplashActivity();
 		}
 
 		@Override
@@ -202,7 +199,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		activity.openProgressDialog("正在设置灯泡属性");
+		activity.openProgressDialog(R.string.setting_lightattr);
 		if (id == -1) {
 			Logger.i(TAG, "关闭全部燈泡");
 			State state = new State();
@@ -245,7 +242,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 						activity.refresh();
 					}
 				} else {
-					ToastUtil.makeText(activity, "删除失败");
+					ToastUtil.makeText(activity, R.string.delete_failure);
 				}
 				dialog.dismiss();
 			}

@@ -16,6 +16,11 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.ToastUtil;
 
+/**
+ * 欢迎界面，在这个界面认证用户
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class SplashActivity extends GenericActivity {
 	protected static final String TAG = "SplashActivity";
 	private Config config = new Config();
@@ -42,7 +47,7 @@ public class SplashActivity extends GenericActivity {
 
 		@Override
 		public void onFailure() {
-			ToastUtil.makeText(app, "认证用户失败");
+			ToastUtil.makeText(app, R.string.auth_failure);
 		}
 
 		@Override
@@ -86,7 +91,7 @@ public class SplashActivity extends GenericActivity {
 	 * 认证用户
 	 */
 	public void auth() {
-		pd = ProgressDialog.show(this, "提示", "正在认证用户...");
+		pd = ProgressDialog.show(this, getResources().getString(R.string.prompt), getResources().getString(R.string.authing));
 		pd.setCancelable(false);
 		config.createUser(lightCallback);
 	}

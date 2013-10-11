@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="添加模板"
+            android:text="@string/add_template"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -136,7 +136,7 @@
         android:textSize="20sp"
         android:clickable="true"
         android:gravity="center_vertical"
-        android:hint="请输入模板名称"
+        android:hint="@string/template_name_hint"
         android:paddingLeft="10dp"
         android:singleLine="true" />
 
@@ -147,6 +147,6 @@
         android:textSize="25sp"
         android:gravity="center"
         android:background="@drawable/btn_add_selector"
-        android:text="保存" />
+        android:text="@string/save" />
 
 </LinearLayout>

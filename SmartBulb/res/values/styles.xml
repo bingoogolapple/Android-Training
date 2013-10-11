@@ -29,8 +29,8 @@
         <item name="android:background">#F8F8F8</item>
         <item name="android:orientation">vertical</item>
     </style>
-
-    <style name="tv_dialog_select_img_title">
+    
+    <style name="tv_dialog_title">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">5dp</item>
@@ -38,6 +38,9 @@
         <item name="android:background">#FF00FF00</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tv_dialog_select_img_title" parent="tv_dialog_title">
     </style>
 
     <style name="btn_dialog_add_img">
@@ -49,35 +52,23 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="tv_dialog_operate_title">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">5dp</item>
+    <style name="tv_dialog_operate_title" parent="tv_dialog_title">
+    </style>
+    
+    <style name="btn_dialog">
         <item name="android:gravity">center</item>
-        <item name="android:background">#FF00FF00</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:background">#F8F8F8</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">999</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="btn_dialog_set_wifi">
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">15dp</item>
-        <item name="android:background">#F8F8F8</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">999</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="btn_dialog_set_wifi" parent="btn_dialog">
     </style>
-    <style name="btn_dialog_linkbutton">
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">15dp</item>
-        <item name="android:background">#F8F8F8</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">999</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="btn_dialog_linkbutton" parent="btn_dialog">
     </style>
 
     <style name="tv_dialog_msg">
@@ -88,48 +79,7 @@
         <item name="android:background">#F8F8F8</item>
         <item name="android:textSize">16sp</item>
     </style>
-
-    <!-- dialog End -->
-
-    <style name="tv_dialog">
-        <item name="android:gravity">left</item>
-        <item name="android:padding">25dp</item>
-        <item name="android:layout_width">220dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#F8F8F8</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="tv_dialog_operate" parent="tv_dialog"></style>
-
-    <style name="btn_dialog">
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">15dp</item>
-        <item name="android:background">#F8F8F8</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="btn_dialog_operate" parent="btn_dialog">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">999</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="btn_dialog_add_img_type" parent="btn_dialog">
-        <item name="android:layout_width">220dp</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="btn_dialog_select_img">
-        <item name="android:gravity">left</item>
-        <item name="android:padding">15dp</item>
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
+    
     <style name="dialog_long_click_btn">
         <item name="android:gravity">left</item>
         <item name="android:padding">15dp</item>
@@ -138,8 +88,6 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">16sp</item>
     </style>
-    
-    
-    
+    <!-- dialog End -->
 
 </resources>

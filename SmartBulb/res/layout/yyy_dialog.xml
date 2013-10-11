@@ -7,7 +7,7 @@
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:gravity="center"
-        android:text="请摇晃手机"
+        android:text="@string/shake_phone"
         android:textSize="20sp" />
 
     <ImageView

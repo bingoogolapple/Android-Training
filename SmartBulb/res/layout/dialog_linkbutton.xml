@@ -4,11 +4,11 @@
 
     <TextView
         style="@style/tv_dialog_operate_title"
-        android:text="操作提示" />
+        android:text="@string/prompt" />
 
     <TextView
         style="@style/tv_dialog_msg"
-        android:text="请按下按钮" />
+        android:text="@string/press_link_btn" />
 
     <ImageView style="@style/iv_dialog_devide_line_horizontal" />
 
@@ -19,14 +19,14 @@
         <Button
             android:id="@+id/btn_linkbutton_commit"
             style="@style/btn_dialog_linkbutton"
-            android:text="重试" />
+            android:text="@string/retry" />
 
         <ImageView style="@style/iv_dialog_devide_line_vertical" />
 
         <Button
             android:id="@+id/btn_linkbutton_exit"
             style="@style/btn_dialog_linkbutton"
-            android:text="退出" />
+            android:text="@string/exit" />
     </LinearLayout>
 
 </LinearLayout>

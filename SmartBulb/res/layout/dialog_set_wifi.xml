@@ -4,11 +4,11 @@
 
     <TextView
         style="@style/tv_dialog_operate_title"
-        android:text="操作提示" />
+        android:text="@string/prompt" />
 
     <TextView
         style="@style/tv_dialog_msg"
-        android:text="Wifi未正确链接，请设置wifi" />
+        android:text="@string/wifi_dialog_msg" />
 
     <ImageView style="@style/iv_dialog_devide_line_horizontal" />
 
@@ -19,14 +19,14 @@
         <Button
             android:id="@+id/btn_set_wifi_commit"
             style="@style/btn_dialog_set_wifi"
-            android:text="设置" />
+            android:text="@string/set_wifi" />
 
         <ImageView style="@style/iv_dialog_devide_line_vertical" />
 
         <Button
             android:id="@+id/btn_set_wifi_exit"
             style="@style/btn_dialog_set_wifi"
-            android:text="退出" />
+            android:text="@string/exit" />
     </LinearLayout>
 
 </LinearLayout>

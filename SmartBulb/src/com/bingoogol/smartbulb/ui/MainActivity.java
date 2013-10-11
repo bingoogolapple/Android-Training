@@ -27,6 +27,11 @@ import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.MyAnimations;
 import com.bingoogol.smartbulb.util.ToastUtil;
 
+/**
+ * 主界面
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class MainActivity extends GenericActivity {
 	protected static final String TAG = "MainActivity";
 	private GridView mainGv;
@@ -67,8 +72,8 @@ public class MainActivity extends GenericActivity {
 		fillGridView();
 	}
 
-	public void openProgressDialog(String msg) {
-		pd = ProgressDialog.show(this, "提示", msg);
+	public void openProgressDialog(int resId) {
+		pd = ProgressDialog.show(this, getResources().getString(R.string.prompt), getResources().getString(resId));
 		pd.setCancelable(false);
 	}
 
@@ -82,7 +87,7 @@ public class MainActivity extends GenericActivity {
 			protected void onPreExecute() {
 				super.onPreExecute();
 				isLoading = true;
-				openProgressDialog("正在加载数据");
+				openProgressDialog(R.string.loading_template);
 			}
 
 			@Override
@@ -217,7 +222,7 @@ public class MainActivity extends GenericActivity {
 								offset += maxResult;
 								fillGridView();
 							} else {
-								ToastUtil.makeText(MainActivity.this, "没有更多数据了");
+								ToastUtil.makeText(MainActivity.this, R.string.no_more_data);
 							}
 						}
 					}
@@ -236,7 +241,7 @@ public class MainActivity extends GenericActivity {
 	@Override
 	protected void processLogic() {
 		lightsController = new LightsController();
-		openProgressDialog("正在获取灯泡列表");
+		openProgressDialog(R.string.getting_lights);
 		lightsController.getAllLights(new LightCallback() {
 
 			@SuppressWarnings("unchecked")
