@@ -14,7 +14,7 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
 /**
- * 燈泡访问客户端
+ * 灯泡访问RestFul客户端类，单例
  * 
  * @author 王浩 bingoogol@sina.com
  */
@@ -22,8 +22,6 @@ public class HueRestClient {
 	private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
 	private static final String TAG = "HueRestClient";
-
-	private String ipAddress = "192.168.1.101";
 
 	private String userName = "newdeveloper";
 
@@ -33,7 +31,7 @@ public class HueRestClient {
 	}
 
 	/**
-	 * 懒汉模式，获取HueRestClient类唯一实例
+	 * 单例模式（懒汉式），获取HueRestClient类唯一实例
 	 * 
 	 * @return HueRestClient实例
 	 */
@@ -42,15 +40,6 @@ public class HueRestClient {
 			instance = new HueRestClient();
 		}
 		return instance;
-	}
-
-	/**
-	 * 获取桥接器ip
-	 * 
-	 * @return
-	 */
-	public String getIpAddress() {
-		return ipAddress;
 	}
 
 	/**
@@ -69,15 +58,6 @@ public class HueRestClient {
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	/**
-	 * 设置桥接器ip
-	 * 
-	 * @param ipAddress
-	 */
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
 	}
 
 	/**
@@ -100,10 +80,10 @@ public class HueRestClient {
 			}
 
 		} catch (MalformedURLException e) {
-			Log.e("Get", "URL格式错误");
+			Logger.e("Get", "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e("Get", "连接网络发生错误" + e.getMessage());
+			Logger.e("Get", "连接网络发生错误" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			closeStream(is);
@@ -143,10 +123,10 @@ public class HueRestClient {
 				Log.i("Post", jsonResult);
 			}
 		} catch (MalformedURLException e) {
-			Log.e(TAG, "URL格式错误");
+			Logger.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(TAG, "网络链接错误");
+			Logger.e(TAG, "网络链接错误");
 			e.printStackTrace();
 		} finally {
 			closeStream(is);
@@ -183,10 +163,10 @@ public class HueRestClient {
 				jsonResult = this.read(is);
 			}
 		} catch (MalformedURLException e) {
-			Log.e(TAG, "URL格式错误");
+			Logger.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(TAG, "连接网络发生错误:");
+			Logger.e(TAG, "连接网络发生错误:");
 		} finally {
 			closeStream(is);
 			closeStream(os);
@@ -211,12 +191,11 @@ public class HueRestClient {
 				is = conn.getInputStream();
 				jsonResult = this.read(is);
 			}
-			Log.d(TAG, jsonResult);
 		} catch (MalformedURLException e) {
-			Log.e(TAG, "URL格式错误");
+			Logger.e(TAG, "URL格式错误");
 			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(TAG, "连接网络发生错误" + e.getMessage());
+			Logger.e(TAG, "连接网络发生错误" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			closeStream(is);
@@ -254,7 +233,6 @@ public class HueRestClient {
 		while ((len = is.read(buffer)) != -1) {
 			out.write(buffer, 0, len);
 		}
-
 		String text = new String(out.toByteArray(), "utf-8");
 		out.flush();
 		this.closeStream(out);
@@ -272,15 +250,14 @@ public class HueRestClient {
 			try {
 				is.close();
 			} catch (IOException e) {
-				Log.e(TAG, "输入流关闭错误");
-				e.printStackTrace();
+				Logger.e(TAG, "输入流关闭错误");
 			}
 		} else if (obj != null && obj instanceof OutputStream) {
 			OutputStream os = (OutputStream) obj;
 			try {
 				os.close();
 			} catch (IOException e) {
-				Log.e(TAG, "输出流关闭错误");
+				Logger.e(TAG, "输出流关闭错误");
 				e.printStackTrace();
 			}
 		}
@@ -296,9 +273,9 @@ public class HueRestClient {
 	private String getAbsoluteURL(String relativeURL) {
 		String absoluteUrl = "";
 		if (relativeURL == null || "".equals(relativeURL)) {
-			absoluteUrl = "http://" + this.getIpAddress() + "/api/";
+			absoluteUrl = "http://" + Constants.IPADDRESS + "/api/";
 		} else {
-			absoluteUrl = "http://" + this.getIpAddress() + "/api/" + this.getUserName() + relativeURL;
+			absoluteUrl = "http://" + Constants.IPADDRESS + "/api/" + this.getUserName() + relativeURL;
 		}
 		Logger.i(TAG, "absoluteURL >> " + absoluteUrl);
 		return absoluteUrl;

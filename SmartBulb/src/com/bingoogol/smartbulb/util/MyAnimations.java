@@ -23,11 +23,28 @@ public class MyAnimations {
 	private MyAnimations() {
 	}
 
-	public static void initOffset(Context context) {// 由布局文件
+	/**
+	 * 初始化偏移量
+	 * 
+	 * @param context
+	 *            应用程序上下文
+	 */
+	public static void initOffset(Context context) {
 		xOffset = (int) (10.667 * context.getResources().getDisplayMetrics().density);
 		yOffset = -(int) (8.667 * context.getResources().getDisplayMetrics().density);
 	}
 
+	/**
+	 * 获取滚轮动画
+	 * 
+	 * @param fromDegrees
+	 *            开始时的度数
+	 * @param toDegrees
+	 *            结束时的度数
+	 * @param durationMillis
+	 *            动画的持续时间
+	 * @return Animation
+	 */
 	public static Animation getRotateAnimation(float fromDegrees, float toDegrees, int durationMillis) {
 		RotateAnimation rotate = new RotateAnimation(fromDegrees, toDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		rotate.setDuration(durationMillis);
@@ -35,6 +52,14 @@ public class MyAnimations {
 		return rotate;
 	}
 
+	/**
+	 * 收起pathMenu动画
+	 * 
+	 * @param viewgroup
+	 *            包含pathMenu的布局组件
+	 * @param durationMillis
+	 *            动画的持续时间
+	 */
 	public static void startAnimationsIn(ViewGroup viewgroup, int durationMillis) {
 		for (int i = 0; i < viewgroup.getChildCount(); i++) {
 			ImageButton inoutimagebutton = (ImageButton) viewgroup.getChildAt(i);
@@ -51,6 +76,14 @@ public class MyAnimations {
 		}
 	}
 
+	/**
+	 * 打开pathMenu动画
+	 * 
+	 * @param viewgroup
+	 *            包含pathMenu的布局组件
+	 * @param durationMillis
+	 *            动画的持续时间
+	 */
 	public static void startAnimationsOut(ViewGroup viewgroup, int durationMillis) {
 		for (int i = 0; i < viewgroup.getChildCount(); i++) {
 			final ImageButton inoutimagebutton = (ImageButton) viewgroup.getChildAt(i);

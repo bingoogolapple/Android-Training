@@ -21,7 +21,7 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
 /**
- * 模板和狀態操作
+ * 模板数据访问Dao
  * 
  * @author 王浩 bingoogol@sina.com
  */
@@ -29,6 +29,11 @@ public class TemplateDao {
 	private static final String TAG = "TemplateDao";
 	private DBOpenHelper dbOpenHelper;
 
+	/**
+	 * 创建一个TemplateDao,用于对模板数据进行增删改查
+	 * 
+	 * @param context 应用程序上下文
+	 */
 	public TemplateDao(Context context) {
 		dbOpenHelper = new DBOpenHelper(context);
 	}
@@ -39,14 +44,14 @@ public class TemplateDao {
 	 * @param template
 	 *            模板
 	 * @param lightAttrs
-	 *            燈泡屬性
+	 *            灯泡属性列表
 	 * @param bitmap
-	 *            模板圖片Bitmap
-	 * @return 添加成功返回true，否則返回false
+	 *            模板图片Bitmap
+	 * @return 添加成功返回true，否则返回false
 	 */
 	public boolean addTemplete(Template template, ArrayList<LightAttr> lightAttrs, Bitmap bitmap) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
-		// 1.開起事務
+		// 1.开起事务
 		db.beginTransaction();
 		FileOutputStream fos = null;
 		boolean result = false;
@@ -56,7 +61,7 @@ public class TemplateDao {
 			templateValues.put(Constants.db.template.COLUMN_NAME_IMG_PATH, template.getImgPath());
 			// 2.添加模板
 			long tid = db.insert(Constants.db.template.TABLE_NAME, null, templateValues);
-			// 3.添加燈泡屬性
+			// 3.添加灯泡属性
 			for (LightAttr lightAttr : lightAttrs) {
 				ContentValues lightAttrValues = new ContentValues();
 				lightAttrValues.put(Constants.db.lightattr.COLUMN_NAME_TID, tid);
@@ -92,6 +97,10 @@ public class TemplateDao {
 			e.printStackTrace();
 		} finally {
 			// 6.结束事务
+			/*
+			 * 结束事务，有两种情况：commit，rollback 事务的提交或回滚是由事务的标志决定
+			 * 如果事务的标志为True，事务就会提交，否则回滚，默认情况下事务的标志为False
+			 */
 			db.endTransaction();
 			DBOpenHelper.close(db, null);
 			if (fos != null) {
@@ -110,7 +119,7 @@ public class TemplateDao {
 	 * 
 	 * @param id
 	 *            模板id
-	 * @return 刪除成功返回true，否則返回false
+	 * @return 刪除成功返回true，否则返回false
 	 */
 	public boolean deleteTemplete(int id) {
 		SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -122,10 +131,6 @@ public class TemplateDao {
 			db.setTransactionSuccessful();
 			result = true;
 		} finally {
-			/*
-			 * 结束事务，有两种情况：commit，rollback 事务的提交或回滚是由事务的标志决定，如果事务的标志为True，事务就会提交
-			 * 否则回滚，默认情况下事务的标志为False
-			 */
 			db.endTransaction();
 			DBOpenHelper.close(db, null);
 		}
@@ -137,7 +142,7 @@ public class TemplateDao {
 	 * 
 	 * @param template
 	 *            模板
-	 * @return 修改成功返回true，否則返回false
+	 * @return 修改成功返回true，否则返回false
 	 */
 	public boolean updateTemplete(Template template, ArrayList<LightAttr> lightAttrs, Bitmap bitmap) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
@@ -220,7 +225,7 @@ public class TemplateDao {
 	 *            偏移量
 	 * @param maxResult
 	 *            每页显示的数量
-	 * @return
+	 * @return 模板分页数据
 	 */
 	public List<Template> getTemplateScrollData(int offset, int maxResult) {
 		List<Template> datas = new ArrayList<Template>();
@@ -244,8 +249,9 @@ public class TemplateDao {
 	/**
 	 * 根据模板id获取灯泡属性列表
 	 * 
-	 * @param tid 模板id
-	 * @return 燈泡屬性列表
+	 * @param tid
+	 *            模板id
+	 * @return 灯泡属性列表
 	 */
 	public ArrayList<LightAttr> getLightAttrListByTid(int tid) {
 		ArrayList<LightAttr> datas = new ArrayList<LightAttr>();
@@ -280,8 +286,9 @@ public class TemplateDao {
 	}
 
 	/**
-	 * 獲取模板總數
-	 * @return
+	 * 获取模板数量
+	 * 
+	 * @return 模板总数
 	 */
 	public long getCount() {
 		SQLiteDatabase db = null;

@@ -32,6 +32,11 @@ import com.bingoogol.smartbulb.util.Logger;
 import com.bingoogol.smartbulb.util.StorageUtil;
 import com.bingoogol.smartbulb.util.ToastUtil;
 
+/**
+ * 显示模板的GridView适配器
+ * 
+ * @author 王浩 bingoogol@sina.com
+ */
 public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListener, OnItemLongClickListener {
 	private static final String TAG = "MainGridViewAdapter";
 	private LayoutInflater layoutInflater;
@@ -45,7 +50,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 	private TemplateDao templateDao;
 	private Typeface typeface;
 	/**
-	 * 設置模板的flag
+	 * 设置模板时的flag
 	 */
 	private int setTemplateFlag = 0;
 	private LightCallback setTemplateCallback = new LightCallback() {
@@ -54,52 +59,50 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		public void onSuccess(Object obj) {
 			setTemplateFlag++;
 			if (setTemplateFlag == 3) {
-				Logger.i(TAG, "成功设置所有灯泡属性");
-				setTemplateFlag = 0;
 				activity.closeProgressDialog();
+				Logger.i(TAG, "成功设置所有灯泡属性");
 			}
 		}
 
 		@Override
 		public void onFailure() {
-			Logger.e(TAG, "设置灯泡属性失败");
-			setTemplateFlag = 0;
+			Logger.e(TAG, "模板设置失败");
 			activity.closeProgressDialog();
+			ToastUtil.makeText(activity, activity.getResources().getString(R.string.set_template_failure));
 		}
 
 		@Override
 		public void wifiError() {
 			Logger.e(TAG, "wifi链接不对");
-			activity.closeProgressDialog();
-			App app = (App) activity.getApplication();
-			app.addSp("username", "");
-			activity.openSplashActivity();
+			activity.authAgain();
 		}
 
 		@Override
 		public void unauthorized() {
 			Logger.e(TAG, "用户名失效");
-			activity.closeProgressDialog();
 			App app = (App) activity.getApplication();
 			app.addSp("username", "");
-			activity.openSplashActivity();
+			activity.authAgain();
 		}
 
 		@Override
 		public void pressLinkBtn() {
-			Logger.w(TAG, "请按下按钮");
-			App app = (App) activity.getApplication();
-			app.addSp("username", "");
-			activity.openSplashActivity();
-		}
-
-		@Override
-		public void closeDialog() {
-			
+			Logger.i(TAG, "按钮");
+			activity.authAgain();
 		}
 
 	};
 
+	/**
+	 * 构造方法
+	 * 
+	 * @param activity
+	 *            主页面Activity
+	 * @param datas
+	 *            模板数据
+	 * @param lightEntries
+	 *            当前桥接器链接的所有灯的信息
+	 */
 	public MainGridViewAdapter(MainActivity activity, List<Template> datas, List<LightEntry> lightEntries) {
 		this.layoutInflater = LayoutInflater.from(activity);
 		this.datas = datas;
@@ -109,10 +112,12 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		// 字体
 		typeface = Typeface.createFromAsset(activity.getAssets(), "font.ttf");
 	}
-	
+
 	/**
-	 * 設置指定模板
+	 * 设置定模板
+	 * 
 	 * @param id
+	 *            模板id
 	 */
 	public void setTemplate(long id) {
 		List<LightAttr> lightAttrs = templateDao.getLightAttrListByTid((int) id);
@@ -125,17 +130,26 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 			state.setOn(lightAttr.getState() == 1 ? true : false);
 			state.setBri(lightAttr.getBri());
 			state.setSat(lightAttr.getSat());
-			Logger.i(TAG, "设置模板 >> bri:" + state.getBri() + "   hue:" + state.getHue() + "   sat:" + state.getSat() + " on:" + state.isOn());
-//			state.setAlert(lightAttr.getAlert());
-//			state.setColormode(lightAttr.getColormode());
-//			state.setCt(lightAttr.getCt());
-//			state.setEffect(lightAttr.getEffect());
-//			state.setTransitiontime(lightAttr.getTransitiontime());
-//			state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
+			Logger.d(TAG, "设置模板 >> bri:" + state.getBri() + "   hue:" + state.getHue() + "   sat:" + state.getSat() + " on:" + state.isOn());
+			// state.setAlert(lightAttr.getAlert());
+			// state.setColormode(lightAttr.getColormode());
+			// state.setCt(lightAttr.getCt());
+			// state.setEffect(lightAttr.getEffect());
+			// state.setTransitiontime(lightAttr.getTransitiontime());
+			// state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
 			lightsController.setLightState(lightEntries.get(i).getId() + "", state, setTemplateCallback);
 		}
 	}
-	
+
+	/**
+	 * 下拉刷新时，添加更多模板数据到适配器里
+	 * 
+	 * @param templates
+	 *            模板数据列表
+	 */
+	public void addMoreMoment(List<Template> templates) {
+		datas.addAll(templates);
+	}
 
 	@Override
 	public int getCount() {
@@ -184,24 +198,18 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		private TextView nameTv;
 	}
 
-	public void addMoreMoment(List<Template> templates) {
-		datas.addAll(templates);
-	}
-
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		Logger.i(TAG, "长按");
-		if(id != -1) {
-			showLongClickDialog((int)id);
+		if (id != -1) {
+			showLongClickDialog((int) id);
 		}
 		return false;
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		activity.openProgressDialog(R.string.setting_lightattr);
+		activity.openProgressDialog(R.string.setting_template);
 		if (id == -1) {
-			Logger.i(TAG, "关闭全部燈泡");
 			State state = new State();
 			state.setBri(0);
 			state.setHue(0);
@@ -212,7 +220,6 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 				lightsController.setLightState(lightEntry.getId(), state, setTemplateCallback);
 			}
 		} else {
-			Logger.i(TAG, "设置模板");
 			setTemplate(id);
 		}
 	}
@@ -224,8 +231,8 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		updateBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Logger.i("HomeMomentAdapter", "要修改的模板id >> " + id);
-				Intent intent = new Intent(activity,EditTemplateActivity.class);
+				Logger.d("HomeMomentAdapter", "要修改的模板id >> " + id);
+				Intent intent = new Intent(activity, EditTemplateActivity.class);
 				intent.putExtra("id", id);
 				activity.startActivityForResult(intent, 0);
 				activity.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
@@ -236,13 +243,13 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 		deleteBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Logger.i("HomeMomentAdapter", "要删除的模板id >> " + id);
+				Logger.d("HomeMomentAdapter", "要删除的模板id >> " + id);
 				if (templateDao.deleteTemplete(id)) {
-					if(datas.remove(getDeleteTemplate(id))) {
+					if (datas.remove(getDeleteTemplate(id))) {
 						activity.refresh();
 					}
 				} else {
-					ToastUtil.makeText(activity, R.string.delete_failure);
+					ToastUtil.makeText(activity, R.string.delete_template_failure);
 				}
 				dialog.dismiss();
 			}
@@ -258,7 +265,7 @@ public class MainGridViewAdapter extends BaseAdapter implements OnItemClickListe
 	 * @param id
 	 * @return
 	 */
-	public Template getDeleteTemplate(int id) {
+	private Template getDeleteTemplate(int id) {
 		for (Template template : datas) {
 			if (template.getId() == id) {
 				return template;

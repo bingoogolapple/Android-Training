@@ -33,8 +33,11 @@ import com.bingoogol.smartbulb.util.ToastUtil;
  * @author 王浩 bingoogol@sina.com
  */
 public class MainActivity extends GenericActivity {
-	protected static final String TAG = "MainActivity";
+	private static final String TAG = "MainActivity";
 	private GridView mainGv;
+	/**
+	 * 模板数据适配器
+	 */
 	public MainGridViewAdapter adapter;
 	private TemplateDao templateDao;
 	private boolean isFunctionsShowing;
@@ -72,11 +75,20 @@ public class MainActivity extends GenericActivity {
 		fillGridView();
 	}
 
+	/**
+	 * 打开进度条
+	 * 
+	 * @param resId
+	 *            进度条显示信息的资源id
+	 */
 	public void openProgressDialog(int resId) {
 		pd = ProgressDialog.show(this, getResources().getString(R.string.prompt), getResources().getString(resId));
 		pd.setCancelable(false);
 	}
 
+	/**
+	 * 关闭进度条
+	 */
 	public void closeProgressDialog() {
 		pd.dismiss();
 	}
@@ -145,23 +157,18 @@ public class MainActivity extends GenericActivity {
 			break;
 
 		case R.id.ib_add_main:
-			Logger.i(TAG, "点击了添加按钮");
 			closeFunction();
 			Intent editTemplateIntent = new Intent(getApplicationContext(), EditTemplateActivity.class);
 			startActivityForResult(editTemplateIntent, 0);
 			overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
 			break;
 		case R.id.ib_yyy_main:
-			Logger.i(TAG, "注册摇一摇监听器");
 			closeFunction();
 			new YYYDialog(this).show();
-			//sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 			break;
 		case R.id.ib_exit_main:
-			Logger.i(TAG, "点击了退出");
 			app.exit();
 			break;
-
 		default:
 			break;
 		}
@@ -232,8 +239,6 @@ public class MainActivity extends GenericActivity {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 	}
@@ -247,6 +252,7 @@ public class MainActivity extends GenericActivity {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void onSuccess(Object obj) {
+				pd.dismiss();
 				lightEntries = (List<LightEntry>) obj;
 				Collections.sort(lightEntries);
 				// 成功获取到当前桥接器链接的所有灯的信息，为gridview填充数据
@@ -256,44 +262,41 @@ public class MainActivity extends GenericActivity {
 			@Override
 			public void onFailure() {
 				Logger.e(TAG, "获取灯泡列表失败");
-				app.exit();
-				openSplashActivity();
+				authAgain();
 			}
 
 			@Override
 			public void wifiError() {
 				Logger.e(TAG, "wifi链接不对");
-				app.exit();
-				openSplashActivity();
+				authAgain();
 			}
 
 			@Override
 			public void unauthorized() {
 				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
-				app.exit();
-				openSplashActivity();
-
+				authAgain();
 			}
 
 			@Override
 			public void pressLinkBtn() {
 				Logger.i(TAG, "按钮");
-			}
-
-			@Override
-			public void closeDialog() {
-				closeProgressDialog();
+				authAgain();
 			}
 
 		});
 		functionIb.startAnimation(MyAnimations.getRotateAnimation(0, 360, 200));
 	}
 
-	public void openSplashActivity() {
-		Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+	/**
+	 * 重新认证
+	 */
+	public void authAgain() {
+		pd.dismiss();
+		Intent intent = new Intent(this, SplashActivity.class);
 		startActivity(intent);
-		this.finish();
+		overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
+		finish();
 	}
 
 }

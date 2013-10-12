@@ -81,6 +81,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		public void onSuccess(Object obj) {
 			setTemplateFlag++;
 			if (setTemplateFlag == 3) {
+				setTemplateFlag = 0;
 				Logger.i(TAG, "成功设置所有灯泡属性");
 				initColor();
 				pd.dismiss();
@@ -89,47 +90,75 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 		@Override
 		public void onFailure() {
-			Logger.e(TAG, "设置灯泡属性失败");
-			setTemplateFlag = 0;
+			Logger.e(TAG, "设置灯泡模板失败");
 			pd.dismiss();
-			app.exit();
-			openSplashActivity();
+			finish();
+			ToastUtil.makeText(app, app.getResources().getString(R.string.set_template_failure));
 		}
 
 		@Override
 		public void wifiError() {
 			Logger.e(TAG, "wifi链接不对");
-			pd.dismiss();
-			app.exit();
-			openSplashActivity();
+			authAgain();
 		}
 
 		@Override
 		public void unauthorized() {
 			Logger.e(TAG, "用户名失效");
-			pd.dismiss();
 			app.addSp("username", "");
-			app.exit();
-			openSplashActivity();
+			authAgain();
 		}
 
 		@Override
 		public void pressLinkBtn() {
 			Logger.i(TAG, "按钮");
-			pd.dismiss();
-			app.exit();
-			openSplashActivity();
-		}
-
-		@Override
-		public void closeDialog() {
-
+			authAgain();
 		}
 
 	};
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case Constants.activity.GET_FROM_GALLERY:
+				startPhotoZoom(data.getData());
+				break;
+			case Constants.activity.GET_FROM_CAMERA:
+				startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
+				break;
+			case Constants.activity.GET_FROM_CROP:
+				if (data != null) {
+					Bitmap bitmap = data.getExtras().getParcelable("data");
+					imgIv.setDrawingCacheEnabled(false);
+					imgIv.setImageBitmap(bitmap);
+				}
+				break;
+			}
+		} else {
+			// TODO
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private void startPhotoZoom(Uri uri) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 4);
+		intent.putExtra("aspectY", 3);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", 300);
+		intent.putExtra("outputY", 240);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, Constants.activity.GET_FROM_CROP);
+		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+	}
+
 	private void setTemplate(long id) {
-		openProgressDialog(R.string.setting_lightattr);
+		openProgressDialog(R.string.setting_template);
 		lightAttrs = templateDao.getLightAttrListByTid((int) id);
 		LightAttr lightAttr;
 		setTemplateFlag = 0;
@@ -140,53 +169,27 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			state.setHue(lightAttr.getHue());
 			state.setOn(lightAttr.getState() == 1 ? true : false);
 			state.setSat(lightAttr.getSat());
-//			state.setAlert(lightAttr.getAlert());
-//			state.setColormode(lightAttr.getColormode());
-//			state.setCt(lightAttr.getCt());
-//			state.setEffect(lightAttr.getEffect());
-//			state.setTransitiontime(lightAttr.getTransitiontime());
-//			state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
+			// state.setAlert(lightAttr.getAlert());
+			// state.setColormode(lightAttr.getColormode());
+			// state.setCt(lightAttr.getCt());
+			// state.setEffect(lightAttr.getEffect());
+			// state.setTransitiontime(lightAttr.getTransitiontime());
+			// state.setXy(lightAttr.getXy_x(), lightAttr.getXy_y());
 			lightsController.setLightState(lightEntries.get(i).getId() + "", state, setTemplateCallback);
 		}
 	}
 
-	protected void initColor() {
+	private void initColor() {
 		sbar.setProgress(lightEntries.get(index).getState().getBri());
 		setPickerColor(1, 0);
-		for(int i = 0; i < lightAttrs.size(); i++) {
+		for (int i = 0; i < lightAttrs.size(); i++) {
 			float[] hsv = new float[3];
-			hsv[0] = lightAttrs.get(i).getHue() * 360/65535;
+			hsv[0] = lightAttrs.get(i).getHue() * 360 / 65535;
 			hsv[1] = lightAttrs.get(i).getSat() * 255;
 			hsv[2] = lightAttrs.get(i).getBri() * 255;
 			int color = Color.HSVToColor(hsv);
 			setPickerColor(color, i);
 		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case Constants.activity.GET_FROM_GALLERY:
-				selectImgDialog.startPhotoZoom(data.getData());
-				break;
-			case Constants.activity.GET_FROM_CAMERA:
-				selectImgDialog.startPhotoZoom(Uri.fromFile(new File(imgRealPath)));
-				break;
-			case Constants.activity.GET_FROM_CROP:
-				if (data != null) {
-					Bitmap bitmap = data.getExtras().getParcelable("data");
-					imgIv.setDrawingCacheEnabled(false);
-					imgIv.setImageBitmap(bitmap);
-				}
-				break;
-			default:
-				break;
-			}
-		} else {
-			// TODO
-		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
@@ -213,8 +216,8 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		case R.id.btn_save:
 			final String name = nameEt.getText().toString().trim();
 			if (name.length() == 0) {
-				Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
-				nameEt.startAnimation(shake);
+				Animation shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
+				nameEt.startAnimation(shakeAnimation);
 			} else {
 				Template template = new Template();
 				template.setName(name);
@@ -226,21 +229,21 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				for (int i = 0; i < 3; i++) {
 					LightEntry lightEntry = lightEntries.get(i);
 					LightAttr lightAttr = lightAttrs.get(i);
-//					lightAttr.setType(lightEntry.getType());
-//					lightAttr.setName(lightEntry.getName());
-//					lightAttr.setModelid(lightEntry.getModelid());
-//					lightAttr.setSwversion(lightEntry.getSwversion());
+					// lightAttr.setType(lightEntry.getType());
+					// lightAttr.setName(lightEntry.getName());
+					// lightAttr.setModelid(lightEntry.getModelid());
+					// lightAttr.setSwversion(lightEntry.getSwversion());
 					lightAttr.setState(lightEntry.getState().isOn() == false ? 0 : 1);
 					lightAttr.setBri(lightEntry.getState().getBri());
 					lightAttr.setHue(lightEntry.getState().getHue());
 					lightAttr.setSat(lightEntry.getState().getSat());
-//					lightAttr.setXy_x(lightEntry.getState().getXy()[0]);
-//					lightAttr.setXy_y(lightEntry.getState().getXy()[1]);
-//					lightAttr.setCt(lightEntry.getState().getCt());
-//					lightAttr.setAlert(lightEntry.getState().getAlert());
-//					lightAttr.setEffect(lightEntry.getState().getEffect());
-//					lightAttr.setTransitiontime(lightEntry.getState().getTransitiontime());
-//					lightAttr.setColormode(lightEntry.getState().getColormode());
+					// lightAttr.setXy_x(lightEntry.getState().getXy()[0]);
+					// lightAttr.setXy_y(lightEntry.getState().getXy()[1]);
+					// lightAttr.setCt(lightEntry.getState().getCt());
+					// lightAttr.setAlert(lightEntry.getState().getAlert());
+					// lightAttr.setEffect(lightEntry.getState().getEffect());
+					// lightAttr.setTransitiontime(lightEntry.getState().getTransitiontime());
+					// lightAttr.setColormode(lightEntry.getState().getColormode());
 				}
 				if (isAdd) {
 					if (templateDao.addTemplete(template, lightAttrs, bitmap)) {
@@ -297,7 +300,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		bulbNameTv = (TextView) this.findViewById(R.id.tv_bulb_name);
 		titleTv = (TextView) this.findViewById(R.id.tv_title_edit_template);
 		selectImgDialog = new SelectImgDialog(this);
-		
+
 		typeface = Typeface.createFromAsset(getAssets(), "font.ttf");
 		nameEt.setTypeface(typeface);
 		saveBtn.setTypeface(typeface);
@@ -324,12 +327,10 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-
 			}
 
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
 			}
 		});
 	}
@@ -342,14 +343,15 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			@SuppressWarnings("unchecked")
 			@Override
 			public void onSuccess(Object obj) {
+				pd.dismiss();
 				lightEntries = (ArrayList<LightEntry>) obj;
 				Collections.sort(lightEntries);
 				bulbNameTv.setText(lightEntries.get(index).getName());
 				Bundle bundle = getIntent().getExtras();
 				if (bundle != null) {
 					isAdd = false;
-					saveBtn.setText("修改");
-					titleTv.setText("修改模板");
+					saveBtn.setText(getResources().getString(R.string.update));
+					titleTv.setText(getResources().getString(R.string.update_template));
 					id = bundle.getInt("id");
 					Template template = templateDao.getTemplete(id);
 					imgIv.setImageBitmap(BitmapFactory.decodeFile(template.getImgPath()));
@@ -358,7 +360,8 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 				} else {
 					lightAttrs = new ArrayList<LightAttr>();
 					openProgressDialog(R.string.setting_lightattr);
-					for(int i = 0; i < 3;i++) {
+					setTemplateFlag = 0;
+					for (int i = 0; i < 3; i++) {
 						LightAttr lightAttr = new LightAttr(1, 135, 24775, 232);
 						State state = lightEntries.get(i).getState();
 						state.setBri(lightAttr.getBri());
@@ -374,35 +377,27 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 			@Override
 			public void onFailure() {
 				Logger.e(TAG, "获取灯泡列表失败");
-				app.exit();
-				openSplashActivity();
+				ToastUtil.makeText(app, app.getResources().getString(R.string.get_lights_failure));
+				finish();
 			}
 
 			@Override
 			public void wifiError() {
 				Logger.e(TAG, "wifi链接不对");
-				app.exit();
-				openSplashActivity();
+				authAgain();
 			}
 
 			@Override
 			public void unauthorized() {
 				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
-				app.exit();
-				openSplashActivity();
+				authAgain();
 			}
 
 			@Override
 			public void pressLinkBtn() {
 				Logger.i(TAG, "按钮");
-				app.exit();
-				openSplashActivity();
-			}
-
-			@Override
-			public void closeDialog() {
-				pd.dismiss();
+				authAgain();
 			}
 
 		});
@@ -458,47 +453,44 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 
 			@Override
 			public void wifiError() {
-				app.exit();
-				openSplashActivity();
+				Logger.e(TAG, "wifi链接不对");
+				authAgain();
 			}
 
 			@Override
 			public void unauthorized() {
 				Logger.e(TAG, "用户名失效");
 				app.addSp("username", "");
-				app.exit();
-				openSplashActivity();
+				authAgain();
 			}
 
 			@Override
 			public void pressLinkBtn() {
-				app.exit();
-				openSplashActivity();
-			}
-
-			@Override
-			public void onSuccess(Object obj) {
-				sbar.setProgress(lightEntries.get(index).getState().getBri());
-				Logger.i(TAG, "成功设置灯泡属性");
+				Logger.i(TAG, "按钮");
+				authAgain();
 			}
 
 			@Override
 			public void onFailure() {
-				app.exit();
-				openSplashActivity();
+				pd.dismiss();
+				ToastUtil.makeText(app, app.getResources().getString(R.string.set_lightattr_failure));
 			}
 
 			@Override
-			public void closeDialog() {
+			public void onSuccess(Object obj) {
 				pd.dismiss();
+				sbar.setProgress(lightEntries.get(index).getState().getBri());
 			}
+
 		});
 	}
 
-	public void openSplashActivity() {
-		Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+	private void authAgain() {
+		Intent intent = new Intent(this, SplashActivity.class);
+		pd.dismiss();
+		app.exit();
 		startActivity(intent);
-		this.finish();
+		overridePendingTransition(R.anim.translate_in_reverse, R.anim.translate_out_reverse);
 	}
 
 	private void setPickerColor(int color, int position) {

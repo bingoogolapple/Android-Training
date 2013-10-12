@@ -3,9 +3,9 @@ package com.bingoogol.smartbulb.domain.http;
 import java.io.Serializable;
 
 /**
- * State Of a light
+ * 灯泡状态，要通过网络传输，实现Serializable接口
  * 
- * @author USER
+ * @author 王浩 bingoogol@sina.com
  */
 public class State implements Serializable {
 

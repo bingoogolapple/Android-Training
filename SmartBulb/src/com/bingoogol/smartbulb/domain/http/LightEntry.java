@@ -3,9 +3,9 @@ package com.bingoogol.smartbulb.domain.http;
 import java.io.Serializable;
 
 /**
- * Light Attributes
+ * 灯泡属性实体，要通过网络传输，实现Serializable接口
  * 
- * @author 李斌
+ * @author 王浩 bingoogol@sina.com
  */
 public class LightEntry implements Serializable, Comparable<LightEntry> {
 

@@ -29,6 +29,8 @@ public class LinkButtonDialog extends Dialog implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_linkbutton);
+		this.setCancelable(false);
+		this.setCanceledOnTouchOutside(false);
 		commitBtn = (Button) this.findViewById(R.id.btn_linkbutton_commit);
 		exitBtn = (Button) this.findViewById(R.id.btn_linkbutton_exit);
 		commitBtn.setOnClickListener(this);
@@ -39,13 +41,13 @@ public class LinkButtonDialog extends Dialog implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_linkbutton_commit:
+			this.dismiss();
 			activity.auth();
 			break;
 		case R.id.btn_linkbutton_exit:
+			this.dismiss();
 			App app = (App) activity.getApplication();
 			app.exit();
-			break;
-		default:
 			break;
 		}
 		this.dismiss();

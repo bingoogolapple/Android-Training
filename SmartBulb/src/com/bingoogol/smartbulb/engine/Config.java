@@ -12,23 +12,19 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.Logger;
 
 /**
- * 应用程序配置，认证用户
+ * 配置应用程序，认证用户
  * 
  * @author 王浩 bingoogol@sina.com
  */
 public class Config {
-	protected static final String TAG = "Config";
-	private String deviceType = "bingoogol";
-
-	public String getDeviceType() {
-		return deviceType;
-	}
+	private static final String TAG = "Config";
+	private String deviceType = "googol";
 
 	/**
 	 * 异步认证用户
 	 * 
 	 * @param lightCallback
-	 *            Light操作回调接口
+	 *            操作灯泡的回调接口
 	 */
 	public void createUser(LightCallback lightCallback) {
 		final LightHandler lightHandler = new LightHandler(lightCallback);
@@ -57,6 +53,7 @@ public class Config {
 					}
 				} catch (Exception e) {
 					msg.what = Constants.what.WIFIERROR;
+					Logger.e(TAG, e.getLocalizedMessage());
 				} finally {
 					lightHandler.sendMessage(msg);
 				}

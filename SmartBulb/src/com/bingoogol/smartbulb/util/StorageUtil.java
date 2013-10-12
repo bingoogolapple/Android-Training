@@ -27,7 +27,7 @@ public class StorageUtil {
 	/**
 	 * 判断外存储是否可写
 	 * 
-	 * @return
+	 * @return 如果外存储可写则返回ture，否则返回false
 	 */
 	public static boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();
@@ -37,7 +37,7 @@ public class StorageUtil {
 	/**
 	 * 判断外存储是否可读
 	 * 
-	 * @return
+	 * @return 如果外存储可读则返回ture，否则返回false
 	 */
 	public static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();
@@ -47,7 +47,7 @@ public class StorageUtil {
 	/**
 	 * 获取当前app文件存储路径
 	 * 
-	 * @return
+	 * @return 当前app文件的根文件夹
 	 */
 	public static File getAppDir() {
 		File appDir = null;
@@ -66,7 +66,8 @@ public class StorageUtil {
 	 * 获取当前app图片存储路径
 	 * 
 	 * @param context
-	 * @return
+	 *            应用程序上下文
+	 * @return 存放该应用程序图片的文件夹
 	 */
 	public static File getImageDir() {
 		File imageDir = null;
@@ -85,7 +86,8 @@ public class StorageUtil {
 	 * 从本地读取图片
 	 * 
 	 * @param imgRealPath
-	 * @return
+	 *            图片真实路径
+	 * @return Bitmap对象
 	 */
 	public static Bitmap getBitmapFromLocal(String imgRealPath) {
 		Bitmap bitmap = null;
@@ -101,9 +103,12 @@ public class StorageUtil {
 	 * 从本地获取压缩后的图片
 	 * 
 	 * @param imgRealPath
+	 *            图片真实路径
 	 * @param reqWidth
+	 *            宽度
 	 * @param reqHeight
-	 * @return
+	 *            高度
+	 * @return 压缩后的Bitmap对象
 	 */
 	public static Bitmap getBitmapFromLocal(String imgRealPath, int reqWidth, int reqHeight) {
 		Bitmap bitmap = null;
@@ -124,9 +129,12 @@ public class StorageUtil {
 	 * 计算图片inSampleSize缩放比
 	 * 
 	 * @param opts
+	 *            Options
 	 * @param reqWidth
+	 *            宽度
 	 * @param reqHeight
-	 * @return
+	 *            高度
+	 * @return 图片缩放比例
 	 */
 	public static int calculateInSampleSize(Options opts, int reqWidth, int reqHeight) {
 		int width = opts.outWidth;
@@ -149,8 +157,10 @@ public class StorageUtil {
 	 * 根据Uri获取文件的真实路径
 	 * 
 	 * @param uri
+	 *            Uri
 	 * @param context
-	 * @return
+	 *            应用程序上下文
+	 * @return 文件的真实路径
 	 */
 	public static String getRealPathByUri(Context context, Uri uri) {
 		ContentResolver resolver = context.getContentResolver();
@@ -170,7 +180,8 @@ public class StorageUtil {
 	 * 根据真实路径判断文件是否存在
 	 * 
 	 * @param realPath
-	 * @return
+	 *            文件真实路径
+	 * @return 如果存在则返回true，否则返回false
 	 */
 	public static boolean isExistsInLocal(String realPath) {
 		if (isExternalStorageReadable()) {

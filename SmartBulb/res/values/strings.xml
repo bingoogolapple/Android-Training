@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">智能灯泡</string>
-    <string name="operate">操作提示</string>
-    <string name="no_wifi">Wifi未正确链接,请设置Wifi</string>
     <string name="set_wifi">设置</string>
     <string name="exit">退出</string>
     <string name="press_link_btn">请按下按钮</string>
@@ -13,16 +11,21 @@
     <string name="delete">删除</string>
     <string name="no_more_data">没有更多数据了</string>
     <string name="getting_lights">正在获取灯泡列表</string>
+    <string name="get_lights_failure">灯泡列表获取失败</string>
     <string name="loading_template">正在加载数据</string>
     <string name="setting_lightattr">正在设置灯泡属性</string>
-    <string name="delete_failure">删除失败</string>
-    <string name="auth_failure">认证用户失败</string>
+    <string name="set_lightattr_failure">灯泡属性设置失败</string>
+    <string name="setting_template">正在设置模板</string>
+    <string name="set_template_failure">模板设置失败</string>
+    <string name="delete_template_failure">模板删除失败</string>
     <string name="authing">正在认证用户</string>
+    <string name="auth_failure">用户认证失败</string>
     <string name="prompt">提示</string>
     <string name="wifi_dialog_msg">Wifi未正确链接，请设置wifi</string>
     <string name="shake_phone">请摇晃手机</string>
     <string name="select_img">选择图片</string>
     <string name="add_template">添加模板</string>
+    <string name="update_template">修改模板</string>
     <string name="template_name_hint">请输入模板名称</string>
     <string name="save">保存</string>
 </resources>

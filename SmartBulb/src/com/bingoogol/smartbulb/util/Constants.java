@@ -8,29 +8,55 @@ import java.io.File;
  * @author 王浩 bingoogol@sina.com
  */
 public final class Constants {
+	
+	
 	private Constants() {
 	}
 	
-	public static String APP_NAME = "SmartBulb";
+	/**
+	 * 桥接器ip地址
+	 */
+	public static String IPADDRESS = "192.168.1.101";
 	
+	/**
+	 * message code常量类
+	 * 
+	 * @author 王浩 bingoogol@sina.com
+	 */
 	public static final class what {
 		public static final int SUCCESS = 1;
 		public static final int FAILURE = 2;
 		public static final int UNAUTHORIZED = 3;
 		public static final int WIFIERROR = 4;
 		public static final int LINKBUTTON = 5;
+		public static final int YYY = 6;
 		
 	}
 	
+	/**
+	 * 系统文件常量类
+	 * 
+	 * @author 王浩 bingoogol@sina.com
+	 */
 	public static final class file {
-		public static final String DIR_ROOT = APP_NAME;
+		public static final String DIR_ROOT = "SmartBulb";
 		public static final String DIR_IMAGE = DIR_ROOT + File.separator + "images";
 	}
 
+	/**
+	 * 数据库常量类
+	 * 
+	 * @author 王浩 bingoogol@sina.com
+	 */
 	public static final class db {
 		public static final String DB_NAME = "SmartBulb.db";
 		public static final int DB_VERSION = 1;
 		
+		/**
+		 * 模板属性常量类
+		 * 
+		 * @author 王浩 bingoogol@sina.com
+		 */
 		public static final class template {
 			public static final String TABLE_NAME = "Template";
 			public static final String COLUMN_NAME_ID = "_id";
@@ -38,6 +64,11 @@ public final class Constants {
 			public static final String COLUMN_NAME_IMG_PATH = "img_path";
 		}
 
+		/**
+		 * 灯泡属性常量类
+		 * 
+		 * @author 王浩 bingoogol@sina.com
+		 */
 		public static final class lightattr {
 			public static final String TABLE_NAME = "LightAttr";
 			public static final String COLUMN_NAME_ID = "_id";
@@ -60,14 +91,23 @@ public final class Constants {
 		}
 	}
 
+	/**
+	 * 系统activity之间跳转的请求码常量类
+	 * 
+	 * @author 王浩 bingoogol@sina.com
+	 */
 	public static final class activity {
 		public static final int OPEN_WIFI_SETTINGS = 1;
 		public static final int GET_FROM_GALLERY = 2;
 		public static final int GET_FROM_CAMERA = 3;
 		public static final int GET_FROM_CROP = 4;
-		public static final int YYY = 5;
 	}
 
+	/**
+	 * 网络访问常量类
+	 * 
+	 * @author 王浩 bingoogol@sina.com
+	 */
 	public static final class net {
 		public static final int CONNECTTIMEOUT = 5000;
 		public static final int READTIMEOUT = 5000;

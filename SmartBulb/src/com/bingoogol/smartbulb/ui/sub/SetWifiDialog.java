@@ -13,7 +13,7 @@ import com.bingoogol.smartbulb.R;
 import com.bingoogol.smartbulb.util.Constants;
 
 /**
- * 提示设置wifi的对话框
+ * 提示设置wifi的自定义对话框
  * 
  * @author 王浩 bingoogol@sina.com
  */
@@ -31,6 +31,9 @@ public class SetWifiDialog extends Dialog implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_set_wifi);
+		this.setCancelable(false);
+		this.setCanceledOnTouchOutside(false);
+
 		commitBtn = (Button) this.findViewById(R.id.btn_set_wifi_commit);
 		exitBtn = (Button) this.findViewById(R.id.btn_set_wifi_exit);
 		commitBtn.setOnClickListener(this);
@@ -43,8 +46,11 @@ public class SetWifiDialog extends Dialog implements OnClickListener {
 		case R.id.btn_set_wifi_commit:
 			Intent intent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
 			activity.startActivityForResult(intent, Constants.activity.OPEN_WIFI_SETTINGS);
+			activity.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+			this.dismiss();
 			break;
 		case R.id.btn_set_wifi_exit:
+			this.dismiss();
 			App app = (App) activity.getApplication();
 			app.exit();
 			break;

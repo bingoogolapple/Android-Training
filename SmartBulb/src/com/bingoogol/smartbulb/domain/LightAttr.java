@@ -2,7 +2,7 @@ package com.bingoogol.smartbulb.domain;
 
 
 /**
- * 定灯的属性和状态实体
+ * 灯的属性和状态实体
  * 
  * @author 王浩 bingoogol@sina.com
  */
@@ -35,28 +35,6 @@ public class LightAttr {
 			double xy_x, double xy_y, int ct, String alert, String effect,
 			long transitiontime, String colormode) {
 		this.id = id;
-		this.tid = tid;
-		this.type = type;
-		this.name = name;
-		this.modelid = modelid;
-		this.swversion = swversion;
-		this.state = state;
-		this.bri = bri;
-		this.hue = hue;
-		this.sat = sat;
-		this.xy_x = xy_x;
-		this.xy_y = xy_y;
-		this.ct = ct;
-		this.alert = alert;
-		this.effect = effect;
-		this.transitiontime = transitiontime;
-		this.colormode = colormode;
-	}
-
-	public LightAttr(int tid, String type, String name, String modelid,
-			String swversion, int state, int bri, long hue, int sat,
-			double xy_x, double xy_y, int ct, String alert, String effect,
-			long transitiontime, String colormode) {
 		this.tid = tid;
 		this.type = type;
 		this.name = name;

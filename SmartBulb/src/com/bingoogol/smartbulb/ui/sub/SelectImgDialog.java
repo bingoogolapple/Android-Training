@@ -19,7 +19,7 @@ import com.bingoogol.smartbulb.util.Constants;
 import com.bingoogol.smartbulb.util.StorageUtil;
 
 /**
- * 选择插入图片的对话框
+ * 选择插入图片的自定义对话框
  * 
  * @author 王浩 bingoogol@sina.com
  */
@@ -37,6 +37,8 @@ public class SelectImgDialog extends Dialog implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_select_img);
+		this.setCancelable(true);
+		this.setCanceledOnTouchOutside(false);
 		galleryBtn = (Button) this.findViewById(R.id.btn_select_img_gallery);
 		cameraBtn = (Button) this.findViewById(R.id.btn_select_img_camera);
 		galleryBtn.setOnClickListener(this);
@@ -47,15 +49,14 @@ public class SelectImgDialog extends Dialog implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_select_img_camera:
+			this.dismiss();
 			getFromCamera();
 			break;
 		case R.id.btn_select_img_gallery:
+			this.dismiss();
 			getFromGallery();
 			break;
-		default:
-			break;
 		}
-		this.dismiss();
 	}
 
 	private void getFromCamera() {
@@ -78,21 +79,6 @@ public class SelectImgDialog extends Dialog implements OnClickListener {
 		intent.setType("image/*");
 		activity.startActivityForResult(intent, Constants.activity.GET_FROM_GALLERY);
 		activity.overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
-	}
-
-	public void startPhotoZoom(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		// 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 4);
-		intent.putExtra("aspectY", 3);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 300);
-		intent.putExtra("outputY", 240);
-		intent.putExtra("return-data", true);
-		activity.startActivityForResult(intent, Constants.activity.GET_FROM_CROP);
 	}
 
 }

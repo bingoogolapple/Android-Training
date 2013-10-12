@@ -22,7 +22,7 @@ import com.bingoogol.smartbulb.util.ToastUtil;
  * @author 王浩 bingoogol@sina.com
  */
 public class SplashActivity extends GenericActivity {
-	protected static final String TAG = "SplashActivity";
+	private static final String TAG = "SplashActivity";
 	private Config config = new Config();
 	private ProgressDialog pd;
 	private LightCallback lightCallback = new LightCallback() {
@@ -30,17 +30,20 @@ public class SplashActivity extends GenericActivity {
 		@Override
 		public void pressLinkBtn() {
 			Logger.i(TAG, "打开按钮对话框");
+			pd.dismiss();
 			new LinkButtonDialog(SplashActivity.this).show();
 		}
 
 		@Override
 		public void wifiError() {
 			Logger.i(TAG, "打开wifi对话框");
+			pd.dismiss();
 			new SetWifiDialog(SplashActivity.this).show();
 		}
 
 		@Override
 		public void onSuccess(Object obj) {
+			pd.dismiss();
 			app.addSp("username", (String) obj);
 			openMainActivity();
 		}
@@ -48,18 +51,18 @@ public class SplashActivity extends GenericActivity {
 		@Override
 		public void onFailure() {
 			ToastUtil.makeText(app, R.string.auth_failure);
+			pd.dismiss();
+			auth();
 		}
 
 		@Override
 		public void unauthorized() {
-
-		}
-		
-		@Override
-		public void closeDialog() {
+			Logger.e(TAG, "用户名失效");
 			pd.dismiss();
-			Logger.i(TAG, "关闭进度条");
+			app.addSp("username", "");
+			auth();
 		}
+
 	};
 
 	@Override
@@ -68,7 +71,7 @@ public class SplashActivity extends GenericActivity {
 			processLogic();
 		}
 	};
-	
+
 	@Override
 	public void onBackPressed() {
 		app.exit();
@@ -76,10 +79,10 @@ public class SplashActivity extends GenericActivity {
 
 	private void openMainActivity() {
 		HueRestClient.getInstance().setUserName(app.getSp("username", ""));
-		Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
-		SplashActivity.this.finish();
+		Intent homeIntent = new Intent(this, MainActivity.class);
 		startActivity(homeIntent);
 		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
+		finish();
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class SplashActivity extends GenericActivity {
 	protected void processLogic() {
 		if (ConnectivityUtil.isWifiConnected(SplashActivity.this)) {
 			String username = app.getSp("username", "");
-			Logger.i(TAG, "用户名:" + username);
+			Logger.d(TAG, "用户名:" + username);
 			if ("".equals(username)) {
 				auth();
 			} else {
