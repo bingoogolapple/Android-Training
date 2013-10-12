@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Bulb</string>
+    <string name="set_wifi">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="press_link_btn">Please press the button</string>
+    <string name="retry">Retry</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Take a picture</string>
+    <string name="update">update</string>
+    <string name="delete">delete</string>
+    <string name="no_more_data">no more data</string>
+    <string name="getting_lights">Getting the lighting list</string>
+    <string name="get_lights_failure">Fail to get the list</string>
+    <string name="loading_template">Loading data</string>
+    <string name="setting_lightattr">Setting the lamp attribution</string>
+    <string name="set_lightattr_failure">Fail to set the lamp attribute</string>
+    <string name="setting_template">Setting the template</string>
+    <string name="set_template_failure">Fail to set the template</string>
+    <string name="delete_template_failure">Fail to delete the template</string>
+    <string name="authing">Authenticating the user</string>
+    <string name="auth_failure">Fail to authenticating the user</string>
+    <string name="prompt">prompt</string>
+    <string name="wifi_dialog_msg">Please settings Wi-Fi</string>
+    <string name="shake_phone">Please shake the mobile phone</string>
+    <string name="select_img">Select the picture</string>
+    <string name="add_template">add template</string>
+    <string name="update_template">update template</string>
+    <string name="template_name_hint">please input template name</string>
+    <string name="save">save</string>
+</resources>
