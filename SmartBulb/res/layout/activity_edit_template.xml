@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/rl_title_main"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="@drawable/title_activity_bg"
         android:gravity="center_vertical" >
 
@@ -36,14 +36,14 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_vertical" >
 
         <RelativeLayout
             android:layout_alignParentLeft="true"
             android:layout_width="43dp"
             android:layout_height="52dp"
-            android:layout_marginLeft="20dp" >
+            android:layout_marginLeft="30dp" >
 
             <ImageView
                 android:id="@+id/picker1"
@@ -82,7 +82,7 @@
             android:layout_width="43dp"
             android:layout_height="52dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp" >
+            android:layout_marginRight="30dp" >
 
             <ImageView
                 android:id="@+id/picker3"
@@ -101,10 +101,10 @@
 
     <ImageView
         android:id="@+id/iv_img_add_template"
-        android:layout_width="300dp"
-        android:layout_height="240dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="360dp"
+        android:layout_height="270dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/default_img" />
 
     <TextView
@@ -120,19 +120,18 @@
         android:id="@+id/edit_sb_bri"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:max="255"
-        android:textSize="20sp"
         android:progressDrawable="@drawable/seekbar"
         android:thumb="@drawable/thum" />
 
     <EditText
         android:id="@+id/et_name"
-        android:layout_width="250dp"
+        android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="35dp"
+        android:layout_marginTop="25dp"
         android:textSize="20sp"
         android:clickable="true"
         android:gravity="center_vertical"
@@ -142,9 +141,9 @@
 
     <Button
         android:id="@+id/btn_save"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:textSize="25sp"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:textSize="30sp"
         android:gravity="center"
         android:background="@drawable/btn_add_selector"
         android:text="@string/save" />

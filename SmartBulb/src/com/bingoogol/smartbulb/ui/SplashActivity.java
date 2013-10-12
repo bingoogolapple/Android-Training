@@ -80,9 +80,9 @@ public class SplashActivity extends GenericActivity {
 	private void openMainActivity() {
 		HueRestClient.getInstance().setUserName(app.getSp("username", ""));
 		Intent homeIntent = new Intent(this, MainActivity.class);
+		finish();
 		startActivity(homeIntent);
 		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
-		finish();
 	}
 
 	@Override

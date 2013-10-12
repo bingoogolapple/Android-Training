@@ -90,7 +90,7 @@ public class YYYDialog extends Dialog {
 				if (templatesYyy.size() == 1) {
 					Template template = templatesYyy.get(0);
 					nameTv.setText(template.getName());
-					iconIv.setImageBitmap(StorageUtil.getBitmapFromLocal(template.getImgPath(), 300, 240));
+					iconIv.setImageBitmap(StorageUtil.getBitmapFromLocal(template.getImgPath(), 360, 270));
 					activity.adapter.setTemplate(template.getId());
 				}
 				break;

@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -150,8 +149,8 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 		intent.putExtra("aspectX", 4);
 		intent.putExtra("aspectY", 3);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 300);
-		intent.putExtra("outputY", 240);
+		intent.putExtra("outputX", 360);
+		intent.putExtra("outputY", 270);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, Constants.activity.GET_FROM_CROP);
 		overridePendingTransition(R.anim.translate_in, R.anim.translate_out);
@@ -354,7 +353,7 @@ public class EditTemplateActivity extends GenericActivity implements OnTouchList
 					titleTv.setText(getResources().getString(R.string.update_template));
 					id = bundle.getInt("id");
 					Template template = templateDao.getTemplete(id);
-					imgIv.setImageBitmap(BitmapFactory.decodeFile(template.getImgPath()));
+					imgIv.setImageBitmap(StorageUtil.getBitmapFromLocal(template.getImgPath(), 360, 270));
 					nameEt.setText(template.getName());
 					setTemplate(id);
 				} else {
