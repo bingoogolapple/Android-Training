@@ -42,7 +42,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue1.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue1.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -53,7 +53,7 @@
 						</dt>
 						<dd>
 							<img
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue2.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue2.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -64,7 +64,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue3.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue3.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -75,7 +75,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue4.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue4.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -86,7 +86,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue5.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue5.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -97,7 +97,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue6.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue6.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -108,7 +108,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue7.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue7.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -119,7 +119,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue8.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue8.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -130,7 +130,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue12.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue12.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -141,7 +141,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue13.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue13.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -152,7 +152,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%871.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%871.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -163,7 +163,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -186,7 +186,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment1.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment1.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -197,7 +197,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment2.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment2.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -208,7 +208,7 @@
 						</dt>
 						<dd>
 							<img style="width: 240px;
-		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment3.png?imageView/2/w/240/h/320" class="img-thumbnail">
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment3.png?imageView/2/w/320/h/480" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
