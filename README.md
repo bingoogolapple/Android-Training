@@ -17,7 +17,7 @@
 	<h4 class="alert alert-info text-center">Smart Hue 智能灯光控制系统</h4>
 	<div class="panel panel-success" style="margin-top: 10px;">
 		<div class="panel-heading">
-			<h3 class="panel-title">系统主要功能</h3>
+			<h3 class="panel-title">系统主要功能（必须要配合飞利浦灯泡一起使用）</h3>
 		</div>
 		<div class="panel-body">
 			<ol>
@@ -164,6 +164,51 @@
 						<dd>
 							<img style="width: 240px;
 		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png" class="img-thumbnail">
+						</dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<h4 class="alert alert-info text-center">MyMoment</h4>
+	<a href="http://bingoshare.u.qiniudn.com/MyMoment.apk">下载</a>
+	<div class="panel panel-success" style="margin-top: 10px;">
+		<div class="panel-heading">
+			<h3 class="panel-title">UI界面</h3>
+		</div>
+		<div class="panel-body">
+			<ul class="list-inline">
+				<li>
+
+					<dl>
+						<dt>
+							欢迎界面
+						</dt>
+						<dd>
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment1.png" class="img-thumbnail">
+						</dd>
+					</dl>
+				</li>
+				<li>
+					<dl>
+						<dt>
+							主界面
+						</dt>
+						<dd>
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment2.png" class="img-thumbnail">
+						</dd>
+					</dl>
+				</li>
+				<li>
+					<dl>
+						<dt>
+							记录时光
+						</dt>
+						<dd>
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/MyMoment3.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
