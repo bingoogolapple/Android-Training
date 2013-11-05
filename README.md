@@ -52,7 +52,7 @@
 							wifi设置
 						</dt>
 						<dd>
-							<img style="width: 240px;
+							<img
 		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue2.png" class="img-thumbnail">
 						</dd>
 					</dl>
