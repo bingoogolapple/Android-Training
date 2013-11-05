@@ -1,4 +1,4 @@
-﻿<iframe src="http://docs.google.com/viewer?url=http%3A%2F%2Fbingoshare.u.qiniudn.com%2FHadoop%25E5%2585%25A5%25E9%2597%25A8%25E5%2588%25B0%25E7%25B2%25BE%25E9%2580%259A%25EF%25BC%2588%25E5%25B8%25A6%25E7%259B%25AE%25E5%25BD%2595%25EF%25BC%2589.docx&embedded=true" width="600" height="780" style="border: none;"></iframe>
+<iframe src="http://docs.google.com/viewer?url=http%3A%2F%2Fbingoshare.u.qiniudn.com%2FHadoop%25E5%2585%25A5%25E9%2597%25A8%25E5%2588%25B0%25E7%25B2%25BE%25E9%2580%259A%25EF%25BC%2588%25E5%25B8%25A6%25E7%259B%25AE%25E5%25BD%2595%25EF%25BC%2589.docx&embedded=true" width="600" height="780" style="border: none;"></iframe>
 <style type="text/css">
 	img {
 		width: 240px;
