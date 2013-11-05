@@ -41,7 +41,8 @@
 							wifi连接提示
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue1.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue1.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -51,7 +52,8 @@
 							wifi设置
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue2.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue2.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -61,7 +63,8 @@
 							按下按钮提示
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue3.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue3.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -71,7 +74,8 @@
 							主界面
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue4.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue4.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -81,7 +85,8 @@
 							显示“+”功能的主界面
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue5.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue5.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -91,7 +96,8 @@
 							添加模版
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue6.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue6.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -101,7 +107,8 @@
 							添加图片
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue7.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue7.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -111,7 +118,8 @@
 							裁剪图片
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue8.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue8.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -121,7 +129,8 @@
 							长按弹出操作对话框
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue12.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue12.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -131,7 +140,8 @@
 							修改模版
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue13.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue13.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -141,7 +151,8 @@
 							摇一摇
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%871.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%871.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
@@ -151,7 +162,8 @@
 							摇一摇
 						</dt>
 						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png" class="img-thumbnail">
+							<img style="width: 240px;
+		height: 320px;" src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png" class="img-thumbnail">
 						</dd>
 					</dl>
 				</li>
