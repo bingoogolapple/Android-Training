@@ -1,10 +1,5 @@
-<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.1/css/bootstrap-theme.min.css">
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.1/js/bootstrap.min.js"></script>
-
 <div class="container">
 	<span class="label label-success">2013年android实训</span>
-	<a class="label label-info" href="http://weibo.com/bingoogol/home">新浪微博</a>
 	<h4 class="alert alert-info text-center">Smart Hue 智能灯光控制系统</h4>
 	<div class="panel panel-success" style="margin-top: 10px;">
 		<div class="panel-heading">
@@ -19,178 +14,31 @@
 			</ol>
 		</div>
 	</div>
-	<div class="panel panel-success" style="margin-top: 10px;">
-		<div class="panel-heading">
-			<h3 class="panel-title">UI界面</h3>
-		</div>
-		<div class="panel-body">
-			<ul class="list-inline">
-				<li>
-
-					<dl>
-						<dt>
-							wifi连接提示
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue1.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							wifi设置
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue2.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							按下按钮提示
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue3.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							主界面
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue4.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							显示“+”功能的主界面
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue5.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							添加模版
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue6.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							添加图片
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue7.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							裁剪图片
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue8.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							长按弹出操作对话框
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue12.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							修改模版
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue13.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							摇一摇
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%871.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							摇一摇
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/SmartHue%E6%91%87%E4%B8%80%E6%91%872.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<h4 class="alert alert-info text-center">MyMoment</h4>
-	<a href="http://bingoshare.u.qiniudn.com/MyMoment.apk">下载</a>
-	<div class="panel panel-success" style="margin-top: 10px;">
-		<div class="panel-heading">
-			<h3 class="panel-title">UI界面</h3>
-		</div>
-		<div class="panel-body">
-			<ul class="list-inline">
-				<li>
-
-					<dl>
-						<dt>
-							欢迎界面
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/MyMoment1.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							主界面
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/MyMoment2.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-				<li>
-					<dl>
-						<dt>
-							记录时光
-						</dt>
-						<dd>
-							<img src="http://bingoshare.u.qiniudn.com/MyMoment3.png?imageView/2/w/320/h/480" class="img-thumbnail">
-						</dd>
-					</dl>
-				</li>
-			</ul>
-		</div>
-	</div>
 </div>
 
 
+## 作者联系方式
+
+| 个人主页 | 邮箱 |
+| ------------- | ------------ |
+| <a  href="https://www.bingoogolapple.cn" target="_blank">bingoogolapple.cn</a>  | <a href="mailto:bingoogolapple@gmail.com" target="_blank">bingoogolapple@gmail.com</a> |
+
+| 个人微信号 | 微信群 | 公众号 |
+| ------------ | ------------ | ------------ |
+| <img width="180" alt="个人微信号" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/BGAQrCode.png"> | <img width="180" alt="微信群" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/WeChatGroup1QrCode.jpg"> | <img width="180" alt="公众号" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/GongZhongHao.png"> |
+
+| 个人 QQ 号 | QQ 群 |
+| ------------ | ------------ |
+| <img width="180" alt="个人 QQ 号" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/BGAQQQrCode.jpg"> | <img width="180" alt="QQ 群" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/QQGroup1QrCode.jpg"> |
+
+## 打赏支持作者
+
+如果您觉得 BGA 系列开源库或工具软件帮您节省了大量的开发时间，可以扫描下方的二维码打赏支持。您的支持将鼓励我继续创作，打赏后还可以加我微信免费开通一年 [上帝小助手浏览器扩展/插件开发平台](https://github.com/bingoogolapple/bga-god-assistant-config) 的会员服务
+
+| 微信 | QQ | 支付宝 |
+| ------------- | ------------- | ------------- |
+| <img width="180" alt="微信" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/donate-wechat.jpg"> | <img width="180" alt="QQ" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/donate-qq.jpg"> | <img width="180" alt="支付宝" src="https://github.com/bingoogolapple/bga-god-assistant-config/raw/main/images/donate-alipay.jpg"> |
+
+## 作者项目推荐
+
+* 欢迎您使用我开发的第一个独立开发软件产品 [上帝小助手浏览器扩展/插件开发平台](https://github.com/bingoogolapple/bga-god-assistant-config)
